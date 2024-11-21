@@ -1,6 +1,6 @@
 import { createEL, findEl } from '../utils/index.js';
 
-export const AddStyle = (className, cssStyleClassData) => {
+export const AddStyle = (className: string, cssStyleClassData: string) => {
   let styleEl = findEl('#style');
   if (styleEl === null) {
     styleEl = createEL('style');

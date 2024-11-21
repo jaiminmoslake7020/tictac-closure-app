@@ -1,19 +1,20 @@
-import { createEL } from '../utils/index.js'
+import {createEL, findEl} from '../utils/index.js'
 import { TurnInfo } from './TurnInfo.js'
 import { TurnHandler } from './TurnHandler.js'
 import { TicTacCellRow } from './TicTacCellRow.js'
 import { AddStyle } from './AddStyle.js'
+import {MoveType, TicTacCellRowFunctionType} from '../types/index.js';
 
 export const TicTac = () => {
   const wrapperDiv = createEL('div');
   const ticTacTable = createEL('table');
   const ticTacTableBody = createEL('tbody');
 
-  const trArray = [];
+  const trArray = [] as TicTacCellRowFunctionType[];
   const { getTurn, changeTurn, getWinner, getWinnerSequence, getAnotherPersonTurns } = TurnHandler();
   const turnInfoP = TurnInfo( getTurn() );
 
-  const handleChangeTurn = (v) => {
+  const handleChangeTurn = (v: MoveType) => {
     changeTurn(v);
     const newTurn = getTurn();
     const winner = getWinner();
@@ -27,11 +28,23 @@ export const TicTac = () => {
 
   const render = () => {
     for (let i = 0 ; i < 3 ; i++)  {
-      const tr = TicTacCellRow( i + 1 , getTurn(), handleChangeTurn );
+      const turn = getTurn();
+      const tr = TicTacCellRow( i + 1 ,  turn, handleChangeTurn );
       ticTacTableBody.append(tr.render());
       trArray.push(tr);
     }
     ticTacTable.append(ticTacTableBody);
+    // const b = createEL('button');
+    // b.setAttribute('id', 'reset-button');
+    // b.setAttribute('type', 'button');
+    // b.innerHTML = 'Reset';
+    // b.addEventListener('click', () => {
+    //   findEl('table').remove();
+    //   b.remove()
+    //   findEl('p').remove();
+    //   render();
+    // })
+    // wrapperDiv.append( b );
     wrapperDiv.append( turnInfoP.render() );
     wrapperDiv.append(ticTacTable);
     return wrapperDiv;

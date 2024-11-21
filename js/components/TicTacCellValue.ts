@@ -1,7 +1,8 @@
 import { AddStyle } from './AddStyle.js';
 import { createEL } from '../utils/index.js';
+import {ColumnIdType, TurnType} from '../types/index.js';
 
-export const TicTacCellValue = (columnId, firstTime) => {
+export const TicTacCellValue = (columnId: ColumnIdType, firstTime: boolean) => {
   const span = createEL('span');
 
   const addStyle = () => {
@@ -14,7 +15,7 @@ export const TicTacCellValue = (columnId, firstTime) => {
     return span;
   }
 
-  const update = (v) => {
+  const update = (v: TurnType) => {
     span.innerHTML = v;
   }
 

@@ -2,12 +2,24 @@ import { findEl } from '../utils/index.js';
 import { TicTacCellIdentifier } from './TicTacCellIdentifier.js'
 import { TicTacCellValue } from './TicTacCellValue.js'
 import { AddStyle } from './AddStyle.js'
+import {
+  AnotherPersonMovesTypeWithNull,
+  ChangeFunctionType,
+  ColumnIdType,
+  MoveType,
+  TurnType,
+  WiningSequenceTypeWithNull
+} from '../types/index.js';
 
-export const TicTacCell = (columnId, firstTime, turn, changeTurn) => {
+export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: TurnType, changeTurn: ChangeFunctionType) => {
   const cv = TicTacCellValue( columnId,  firstTime);
   const td = document.createElement('td');
 
   let clicked = false;
+
+  const getMoveType = () : MoveType => {
+    return columnId.replace('-','') as MoveType
+  }
 
   const setClicked = () => {
     clicked = true;
@@ -17,14 +29,14 @@ export const TicTacCell = (columnId, firstTime, turn, changeTurn) => {
     return findEl('#column-'+columnId)
   }
 
-  const onClick = (appliedTurn, appliedChangeTurn, e) => {
+  const onClick = (appliedTurn: TurnType, appliedChangeTurn: ChangeFunctionType, e:Event ) => {
     if ( !clicked ) {
       getTd().classList.add('type-'+appliedTurn);
       const cv = TicTacCellValue( columnId,  firstTime);
-      e.target.append(cv.render());
+      (e.target as HTMLDivElement).append(cv.render());
       cv.update(appliedTurn);
       setClicked();
-      appliedChangeTurn( columnId.replace('-','') );
+      appliedChangeTurn( getMoveType() );
     } else {
       getTd().classList.add('type-Error');
       setTimeout(() => {
@@ -33,7 +45,7 @@ export const TicTacCell = (columnId, firstTime, turn, changeTurn) => {
     }
   }
 
-  const firstClick = (e)  => {
+  const firstClick = (e: Event)  => {
     onClick(turn, changeTurn, e);
   }
 
@@ -48,21 +60,22 @@ export const TicTacCell = (columnId, firstTime, turn, changeTurn) => {
     }
   }
 
-  const update = (newTurn, newChangeTurn, winnerSequence, anotherPersonTurns) => {
+  const update = (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull) => {
     const element = findEl('#column-'+columnId);
 
     // Clone the element
     const newElement = element.cloneNode(true);
 
     // Replace the original element with the clone
+    // @ts-ignore
     element.parentNode.replaceChild(newElement, element);
 
     // console.log('anotherPersonTurns', anotherPersonTurns);
-    if (Array.isArray(anotherPersonTurns) && winnerSequence === null) {
+    if (Array.isArray(anotherPersonMoves) && winnerSequence === null) {
       if (
-        !anotherPersonTurns.includes( columnId.replace('-','') )
+        !anotherPersonMoves.includes( getMoveType() )
       ) {
-        newElement.addEventListener('click', (e) => {
+        newElement.addEventListener('click', (e: Event) => {
           onClick(newTurn, newChangeTurn, e);
         });
       } else if ( !getTd().classList.contains('type-X') ) {
@@ -75,15 +88,15 @@ export const TicTacCell = (columnId, firstTime, turn, changeTurn) => {
       }
     } else {
       if (winnerSequence === null) {
-        newElement.addEventListener('click', (e) => {
+        newElement.addEventListener('click', (e: Event) => {
           onClick(newTurn, newChangeTurn, e);
         });
       } else if ( Array.isArray(winnerSequence) ) {
-        if ( winnerSequence.includes( columnId.replace('-','') ) ) {
+        if ( winnerSequence.includes( getMoveType() ) ) {
           getTd().classList.add('type-Success');
           if (
-            Array.isArray(anotherPersonTurns)
-            && anotherPersonTurns.includes( columnId.replace('-','') )
+            Array.isArray(anotherPersonMoves)
+            && anotherPersonMoves.includes( getMoveType() )
             && !getTd().classList.contains('type-X')
           ) {
             getTd().classList.add('type-X');
