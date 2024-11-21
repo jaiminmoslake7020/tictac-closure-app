@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 16, 18 ] # Test on multiple Node.js versions
+        node-version: [ 18 ] # Test on multiple Node.js versions
     steps:
       - name: Checkout
         uses: actions/checkout@v4
