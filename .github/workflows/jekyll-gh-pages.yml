@@ -25,22 +25,23 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 16, 18 ] # Test on multiple Node.js versions
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Add NPM
-        run: sudo apt install nodejs -y && sudo apt install npm -y
-      - name: NPM Install
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install dependencies
         run: npm install
-      - name: NPM Build
+      - name: Run build
         run: npm run build
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./
-          destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
