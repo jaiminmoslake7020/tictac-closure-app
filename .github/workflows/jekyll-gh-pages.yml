@@ -29,7 +29,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Add NPM
-        run:  sudo apt update && sudo apt upgrade -y && sudo apt install nodejs -y && sudo apt install npm -y
+        run: sudo apt install nodejs -y && sudo apt install npm -y
       - name: NPM Install
         run: npm install
       - name: NPM Build
