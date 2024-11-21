@@ -1,4 +1,4 @@
-import { createEL } from '../utils';
+import { createEL } from '../utils/index.js';
 import { TicTacCell } from './TicTacCell.js';
 
 export const TicTacCellRow = (rowId, turn, changeTurn) => {

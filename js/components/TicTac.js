@@ -1,4 +1,4 @@
-import { createEL } from '../utils'
+import { createEL } from '../utils/index.js'
 import { TurnInfo } from './TurnInfo.js'
 import { TurnHandler } from './TurnHandler.js'
 import { TicTacCellRow } from './TicTacCellRow.js'

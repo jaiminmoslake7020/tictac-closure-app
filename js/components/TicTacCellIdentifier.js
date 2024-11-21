@@ -1,5 +1,5 @@
 import { AddStyle } from './AddStyle.js';
-import { createEL } from '../utils';
+import { createEL } from '../utils/index.js';
 
 export const TicTacCellIdentifier = (columnId, firstTime) => {
   const addStyle = () => {

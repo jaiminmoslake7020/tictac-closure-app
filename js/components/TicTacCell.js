@@ -1,4 +1,4 @@
-import { findEl } from '../utils';
+import { findEl } from '../utils/index.js';
 import { TicTacCellIdentifier } from './TicTacCellIdentifier.js'
 import { TicTacCellValue } from './TicTacCellValue.js'
 import { AddStyle } from './AddStyle.js'
