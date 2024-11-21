@@ -1,4 +1,4 @@
-import { appendEl } from '../utils/index.js'
+import { appendEl } from '../utils'
 import { TicTac } from './TicTac.js'
 
 export const App = () => {

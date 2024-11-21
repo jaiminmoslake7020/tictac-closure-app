@@ -1,4 +1,4 @@
-import { App } from './components/App.js';
+import { App } from './components';
 
 window.addEventListener('load', () => {
   const app = App();

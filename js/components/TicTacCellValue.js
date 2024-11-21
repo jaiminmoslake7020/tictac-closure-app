@@ -1,5 +1,5 @@
 import { AddStyle } from './AddStyle.js';
-import { createEL } from '../utils/index.js';
+import { createEL } from '../utils';
 
 export const TicTacCellValue = (columnId, firstTime) => {
   const span = createEL('span');
@@ -15,7 +15,6 @@ export const TicTacCellValue = (columnId, firstTime) => {
   }
 
   const update = (v) => {
-    console.log('appliedTurn update', v, span.innerHTML)
     span.innerHTML = v;
   }
 

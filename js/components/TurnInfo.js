@@ -1,4 +1,4 @@
-import { createEL } from '../utils/index.js'
+import { createEL } from '../utils'
 
 export const TurnInfo = (turn) => {
   const p = createEL('p');

@@ -1,4 +1,4 @@
-import { createEL } from '../utils/index.js'
+import { createEL } from '../utils'
 import { TurnInfo } from './TurnInfo.js'
 import { TurnHandler } from './TurnHandler.js'
 import { TicTacCellRow } from './TicTacCellRow.js'
@@ -10,7 +10,7 @@ export const TicTac = () => {
   const ticTacTableBody = createEL('tbody');
 
   const trArray = [];
-  const { getTurn, changeTurn, getWinner, getWinnerSequence } = TurnHandler();
+  const { getTurn, changeTurn, getWinner, getWinnerSequence, getAnotherPersonTurns } = TurnHandler();
   const turnInfoP = TurnInfo( getTurn() );
 
   const handleChangeTurn = (v) => {
@@ -18,9 +18,9 @@ export const TicTac = () => {
     const newTurn = getTurn();
     const winner = getWinner();
     const winnerSequence = getWinnerSequence();
-    console.log('getTurn', newTurn, winner, winnerSequence);
+    const anotherPersonTurns = getAnotherPersonTurns();
     for (let i = 0 ; i < 3 ; i++)  {
-      trArray[i].update( newTurn , handleChangeTurn, winnerSequence);
+      trArray[i].update( newTurn , handleChangeTurn, winnerSequence, anotherPersonTurns);
     }
     turnInfoP.update( newTurn , winner);
   }

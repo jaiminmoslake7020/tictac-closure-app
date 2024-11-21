@@ -1,4 +1,4 @@
-import { createEL } from '../utils/index.js';
+import { createEL } from '../utils';
 import { TicTacCell } from './TicTacCell.js';
 
 export const TicTacCellRow = (rowId, turn, changeTurn) => {
@@ -16,10 +16,10 @@ export const TicTacCellRow = (rowId, turn, changeTurn) => {
     return tr;
   }
 
-  const update = (newTurn, newChangeTurn, winnerSequence) => {
+  const update = (newTurn, newChangeTurn, winnerSequence, anotherPersonTurns) => {
     for (let i = 0 ; i < 3 ; i++)  {
       // console.log('TicTacCellRow', newTurn);
-      tdArray[i].update(newTurn, newChangeTurn, winnerSequence);
+      tdArray[i].update(newTurn, newChangeTurn, winnerSequence, anotherPersonTurns);
     }
   }
 
