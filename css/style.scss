@@ -60,7 +60,7 @@ body {
   }
   .tic-tac-cell {
     @apply border border-content w-[33%] font-bold text-2xl relative aspect-square rounded;
-    @apply transition-transform delay-75;
+    @apply transition-all delay-75;
 
     &.type-O{
       @apply cursor-not-allowed;
@@ -74,6 +74,33 @@ body {
         transform: rotate3d(0,0,0,0deg);
       }
 
+      &.type-Success{
+        transform: rotate3d(0,0,0,0deg) scale(110%);
+
+        &.stop-animate-move-success{
+          transform: rotate3d(0,0,0,0deg) scale(100%);
+
+          .tic-tac-cell-value{
+            @apply text-6xl;
+          }
+
+        }
+
+        &.stop-animate-move-x{
+          transform: rotate3d(0,0,0,0deg) scale(110%);
+
+          &.stop-animate-move-success{
+            transform: rotate3d(0,0,0,0deg) scale(100%);
+
+            .tic-tac-cell-value{
+              @apply text-6xl;
+            }
+
+          }
+        }
+
+      }
+
     }
 
     &.type-Disabled{
@@ -85,15 +112,22 @@ body {
     }
 
     &.type-Success{
-      @apply bg-green-300 text-white scale-110 origin-center;
+      @apply bg-green-300 text-white scale-110;
 
       &.stop-animate-move-success{
         @apply scale-100;
+
+        .tic-tac-cell-value{
+          @apply text-6xl;
+        }
+
       }
     }
 
     .tic-tac-cell-span{
       @apply absolute top-2 right-2 text-xs text-white hidden ;
+      @apply delay-75;
+      transition: font-size;
     }
 
     .tic-tac-cell-value{

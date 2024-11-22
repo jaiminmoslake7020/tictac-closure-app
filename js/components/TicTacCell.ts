@@ -11,10 +11,31 @@ import {
 } from '../types/index.js';
 
 const StopAnimateMoveX = 200;
-const StopAnimateMoveSuccess = 400;
+
+const stopAnimateMoveSuccess  = () => {
+  let StopAnimateMoveSuccess = 400;
+
+  const get = () => {
+    return StopAnimateMoveSuccess;
+  }
+
+  const increment = () => {
+    StopAnimateMoveSuccess += 300;
+  }
+
+  return {
+    get,
+    increment
+  };
+}
+
+const {
+  get: getStopAnimateMoveSuccess,
+  increment:incrementStopAnimateMoveSuccess
+} = stopAnimateMoveSuccess();
 
 
-export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: TurnType, changeTurn: ChangeFunctionType) => {
+  export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: TurnType, changeTurn: ChangeFunctionType) => {
   const cv = TicTacCellValue( columnId,  firstTime);
   const td = document.createElement('div');
 
@@ -52,6 +73,16 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
     onClick(turn, changeTurn, e);
   }
 
+  const anotherPersonMove = () => {
+    getTd().classList.add('type-X');
+    setTimeout(() => {
+      getTd().classList.add('stop-animate-move-x');
+    },StopAnimateMoveX);
+    const cv = TicTacCellValue( columnId,  firstTime);
+    getTd().append(cv.render());
+    cv.update('X');
+    setClicked();
+  }
 
   const update = (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull) => {
     const element = findEl('#column-'+columnId);
@@ -72,14 +103,7 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
           onClick(newTurn, newChangeTurn, e);
         });
       } else if ( !getTd().classList.contains('type-X') ) {
-          getTd().classList.add('type-X');
-          setTimeout(() => {
-            getTd().classList.add('stop-animate-move-x');
-          },StopAnimateMoveX);
-          const cv = TicTacCellValue( columnId,  firstTime);
-          getTd().append(cv.render());
-          cv.update('X');
-          setClicked();
+        anotherPersonMove();
       }
     } else {
       if (winnerSequence === null) {
@@ -88,23 +112,19 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
         });
       } else if ( Array.isArray(winnerSequence) ) {
         if ( winnerSequence.includes( getMoveType() ) ) {
-          getTd().classList.add('type-Success');
           setTimeout(() => {
-            getTd().classList.add('stop-animate-move-success');
-          },StopAnimateMoveSuccess);
+            getTd().classList.add('type-Success');
+            setTimeout(() => {
+              getTd().classList.add('stop-animate-move-success');
+            }, 200 );
+          }, getStopAnimateMoveSuccess() );
+          incrementStopAnimateMoveSuccess();
           if (
             Array.isArray(anotherPersonMoves)
             && anotherPersonMoves.includes( getMoveType() )
             && !getTd().classList.contains('type-X')
           ) {
-            getTd().classList.add('type-X');
-            setTimeout(() => {
-              getTd().classList.add('stop-animate-move-x');
-            },StopAnimateMoveX);
-            const cv = TicTacCellValue( columnId,  firstTime);
-            getTd().append(cv.render());
-            cv.update('X');
-            setClicked();
+            anotherPersonMove();
           }
         } else {
           getTd().classList.add('type-Disabled');

@@ -30,8 +30,8 @@ const allData = [
 const singlePlayer = false as Boolean;
 
 export const whenOneInSequence = (
-  currentValues: MoveType[],
   seq: WiningSequenceType,
+  currentValues: MoveType[],
   anotherCurrentValues: MoveType[],
 ) => {
   let foundAnotherMove = null;
@@ -56,6 +56,7 @@ export const whenOneInSequence = (
       foundAnotherMove = seq[0];
     }
   }
+  console.log("whenOneInSequence", foundAnotherMove);
   // console.log('currentValues', currentValues, seq, anotherCurrentValues, foundAnotherMove);
   return foundAnotherMove;
 }
@@ -97,7 +98,7 @@ export const TurnHandler = () => {
     }
   }
 
-  const findAnotherV = () : MoveType => {
+  const findAnotherEasy = () : MoveType => {
     const keys = Object.keys(turnStorage);
     let keysStartAt = 0 ;
     let totalValues = [] as MoveType[];
@@ -108,11 +109,11 @@ export const TurnHandler = () => {
     }
     const remainingMoves = allData.filter(v => !totalValues.includes(v));
     // console.log('remainingMoves', remainingMoves, allData, totalValues);
-    // console.log('foundAnotherMove V1 Random ');
+   //  console.log('foundAnotherMove V1 Random ');
     return remainingMoves[  Math.floor(Math.random() * ( remainingMoves.length - 1 )) ];
   }
 
-  const findAnotherV2 = () : MoveType => {
+  const findAnotherMedium = () : MoveType => {
     let foundWinner = null as WinnerType;
     let foundAnotherMove = null as MoveTypeWithNull;
 
@@ -138,8 +139,6 @@ export const TurnHandler = () => {
               ( currentValues.includes( seq[0] ) && currentValues.includes( seq[2] ) && !anotherCurrentValues.includes( seq[1] ) )
             ) {
               foundAnotherMove = seq[1];
-            } else {
-              foundAnotherMove = whenOneInSequence(currentValues, seq, anotherCurrentValues);
             }
           }
         } else {
@@ -154,7 +153,7 @@ export const TurnHandler = () => {
       let startAt = 0 ;
       while (startAt < winnerData.length) {
         const seq = winnerData[startAt];
-        foundAnotherMove = whenOneInSequence(currentValues, seq, anotherCurrentValues);
+        foundAnotherMove = whenOneInSequence(seq, currentValues, anotherCurrentValues);
         if (foundAnotherMove !== null) {
           break;
         }
@@ -166,13 +165,13 @@ export const TurnHandler = () => {
     if (foundWinner) {
       winner = foundWinner;
     } else if (foundAnotherMove === null) {
-      foundAnotherMove = findAnotherV();
+      foundAnotherMove = findAnotherEasy();
     }
 
     return foundAnotherMove as MoveType;
   }
 
-  const findAnotherV3 = () : MoveType | undefined => {
+  const findAnotherHard = () : MoveType | undefined => {
     let foundWinner = null as WinnerType;
     let foundAnotherMove = null as MoveTypeWithNull;
 
@@ -227,7 +226,7 @@ export const TurnHandler = () => {
     if (foundWinner) {
       winner = foundWinner;
     } else if (foundAnotherMove === null) {
-      foundAnotherMove = findAnotherV2();
+      foundAnotherMove = findAnotherMedium();
     }
 
     return foundAnotherMove as MoveType;
@@ -252,16 +251,19 @@ export const TurnHandler = () => {
       } else {
         turnStorage[turn] = [v];
       }
-      const nextMove = findAnotherV3();
-      if (nextMove) {
-        if (turnStorage[anotherTurn]) {
-          turnStorage[anotherTurn].push(nextMove);
-        } else {
-          turnStorage[anotherTurn] = [nextMove];
-        }
-      }
       checkWinner();
-      console.log( [...turnStorage[turn], ...turnStorage[anotherTurn]] );
+      if ( winner === null ) {
+        const nextMove = findAnotherEasy();
+        if (nextMove) {
+          if (turnStorage[anotherTurn]) {
+            turnStorage[anotherTurn].push(nextMove);
+          } else {
+            turnStorage[anotherTurn] = [nextMove];
+          }
+        }
+        checkWinner();
+      }
+      // console.log( [...turnStorage[turn], ...turnStorage[anotherTurn]] );
       if ([...turnStorage[turn], ...turnStorage[anotherTurn]].length === 9 && winner === null) {
         winner = 'NONE';
       }
