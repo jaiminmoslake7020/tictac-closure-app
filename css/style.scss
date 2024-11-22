@@ -1,5 +1,11 @@
 @use "base/index";
 
+@layer base{
+  .tic-tac-width {
+    @apply w-[90%] md:w-[50%] lg:max-w-[30vw];
+  }
+}
+
 body {
   @apply bg-bkg text-content;
 }
@@ -8,12 +14,42 @@ body {
   @apply w-screen h-screen flex justify-center items-center;
 }
 
+.btn{
+  @apply px-6 py-2 font-semibold bg-content text-bkg rounded-lg ;
+
+  &:hover{
+    @apply opacity-90;
+  }
+}
+
 .wrapper-div{
   @apply w-full flex flex-col items-center gap-8;
+
+  .info-tab{
+    @apply tic-tac-width flex justify-between items-center min-h-[2.5rem];
+
+    .info-p{
+      @apply font-semibold;
+
+      &.winner-found{
+        @apply text-blue-300;
+
+        &.you-lost{
+          @apply text-red-300;
+        }
+
+        &.you-win{
+          @apply text-green-300;
+        }
+
+      }
+
+    }
+  }
 }
 
 .tic-tac-table{
-  @apply w-[90%] md:w-[50%] lg:max-w-[30vw] flex flex-col gap-4;
+  @apply tic-tac-width flex flex-col gap-4;
 
   .tic-tac-table-body{
     @apply w-full flex flex-col gap-4;
@@ -24,7 +60,7 @@ body {
   }
   .tic-tac-cell {
     @apply border border-content w-[33%] font-bold text-2xl relative aspect-square rounded;
-    @apply transition-transform;
+    @apply transition-transform delay-75;
 
     &.type-O{
       @apply cursor-not-allowed;
@@ -49,7 +85,7 @@ body {
     }
 
     &.type-Success{
-      @apply bg-green-300 text-white scale-125 origin-center;
+      @apply bg-green-300 text-white scale-110 origin-center;
 
       &.stop-animate-move-success{
         @apply scale-100;

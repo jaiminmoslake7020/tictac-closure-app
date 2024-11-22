@@ -41,6 +41,11 @@
     --color-theme-btn-border: 214 211 209;
   }
 }
+@layer base {
+  .tic-tac-width {
+    @apply w-[90%] md:w-[50%] lg:max-w-[30vw];
+  }
+}
 body {
   @apply bg-bkg text-content;
 }
@@ -49,12 +54,34 @@ body {
   @apply w-screen h-screen flex justify-center items-center;
 }
 
+.btn {
+  @apply px-6 py-2 font-semibold bg-content text-bkg rounded-lg;
+}
+.btn:hover {
+  @apply opacity-90;
+}
+
 .wrapper-div {
   @apply w-full flex flex-col items-center gap-8;
 }
+.wrapper-div .info-tab {
+  @apply tic-tac-width flex justify-between items-center min-h-[2.5rem];
+}
+.wrapper-div .info-tab .info-p {
+  @apply font-semibold;
+}
+.wrapper-div .info-tab .info-p.winner-found {
+  @apply text-blue-300;
+}
+.wrapper-div .info-tab .info-p.winner-found.you-lost {
+  @apply text-red-300;
+}
+.wrapper-div .info-tab .info-p.winner-found.you-win {
+  @apply text-green-300;
+}
 
 .tic-tac-table {
-  @apply w-[90%] md:w-[50%] lg:max-w-[30vw] flex flex-col gap-4;
+  @apply tic-tac-width flex flex-col gap-4;
 }
 .tic-tac-table .tic-tac-table-body {
   @apply w-full flex flex-col gap-4;
@@ -64,7 +91,7 @@ body {
 }
 .tic-tac-table .tic-tac-cell {
   @apply border border-content w-[33%] font-bold text-2xl relative aspect-square rounded;
-  @apply transition-transform;
+  @apply transition-transform delay-75;
 }
 .tic-tac-table .tic-tac-cell.type-O {
   @apply cursor-not-allowed;
@@ -83,7 +110,7 @@ body {
   @apply bg-red-300 text-red-600;
 }
 .tic-tac-table .tic-tac-cell.type-Success {
-  @apply bg-green-300 text-white scale-125 origin-center;
+  @apply bg-green-300 text-white scale-110 origin-center;
 }
 .tic-tac-table .tic-tac-cell.type-Success.stop-animate-move-success {
   @apply scale-100;

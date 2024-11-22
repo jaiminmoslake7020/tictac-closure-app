@@ -10,6 +10,10 @@ import {
   WiningSequenceTypeWithNull
 } from '../types/index.js';
 
+const StopAnimateMoveX = 200;
+const StopAnimateMoveSuccess = 400;
+
+
 export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: TurnType, changeTurn: ChangeFunctionType) => {
   const cv = TicTacCellValue( columnId,  firstTime);
   const td = document.createElement('div');
@@ -71,7 +75,7 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
           getTd().classList.add('type-X');
           setTimeout(() => {
             getTd().classList.add('stop-animate-move-x');
-          },100);
+          },StopAnimateMoveX);
           const cv = TicTacCellValue( columnId,  firstTime);
           getTd().append(cv.render());
           cv.update('X');
@@ -87,7 +91,7 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
           getTd().classList.add('type-Success');
           setTimeout(() => {
             getTd().classList.add('stop-animate-move-success');
-          },100);
+          },StopAnimateMoveSuccess);
           if (
             Array.isArray(anotherPersonMoves)
             && anotherPersonMoves.includes( getMoveType() )
@@ -96,7 +100,7 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
             getTd().classList.add('type-X');
             setTimeout(() => {
               getTd().classList.add('stop-animate-move-x');
-            },100);
+            },StopAnimateMoveX);
             const cv = TicTacCellValue( columnId,  firstTime);
             getTd().append(cv.render());
             cv.update('X');

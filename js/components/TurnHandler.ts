@@ -56,7 +56,7 @@ export const whenOneInSequence = (
       foundAnotherMove = seq[0];
     }
   }
-  console.log('currentValues', currentValues, seq, anotherCurrentValues, foundAnotherMove);
+  // console.log('currentValues', currentValues, seq, anotherCurrentValues, foundAnotherMove);
   return foundAnotherMove;
 }
 
@@ -68,30 +68,32 @@ export const TurnHandler = () => {
   let turnStorage = {} as TurnStorageType;
 
   const checkWinner = () => {
-    let foundWinner = null as WinnerType;
-    const keys = Object.keys(turnStorage);
-    let keysStartAt = 0 ;
-    while( keysStartAt < keys.length ) {
-      const currentValues = turnStorage[ keys[keysStartAt] as TurnType ];
-      if (currentValues.length >= 3) {
-        let startAt = 0 ;
-        while (startAt < winnerData.length) {
-          const seq = winnerData[startAt] as WiningSequenceType;
-          if (currentValues.includes( seq[0] ) && currentValues.includes( seq[1] ) && currentValues.includes( seq[2] )) {
-            foundWinner = keys[keysStartAt] as TurnType;
-            winnerSequence = seq;
-            break;
+    if (!winner) {
+      let foundWinner = null as WinnerType;
+      const keys = Object.keys(turnStorage);
+      let keysStartAt = 0 ;
+      while( keysStartAt < keys.length ) {
+        const currentValues = turnStorage[ keys[keysStartAt] as TurnType ];
+        if (currentValues.length >= 3) {
+          let startAt = 0 ;
+          while (startAt < winnerData.length) {
+            const seq = winnerData[startAt] as WiningSequenceType;
+            if (currentValues.includes( seq[0] ) && currentValues.includes( seq[1] ) && currentValues.includes( seq[2] )) {
+              foundWinner = keys[keysStartAt] as TurnType;
+              winnerSequence = seq;
+              break;
+            }
+            startAt++;
           }
-          startAt++;
         }
+        if (foundWinner !== null) {
+          break;
+        }
+        keysStartAt++;
       }
-      if (foundWinner !== null) {
-        break;
+      if (foundWinner) {
+        winner = foundWinner;
       }
-      keysStartAt++;
-    }
-    if (foundWinner) {
-      winner = foundWinner;
     }
   }
 
@@ -170,12 +172,15 @@ export const TurnHandler = () => {
     return foundAnotherMove as MoveType;
   }
 
-  const findAnotherV3 = () : MoveType => {
+  const findAnotherV3 = () : MoveType | undefined => {
     let foundWinner = null as WinnerType;
     let foundAnotherMove = null as MoveTypeWithNull;
 
     const currentValues = turnStorage[ turn ];
     const anotherCurrentValues = turnStorage[ anotherTurn ] || [];
+    if (currentValues.length + anotherCurrentValues.length === 9) {
+      return undefined;
+    }
 
     if (anotherCurrentValues.length >= 2) {
       let startAt = 0 ;
@@ -248,13 +253,18 @@ export const TurnHandler = () => {
         turnStorage[turn] = [v];
       }
       const nextMove = findAnotherV3();
-      if (turnStorage[anotherTurn]) {
-        turnStorage[anotherTurn].push(nextMove);
-      } else {
-        turnStorage[anotherTurn] = [nextMove];
+      if (nextMove) {
+        if (turnStorage[anotherTurn]) {
+          turnStorage[anotherTurn].push(nextMove);
+        } else {
+          turnStorage[anotherTurn] = [nextMove];
+        }
       }
-      console.log('turnStorage', turnStorage);
       checkWinner();
+      console.log( [...turnStorage[turn], ...turnStorage[anotherTurn]] );
+      if ([...turnStorage[turn], ...turnStorage[anotherTurn]].length === 9 && winner === null) {
+        winner = 'NONE';
+      }
     }
   }
 

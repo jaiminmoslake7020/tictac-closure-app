@@ -11,9 +11,9 @@
   "author": "",
   "scripts": {
     "dev:sass": "sass --watch ./css/style.scss ./css/output.css",
-    "dev:tailwindcss": "tailwindcss build css/output.css -o css/tailwind-style.css --watch",
+    "dev:tailwindcss": "tailwindcss build -i css/output.css -o css/tailwind-style.css --watch",
     "build:sass": "sass ./css/style.scss ./css/output.css",
-    "build:tailwindcss": "tailwindcss build css/output.css -o css/tailwind-style.css",
+    "build:tailwindcss": "tailwindcss build -i css/output.css -o css/tailwind-style.css",
     "build:style": "npm run build:sass && npm run build:tailwindcss",
     "remove": "rm -rf ./dist",
     "build": "tsc && npm run build:style",

@@ -1,5 +1,5 @@
 export type TurnType = 'X' | 'O';
-export type WinnerType = TurnType | null;
+export type WinnerType = TurnType | null | 'NONE';
 
 export type MoveType = '11' | '12' | '13' | '21' | '22' | '23' | '31' | '32' | '33';
 export type ColumnIdType = '1-1' | '1-2' | '1-3' | '2-1' | '2-2' | '2-3' | '3-1' | '3-2' | '3-3';
