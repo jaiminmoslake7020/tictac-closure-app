@@ -56,6 +56,7 @@ export const whenOneInSequence = (
       foundAnotherMove = seq[0];
     }
   }
+  console.log('currentValues', currentValues, seq, anotherCurrentValues, foundAnotherMove);
   return foundAnotherMove;
 }
 
@@ -105,7 +106,7 @@ export const TurnHandler = () => {
     }
     const remainingMoves = allData.filter(v => !totalValues.includes(v));
     // console.log('remainingMoves', remainingMoves, allData, totalValues);
-    console.log('foundAnotherMove V1 Random ');
+    // console.log('foundAnotherMove V1 Random ');
     return remainingMoves[  Math.floor(Math.random() * ( remainingMoves.length - 1 )) ];
   }
 
@@ -152,14 +153,14 @@ export const TurnHandler = () => {
       while (startAt < winnerData.length) {
         const seq = winnerData[startAt];
         foundAnotherMove = whenOneInSequence(currentValues, seq, anotherCurrentValues);
-        if (!foundAnotherMove) {
+        if (foundAnotherMove !== null) {
           break;
         }
         startAt++;
       }
     }
 
-    console.log('foundAnotherMove with V2 ', foundAnotherMove , foundWinner);
+    // console.log('foundAnotherMove with V2 ', foundAnotherMove , foundWinner);
     if (foundWinner) {
       winner = foundWinner;
     } else if (foundAnotherMove === null) {
@@ -217,7 +218,7 @@ export const TurnHandler = () => {
       }
     }
 
-    console.log('foundAnotherMove with V3 ', foundAnotherMove , foundWinner);
+    // console.log('foundAnotherMove with V3 ', foundAnotherMove , foundWinner);
     if (foundWinner) {
       winner = foundWinner;
     } else if (foundAnotherMove === null) {
