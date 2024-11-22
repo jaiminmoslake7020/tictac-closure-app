@@ -20,7 +20,6 @@ export const TurnInfo = (turn: TurnType) => {
     return button;
   }
 
-
   const render = () => {
     p.innerHTML = 'You are "'+turn+'"';
     div.append(p);
