@@ -13,7 +13,8 @@ export const TicTacCellRow = (rowId: number, turn: TurnType, changeTurn: ChangeF
   const tdArray = [] as TicTacCellFunctionType[];
 
   const render = () => {
-    const tr = createEL('tr');
+    const tr = createEL('div');
+    tr.classList.add('tic-tac-row')
     tr.setAttribute('id', 'row-'+rowId);
     for (let i = 0 ; i < 3 ; i++)  {
       const td = TicTacCell( rowId+'-'+(i + 1) as ColumnIdType , i === 0 && rowId === 1 , turn, changeTurn);

@@ -12,20 +12,20 @@ export type AnotherPersonMovesTypeWithNull = MoveType[] | null;
 export type TurnStorageType = Record<TurnType, MoveType[]>;
 
 export type ChangeFunctionType = ( i: MoveType ) => void;
-export type TicTacCellRowRenderFunctionType = () => HTMLTableRowElement
+export type TicTacCellRowRenderFunctionType = () => HTMLDivElement
 export type TicTacCellRowUpdateFunctionType = (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull ) => void
 
 export type TicTacCellRowFunctionType = {
-  render: () => HTMLTableRowElement,
+  render: () => HTMLDivElement,
   update: (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull ) => void
 }
 
 
-export type TicTacCellRenderFunctionType = () => HTMLTableCellElement
+export type TicTacCellRenderFunctionType = () => HTMLDivElement
 export type TicTacCellUpdateFunctionType = (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull ) => void
 
 export type TicTacCellFunctionType = {
-  render: () => HTMLTableCellElement,
+  render: () => HTMLDivElement,
   update: (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull ) => void
 }
 

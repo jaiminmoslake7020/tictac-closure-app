@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  :root {
+    --color-bkg: 226 232 240;
+    --color-content: 39 39 42;
+    --color-theme-btn-bg: 229 231 235;
+    --color-theme-btn-text: 30 41 59;
+    --color-theme-btn-border: 156 163 175;
+    --color-theme-btn-active-bg: 87 83 78;
+    --color-theme-btn-active-text: 244 244 245;
+    --color-theme-btn-active-border: 214 211 209;
+  }
+  body[data-theme=light] {
+    --color-bkg: 226 232 240;
+    --color-content: 39 39 42;
+    --color-theme-btn-bg: 229 231 235;
+    --color-theme-btn-text: 30 41 59;
+    --color-theme-btn-border: 156 163 175;
+    --color-theme-btn-active-bg: 87 83 78;
+    --color-theme-btn-active-text: 244 244 245;
+    --color-theme-btn-active-border: 214 211 209;
+  }
+}
+@layer base {
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-bkg: 2 6 23;
+      --color-content: 243 244 246;
+    }
+  }
+  body[data-theme=dark] {
+    --color-bkg: 2 6 23;
+    --color-content: 243 244 246;
+    --color-theme-btn-active-bg: 229 231 235;
+    --color-theme-btn-active-text: 30 41 59;
+    --color-theme-btn-active-border: 156 163 175;
+    --color-theme-btn-bg: 87 83 78;
+    --color-theme-btn-text: 244 244 245;
+    --color-theme-btn-border: 214 211 209;
+  }
+}
+body {
+  @apply bg-bkg text-content;
+}
+
+#root {
+  @apply w-screen h-screen flex justify-center items-center;
+}
+
+.wrapper-div {
+  @apply w-full flex flex-col items-center gap-8;
+}
+
+.tic-tac-table {
+  @apply w-[90%] md:w-[50%] lg:max-w-[30vw] flex flex-col gap-4;
+}
+.tic-tac-table .tic-tac-table-body {
+  @apply w-full flex flex-col gap-4;
+}
+.tic-tac-table .tic-tac-row {
+  @apply flex w-full gap-4;
+}
+.tic-tac-table .tic-tac-cell {
+  @apply border border-content w-[33%] font-bold text-2xl relative aspect-square rounded;
+  @apply transition-transform;
+}
+.tic-tac-table .tic-tac-cell.type-O {
+  @apply cursor-not-allowed;
+}
+.tic-tac-table .tic-tac-cell.type-X {
+  @apply bg-content text-bkg cursor-not-allowed origin-center;
+  transform: rotate3d(1, 0, 0, -90deg);
+}
+.tic-tac-table .tic-tac-cell.type-X.stop-animate-move-x {
+  transform: rotate3d(0, 0, 0, 0deg);
+}
+.tic-tac-table .tic-tac-cell.type-Disabled {
+  @apply cursor-not-allowed;
+}
+.tic-tac-table .tic-tac-cell.type-Error {
+  @apply bg-red-300 text-red-600;
+}
+.tic-tac-table .tic-tac-cell.type-Success {
+  @apply bg-green-300 text-white scale-125 origin-center;
+}
+.tic-tac-table .tic-tac-cell.type-Success.stop-animate-move-success {
+  @apply scale-100;
+}
+.tic-tac-table .tic-tac-cell .tic-tac-cell-span {
+  @apply absolute top-2 right-2 text-xs text-white hidden;
+}
+.tic-tac-table .tic-tac-cell .tic-tac-cell-value {
+  @apply flex justify-center items-center w-full h-full text-3xl;
+}
+
+/*# sourceMappingURL=output.css.map */

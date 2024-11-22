@@ -1,7 +1,6 @@
 import { findEl } from '../utils/index.js';
 import { TicTacCellIdentifier } from './TicTacCellIdentifier.js'
 import { TicTacCellValue } from './TicTacCellValue.js'
-import { AddStyle } from './AddStyle.js'
 import {
   AnotherPersonMovesTypeWithNull,
   ChangeFunctionType,
@@ -13,7 +12,7 @@ import {
 
 export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: TurnType, changeTurn: ChangeFunctionType) => {
   const cv = TicTacCellValue( columnId,  firstTime);
-  const td = document.createElement('td');
+  const td = document.createElement('div');
 
   let clicked = false;
 
@@ -49,16 +48,6 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
     onClick(turn, changeTurn, e);
   }
 
-  const addStyle = () => {
-    if (firstTime) {
-      AddStyle('.tic-tac-cell-td', '.tic-tac-cell{  width: 4rem; height: 4rem; padding: 2rem; cursor: pointer; position:relative; }');
-      AddStyle('.type-O', '.type-O{  background-color: #dfe3e8; cursor: not-allowed; }');
-      AddStyle('.type-X', '.type-X{  background-color: #3e3737; color: white; cursor: not-allowed; }');
-      AddStyle('.type-Error', '.type-Error{  background-color: red; color: white; }');
-      AddStyle('.type-Success', '.type-Success{  background-color: green; color: white; cursor: not-allowed; }');
-      AddStyle('.type-Disabled', '.type-Disabled{ cursor: not-allowed; opacity: 0.5;  }');
-    }
-  }
 
   const update = (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull) => {
     const element = findEl('#column-'+columnId);
@@ -80,7 +69,9 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
         });
       } else if ( !getTd().classList.contains('type-X') ) {
           getTd().classList.add('type-X');
-          getTd().classList.add('type-X');
+          setTimeout(() => {
+            getTd().classList.add('stop-animate-move-x');
+          },100);
           const cv = TicTacCellValue( columnId,  firstTime);
           getTd().append(cv.render());
           cv.update('X');
@@ -94,13 +85,18 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
       } else if ( Array.isArray(winnerSequence) ) {
         if ( winnerSequence.includes( getMoveType() ) ) {
           getTd().classList.add('type-Success');
+          setTimeout(() => {
+            getTd().classList.add('stop-animate-move-success');
+          },100);
           if (
             Array.isArray(anotherPersonMoves)
             && anotherPersonMoves.includes( getMoveType() )
             && !getTd().classList.contains('type-X')
           ) {
             getTd().classList.add('type-X');
-            getTd().classList.add('type-X');
+            setTimeout(() => {
+              getTd().classList.add('stop-animate-move-x');
+            },100);
             const cv = TicTacCellValue( columnId,  firstTime);
             getTd().append(cv.render());
             cv.update('X');
@@ -123,7 +119,6 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
     return td;
   }
 
-  addStyle();
   return {
     render,
     update

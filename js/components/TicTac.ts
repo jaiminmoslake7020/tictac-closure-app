@@ -1,14 +1,13 @@
-import {createEL, findEl} from '../utils/index.js'
+import {createEL} from '../utils/index.js'
 import { TurnInfo } from './TurnInfo.js'
 import { TurnHandler } from './TurnHandler.js'
 import { TicTacCellRow } from './TicTacCellRow.js'
-import { AddStyle } from './AddStyle.js'
 import {MoveType, TicTacCellRowFunctionType} from '../types/index.js';
 
 export const TicTac = () => {
   const wrapperDiv = createEL('div');
-  const ticTacTable = createEL('table');
-  const ticTacTableBody = createEL('tbody');
+  const ticTacTable = createEL('div');
+  const ticTacTableBody = createEL('div');
 
   const trArray = [] as TicTacCellRowFunctionType[];
   const { getTurn, changeTurn, getWinner, getWinnerSequence, getAnotherPersonTurns } = TurnHandler();
@@ -33,6 +32,8 @@ export const TicTac = () => {
       ticTacTableBody.append(tr.render());
       trArray.push(tr);
     }
+    ticTacTable.classList.add('tic-tac-table');
+    ticTacTableBody.classList.add('tic-tac-table-body');
     ticTacTable.append(ticTacTableBody);
     // const b = createEL('button');
     // b.setAttribute('id', 'reset-button');
@@ -47,10 +48,10 @@ export const TicTac = () => {
     // wrapperDiv.append( b );
     wrapperDiv.append( turnInfoP.render() );
     wrapperDiv.append(ticTacTable);
+    wrapperDiv.classList.add('wrapper-div')
     return wrapperDiv;
   }
 
-  AddStyle('#root', '#root{ height: 100vh; width: 100vw; display:flex; justify-content:center; align-items:center;  } #root table{ border: 1px solid black; border-collapse: collapse; } #root table td{ border: 1px solid black; } ');
   return {
     render
   };
