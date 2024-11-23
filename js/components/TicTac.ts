@@ -1,55 +1,81 @@
 import {createEL} from '../utils/index.js'
 import { TurnInfo } from './TurnInfo.js'
 import { TurnHandler } from './TurnHandler.js'
-import { TicTacCellRow } from './TicTacCellRow.js'
-import {MoveType, TicTacCellRowFunctionType} from '../types/index.js';
+import {
+  TicTacTableType,
+  TurnHandlerType,
+  TurnInfoType,
+} from '../types/index.js';
+import {TicTacTable} from './TicTacTable.js';
 
 export const TicTac = () => {
-  const wrapperDiv = createEL('div');
-  const ticTacTable = createEL('div');
-  const ticTacTableBody = createEL('div');
+  let wrapperDiv :undefined | HTMLDivElement;
+  let turnInfoP: TurnInfoType | undefined;
+  let turnHandler: TurnHandlerType | undefined;
+  let ticTacTableType: TicTacTableType | undefined;
 
-  const trArray = [] as TicTacCellRowFunctionType[];
-  const { getTurn, changeTurn, getWinner, getWinnerSequence, getAnotherPersonTurns } = TurnHandler();
-  const turnInfoP = TurnInfo( getTurn() );
+  const getWrapperDiv = () : HTMLDivElement => {
+    return wrapperDiv as HTMLDivElement;
+  }
 
-  const handleChangeTurn = (v: MoveType) => {
-    changeTurn(v);
-    const newTurn = getTurn();
-    const winner = getWinner();
-    const winnerSequence = getWinnerSequence();
-    const anotherPersonTurns = getAnotherPersonTurns();
-    for (let i = 0 ; i < 3 ; i++)  {
-      trArray[i].update( newTurn , handleChangeTurn, winnerSequence, anotherPersonTurns);
+  const setWrapperDiv = (item: HTMLDivElement) => {
+    wrapperDiv = item;
+  }
+
+  const setTurnInfoP = (item: TurnInfoType) => {
+    turnInfoP = item;
+  }
+
+  const setTurnHandlerType = (item: TurnHandlerType) => {
+    turnHandler = item;
+  }
+
+  const getTurnHandlerType = () : TurnHandlerType => {
+     return turnHandler as TurnHandlerType;
+  }
+
+  const setTicTacTable = (item: TicTacTableType) => {
+    ticTacTableType = item;
+  }
+
+  const getTicTacTable = () : TicTacTableType => {
+    return ticTacTableType as TicTacTableType;
+  }
+
+  const getTurnInfoP = () : TurnInfoType => {
+    if ( !turnInfoP ) {
+      const t = getTurnHandlerType();
+      setTurnInfoP( TurnInfo( t.getTurn() ) );
     }
-    turnInfoP.update( newTurn , winner);
+    return turnInfoP as TurnInfoType;
+  }
+
+  const reload = () => {
+    setTurnHandlerType( TurnHandler() );
+    const t = getTurnHandlerType();
+    const table = getTicTacTable();
+    table.reset();
+    getTurnInfoP().reset( t.getTurn() );
+  }
+
+  const updateInfo = () => {
+    const {
+      getTurn, getWinner
+    } = getTurnHandlerType();
+    getTurnInfoP().update( getTurn() , getWinner() , reload);
   }
 
   const render = () => {
-    for (let i = 0 ; i < 3 ; i++)  {
-      const turn = getTurn();
-      const tr = TicTacCellRow( i + 1 ,  turn, handleChangeTurn );
-      ticTacTableBody.append(tr.render());
-      trArray.push(tr);
-    }
-    ticTacTable.classList.add('tic-tac-table');
-    ticTacTableBody.classList.add('tic-tac-table-body');
-    ticTacTable.append(ticTacTableBody);
-    // const b = createEL('button');
-    // b.setAttribute('id', 'reset-button');
-    // b.setAttribute('type', 'button');
-    // b.innerHTML = 'Reset';
-    // b.addEventListener('click', () => {
-    //   findEl('table').remove();
-    //   b.remove()
-    //   findEl('p').remove();
-    //   render();
-    // })
-    // wrapperDiv.append( b );
-    wrapperDiv.append( turnInfoP.render() );
-    wrapperDiv.append(ticTacTable);
-    wrapperDiv.classList.add('wrapper-div')
-    return wrapperDiv;
+    setTurnHandlerType( TurnHandler() );
+    const t = getTurnHandlerType();
+    setTurnInfoP( TurnInfo( t.getTurn() ) );
+    setWrapperDiv( createEL('div') as HTMLDivElement );
+    getWrapperDiv().append( getTurnInfoP().render() );
+    const table = TicTacTable( getTurnHandlerType , updateInfo );
+    setTicTacTable(table);
+    getWrapperDiv().append(table.render());
+    getWrapperDiv().classList.add('wrapper-div')
+    return getWrapperDiv();
   }
 
   return {

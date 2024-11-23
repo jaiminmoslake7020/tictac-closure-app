@@ -286,7 +286,11 @@ export const TurnHandler = () => {
     return !singlePlayer ? ( turnStorage[anotherTurn] || [] ) : null;
   }
 
+  const printData = () => {
+    console.log('turnStorage', turnStorage);
+  }
+
   return {
-    turn, changeTurn, getTurn, getWinner, getWinnerSequence, getAnotherPersonTurns
+    turn, changeTurn, getTurn, getWinner, getWinnerSequence, getAnotherPersonTurns, printData
   }
 }

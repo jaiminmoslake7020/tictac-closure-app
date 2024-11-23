@@ -26,13 +26,19 @@ export const TicTacCellRow = (rowId: number, turn: TurnType, changeTurn: ChangeF
 
   const update = (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull) => {
     for (let i = 0 ; i < 3 ; i++)  {
-      // console.log('TicTacCellRow', newTurn);
       tdArray[i].update(newTurn, newChangeTurn, winnerSequence, anotherPersonMoves);
+    }
+  }
+
+  const reset = ( newTurn: TurnType, newChangeTurn: ChangeFunctionType ) => {
+    for (let i = 0 ; i < 3 ; i++)  {
+      tdArray[i].reset( newTurn, newChangeTurn );
     }
   }
 
   return {
     render,
-    update
+    update,
+    reset
   };
 }

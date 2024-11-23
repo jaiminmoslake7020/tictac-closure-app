@@ -16,8 +16,10 @@ export type TicTacCellRowRenderFunctionType = () => HTMLDivElement
 export type TicTacCellRowUpdateFunctionType = (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull ) => void
 
 export type TicTacCellRowFunctionType = {
-  render: () => HTMLDivElement,
-  update: (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull ) => void
+  render: TicTacCellRowRenderFunctionType,
+  update: TicTacCellRowUpdateFunctionType,
+  reset: ( newTurn: TurnType, newChangeTurn: ChangeFunctionType ) => void
+  // update: (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull ) => void
 }
 
 
@@ -25,10 +27,39 @@ export type TicTacCellRenderFunctionType = () => HTMLDivElement
 export type TicTacCellUpdateFunctionType = (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull ) => void
 
 export type TicTacCellFunctionType = {
-  render: () => HTMLDivElement,
-  update: (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull ) => void
+  render: TicTacCellRenderFunctionType,
+  update: TicTacCellUpdateFunctionType,
+  reset: ( newTurn: TurnType, newChangeTurn: ChangeFunctionType ) => void
+  // update: (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull ) => void
 }
 
 export type TicTacFunctionReturnType = {
   render: () => HTMLDivElement,
 }
+
+export type TurnInfoType = {
+  render: () => HTMLDivElement,
+  update: (newTurn: TurnType, winner: WinnerType, reload: Function) => void,
+  reset: ( t: TurnType ) => void
+}
+
+export type TurnHandlerType = {
+  turn: TurnType,
+  changeTurn: ChangeFunctionType,
+  getTurn: () => TurnType,
+  getWinner: () =>  WinnerType,
+  getWinnerSequence: () => WiningSequenceTypeWithNull,
+  getAnotherPersonTurns: () => AnotherPersonMovesTypeWithNull,
+  printData: () =>void
+};
+
+export type TicTacTableType = {
+  render: () => HTMLDivElement,
+  reset: () => void
+}
+
+export type TicTacCellValueType = {
+  render: () => HTMLDivElement,
+}
+
+export type TDClassIdType = 'typeO' | 'typeX' | 'typeError' | 'typeSuccess' | 'typeDisabled' | 'stopAnimateMoveX' | 'stopAnimateMoveSuccess';

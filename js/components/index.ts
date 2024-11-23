@@ -1,6 +1,7 @@
 export { App } from './App.js';
 export { AddStyle } from './AddStyle.js';
 export { TicTac } from './TicTac.js';
+export { TicTacTable } from './TicTacTable.js';
 export { TicTacCell } from './TicTacCell.js';
 export { TicTacCellRow } from './TicTacCellRow.js';
 export { TicTacCellIdentifier } from './TicTacCellIdentifier.js';
