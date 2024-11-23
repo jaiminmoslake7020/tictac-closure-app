@@ -59,7 +59,7 @@ body {
     @apply flex w-full gap-4;
   }
   .tic-tac-cell {
-    @apply border border-content w-[33%] font-bold text-2xl relative aspect-square rounded;
+    @apply border border-content w-[33%] font-bold text-2xl relative aspect-square rounded cursor-pointer;
     @apply transition-all delay-75;
 
     &.type-O{
