@@ -1,39 +1,30 @@
-import {createEL} from '../utils/index.js'
-import { TurnInfo } from './TurnInfo.js'
+import {InfoTab, InfoTabType} from './InfoTab.js';
 import { TurnHandler } from './TurnHandler.js'
 import {
-  AppLevelType,
   TicTacTableType,
   TurnHandlerType,
-  TurnInfoType,
 } from '../types/index.js';
 import {TicTacTable} from './TicTacTable.js';
+import {
+  InitializeContextsFunctionType,
+  AppLevelHookType,
+  useContextAppLevelType
+} from '../contexts/index.js';
+import {useDiv} from './base/Div.js';
 
-export const TicTac = ( appLevelArg: AppLevelType ) => {
-  let wrapperDiv :undefined | HTMLDivElement;
-  let turnInfoP: TurnInfoType | undefined;
+export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
+  let infoTabDiv: InfoTabType | undefined;
   let turnHandler: TurnHandlerType | undefined;
   let ticTacTableType: TicTacTableType | undefined;
-  let appLevel = appLevelArg ;
 
-  const setAppLevel = (item: AppLevelType) => {
-    appLevel = item;
-  }
+  const { getAppLevelType  } = useContextAppLevelType( contextsData ) as AppLevelHookType;
+  const {
+    getDiv: getWrapperDiv,
+    setDiv: setWrapperDiv
+  } = useDiv();
 
-  const getAppLevel = () : AppLevelType => {
-    return appLevel;
-  }
-
-  const getWrapperDiv = () : HTMLDivElement => {
-    return wrapperDiv as HTMLDivElement;
-  }
-
-  const setWrapperDiv = (item: HTMLDivElement) => {
-    wrapperDiv = item;
-  }
-
-  const setTurnInfoP = (item: TurnInfoType) => {
-    turnInfoP = item;
+  const setInfoTabDiv = (item: InfoTabType) => {
+    infoTabDiv = item;
   }
 
   const setTurnHandlerType = (item: TurnHandlerType) => {
@@ -52,44 +43,44 @@ export const TicTac = ( appLevelArg: AppLevelType ) => {
     return ticTacTableType as TicTacTableType;
   }
 
-  const onLevelChange = (l: AppLevelType) => {
-    setAppLevel( l );
-    reload();
-  }
-
-  const getTurnInfoP = () : TurnInfoType => {
-    if ( !turnInfoP ) {
-      const t = getTurnHandlerType();
-      setTurnInfoP( TurnInfo( t.getTurn() , appLevel , onLevelChange ) );
-    }
-    return turnInfoP as TurnInfoType;
-  }
-
   const reload = () => {
-    setTurnHandlerType( TurnHandler( appLevel ) );
+    setTurnHandlerType( TurnHandler( getAppLevelType() ) );
     const t = getTurnHandlerType();
     const table = getTicTacTable();
     table.reset();
-    getTurnInfoP().reset( t.getTurn() );
+    getInfoTabDiv().addTurn( t.getTurn() );
+  }
+
+  const getInfoTabDiv = () : InfoTabType => {
+    if ( !infoTabDiv ) {
+      const t = getTurnHandlerType();
+      setInfoTabDiv( InfoTab( t.getTurn(), reload, contextsData ) );
+    }
+    return infoTabDiv as InfoTabType;
   }
 
   const updateInfo = () => {
     const {
       getTurn, getWinner
     } = getTurnHandlerType();
-    getTurnInfoP().update( getTurn() , getWinner() , reload);
+    if (getWinner() !== null) {
+      getInfoTabDiv().addWinner( getWinner() );
+      getInfoTabDiv().addRestartGameButton(reload);
+    } else {
+      getInfoTabDiv().updateTurn( getTurn() );
+    }
   }
 
   const render = () => {
-    setTurnHandlerType( TurnHandler( appLevel ) );
+    setTurnHandlerType( TurnHandler( getAppLevelType() ) );
     const t = getTurnHandlerType();
-    setTurnInfoP( TurnInfo( t.getTurn() , appLevel , onLevelChange ) );
-    setWrapperDiv( createEL('div') as HTMLDivElement );
-    getWrapperDiv().append( getTurnInfoP().render() );
+    setInfoTabDiv( InfoTab( t.getTurn() , reload, contextsData ) );
+    setWrapperDiv( 'wrapper-div' );
+    getWrapperDiv().append( getInfoTabDiv().render() );
+    getInfoTabDiv().addTurn( t.getTurn() );
     const table = TicTacTable( getTurnHandlerType , updateInfo );
     setTicTacTable(table);
     getWrapperDiv().append(table.render());
-    getWrapperDiv().classList.add('wrapper-div')
     return getWrapperDiv();
   }
 

@@ -39,12 +39,6 @@ export type TicTacFunctionReturnType = {
   render: () => HTMLDivElement,
 }
 
-export type TurnInfoType = {
-  render: () => HTMLDivElement,
-  update: (newTurn: TurnType, winner: WinnerType, reload: Function) => void,
-  reset: ( t: TurnType ) => void
-}
-
 export type TurnHandlerType = {
   turn: TurnType,
   changeTurn: ChangeFunctionType,

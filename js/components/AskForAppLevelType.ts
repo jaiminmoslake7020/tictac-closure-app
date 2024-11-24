@@ -1,50 +1,28 @@
 import {AppLevelType} from '../types/index.js';
 import {createEL} from '../utils/index.js';
 import {appLevelList} from '../helpers/index.js';
+import {RadioButton} from './base/RadioButton.js';
+import {Div} from './base/Div.js';
+import { InitializeContextsFunctionType, useContextAppLevelType} from '../contexts/index.js';
 
-export const AskForAppLevelType = ( onLevelSelected : (a: AppLevelType) =>  void , ignoreLocalStorage:boolean = false ) => {
-  let appLevelType : undefined | AppLevelType;
+export const AskForAppLevelType = ( onLevelSelected : () =>  void , ignoreLocalStorage:boolean = false , contextsData: InitializeContextsFunctionType ) => {
   const f = createEL('form');
 
-  const setAppLevelType = (item: AppLevelType) => {
-    localStorage.setItem('appLevelType', item);
-    appLevelType = item;
-  }
-
-  const getAppLevelType = () : AppLevelType => {
-    const appLevelTypeStorage  = localStorage.getItem('appLevelType');
-    if ( appLevelTypeStorage && Object.keys(appLevelList).includes( appLevelTypeStorage ) ) {
-      setAppLevelType( appLevelTypeStorage as AppLevelType );
-    } else if ( appLevelTypeStorage ) {
-      localStorage.removeItem('appLevelType');
-    }
-    return appLevelType as AppLevelType;
-  }
+  const { getAppLevelType, setAppLevelType } = useContextAppLevelType( contextsData );
 
   const addLevelButton = (labelText: AppLevelType) => {
-    const div = createEL('div');
-    div.classList.add('level-selection-div');
-    const label = createEL('label');
-    const input = createEL('input');
-    input.setAttribute('type', 'checkbox');
-    input.setAttribute('name', labelText);
-    input.setAttribute('value', labelText);
-    input.setAttribute('id', 'input-'+labelText);
-    input.addEventListener('change', (e : Event) => {
+    const radioButton = RadioButton( labelText , (e : Event) => {
       const t = e.target as EventTarget;
       // @ts-ignore
       if ( t?.value ) {
         // @ts-ignore
         setAppLevelType( t?.value );
         f.remove();
-        onLevelSelected( getAppLevelType() );
+        onLevelSelected();
       }
     });
-    label.append(input);
-    const span = createEL('span');
-    span.innerHTML = labelText;
-    label.append(span);
-    div.append(label);
+    const div = Div('level-selection-div');
+    div.append(radioButton);
     return div as HTMLDivElement;
   }
 
@@ -56,7 +34,7 @@ export const AskForAppLevelType = ( onLevelSelected : (a: AppLevelType) =>  void
 
   const render = () => {
     if (!ignoreLocalStorage && getAppLevelType()) {
-      onLevelSelected(appLevelType as AppLevelType);
+      onLevelSelected();
       return null;
     } else {
       const divRow = createEL('div') as HTMLDivElement;

@@ -16,3 +16,10 @@ export const appendEl = (identifier: string, anotherEL: HTMLElement) => {
   el.append(anotherEL);
   return el;
 }
+
+export const applyClassList = (el: any | HTMLElement, classList: string) :any | HTMLElement => {
+  classList.trim().split(' ').forEach((classItem: string) => {
+    el.classList.add( classItem.trim() );
+  });
+  return el;
+}

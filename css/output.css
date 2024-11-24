@@ -87,13 +87,13 @@ body {
 .wrapper-div .info-tab .info-p {
   @apply font-semibold;
 }
-.wrapper-div .info-tab .info-p.winner-found {
+.wrapper-div .info-tab .winner-found {
   @apply text-blue-300;
 }
-.wrapper-div .info-tab .info-p.winner-found.you-lost {
+.wrapper-div .info-tab .winner-found.you-lost {
   @apply text-red-300;
 }
-.wrapper-div .info-tab .info-p.winner-found.you-win {
+.wrapper-div .info-tab .winner-found.you-win {
   @apply text-green-300;
 }
 

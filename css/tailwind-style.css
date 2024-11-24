@@ -930,17 +930,17 @@ body {
   font-weight: 600;
 }
 
-.wrapper-div .info-tab .info-p.winner-found {
+.wrapper-div .info-tab .winner-found {
   --tw-text-opacity: 1;
   color: rgb(147 197 253 / var(--tw-text-opacity, 1));
 }
 
-.wrapper-div .info-tab .info-p.winner-found.you-lost {
+.wrapper-div .info-tab .winner-found.you-lost {
   --tw-text-opacity: 1;
   color: rgb(252 165 165 / var(--tw-text-opacity, 1));
 }
 
-.wrapper-div .info-tab .info-p.winner-found.you-win {
+.wrapper-div .info-tab .winner-found.you-win {
   --tw-text-opacity: 1;
   color: rgb(134 239 172 / var(--tw-text-opacity, 1));
 }

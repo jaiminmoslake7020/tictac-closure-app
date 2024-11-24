@@ -52,18 +52,17 @@ body {
 
     .info-p{
       @apply font-semibold;
+    }
 
-      &.winner-found{
-        @apply text-blue-300;
+    .winner-found{
+      @apply text-blue-300;
 
-        &.you-lost{
-          @apply text-red-300;
-        }
+      &.you-lost{
+        @apply text-red-300;
+      }
 
-        &.you-win{
-          @apply text-green-300;
-        }
-
+      &.you-win{
+        @apply text-green-300;
       }
 
     }

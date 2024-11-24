@@ -58,7 +58,7 @@ export const whenOneInSequence = (
       foundAnotherMove = seq[0];
     }
   }
-  console.log("whenOneInSequence", foundAnotherMove);
+  // console.log("whenOneInSequence", foundAnotherMove);
   // console.log('currentValues', currentValues, seq, anotherCurrentValues, foundAnotherMove);
   return foundAnotherMove;
 }
