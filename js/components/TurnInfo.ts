@@ -4,19 +4,38 @@ import {AskForAppLevelType} from './AskForAppLevelType.js';
 
 let reloadTime = 20;
 
+const ReloadButton = () => {
+  let buttonEnabled = true;
+
+  const getButtonEnabled = () => buttonEnabled
+
+  const setButtonEnabled = (item:boolean) => {
+    buttonEnabled = item;
+  }
+
+  return {
+    getButtonEnabled,
+    setButtonEnabled
+  }
+};
+
 export const TurnInfo = (turn: TurnType, appLevel: AppLevelType, onLevelChange: (l:AppLevelType) => void) => {
   const div = createEL('div') as HTMLDivElement;
   const p = createEL('p') as HTMLParagraphElement;
+  const { setButtonEnabled, getButtonEnabled } = ReloadButton();
 
   div.classList.add('info-tab');
   p.classList.add('info-p');
 
   const addRestartButtonText = ( button: HTMLButtonElement , reload : Function, time: number) => {
-    if (time === 0) {
-      reload();
-    } else {
-      button.innerHTML = 'Reload - '+time+'s';
-      setTimeout(addRestartButtonText, 1000, button, reload, time - 1);
+    if (getButtonEnabled()) {
+      if (time === 0) {
+        setButtonEnabled( false );
+        reload();
+      } else {
+        button.innerHTML = 'Reload - '+time+'s';
+        setTimeout(addRestartButtonText, 1000, button, reload, time - 1);
+      }
     }
   }
 
@@ -27,8 +46,10 @@ export const TurnInfo = (turn: TurnType, appLevel: AppLevelType, onLevelChange: 
     button.classList.add('btn-animate');
     button.setAttribute('type','button')
     button.addEventListener('click', () => {
+      setButtonEnabled( false );
       reload();
     });
+    setButtonEnabled( true );
     button.innerHTML = 'Reload - '+reloadTime+'s';
     return button;
   }
@@ -48,6 +69,7 @@ export const TurnInfo = (turn: TurnType, appLevel: AppLevelType, onLevelChange: 
       const a = AskForAppLevelType( (l:AppLevelType) => {
         b.innerHTML = l;
         dropdownDiv.remove();
+        setButtonEnabled( false );
         onLevelChange(l);
       }, true);
       const d = a.render();
