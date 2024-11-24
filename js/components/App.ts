@@ -1,12 +1,22 @@
-import { appendEl } from '../utils/index.js'
-import { TicTac } from './TicTac.js'
-import {TicTacFunctionReturnType} from '../types/index.js';
+import {appendEl} from '../utils/index.js'
+import {AppLevelType} from '../types/index.js';
+import { AskForAppLevelType } from './AskForAppLevelType.js';
+import { LoadTicTacApp } from './LoadTicTacApp.js';
 
 export const App = () => {
-  const t = TicTac() as TicTacFunctionReturnType;
-  const init = () => {
-    appendEl('#root', t.render());
+
+  const onLevelSelected = (v: AppLevelType) => {
+    LoadTicTacApp(v).render();
   }
+
+  const init = () => {
+    const t = AskForAppLevelType( onLevelSelected );
+    const f = t.render();
+    if ( f ) {
+      appendEl('#root', f);
+    }
+  }
+
   return {
     init
   }

@@ -1,4 +1,5 @@
 import {
+  AppLevelType,
   MoveType,
   MoveTypeWithNull,
   TurnStorageType,
@@ -7,6 +8,7 @@ import {
   WiningSequenceTypeWithNull,
   WinnerType
 } from '../types/index.js';
+import { appLevelList } from '../helpers/index.js';
 
 const winnerData = [
   ['11', '22', '33'],
@@ -61,7 +63,7 @@ export const whenOneInSequence = (
   return foundAnotherMove;
 }
 
-export const TurnHandler = () => {
+export const TurnHandler = ( appLevel: AppLevelType ) => {
   let turn = 'O'  as TurnType;
   let anotherTurn = 'X' as TurnType;
   let winner = null as WinnerType ;
@@ -253,7 +255,16 @@ export const TurnHandler = () => {
       }
       checkWinner();
       if ( winner === null ) {
-        const nextMove = findAnotherEasy();
+        let nextMove;
+        if ( appLevel === appLevelList.easy ) {
+          nextMove = findAnotherEasy();
+        } else if (
+          appLevel === appLevelList.medium
+        ) {
+          nextMove = findAnotherMedium();
+        } else {
+          nextMove = findAnotherHard();
+        }
         if (nextMove) {
           if (turnStorage[anotherTurn]) {
             turnStorage[anotherTurn].push(nextMove);

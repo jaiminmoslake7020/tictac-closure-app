@@ -1,3 +1,5 @@
+export type AppLevelType = 'easy' | 'medium' | 'hard';
+
 export type TurnType = 'X' | 'O';
 export type WinnerType = TurnType | null | 'NONE';
 

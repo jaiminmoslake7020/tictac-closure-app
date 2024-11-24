@@ -8,3 +8,5 @@ export { TicTacCellIdentifier } from './TicTacCellIdentifier.js';
 export { TicTacCellValue } from './TicTacCellValue.js';
 export { TurnInfo } from './TurnInfo.js';
 export { TurnHandler } from './TurnHandler.js';
+export { AskForAppLevelType } from './AskForAppLevelType.js';
+export { LoadTicTacApp } from './LoadTicTacApp.js';

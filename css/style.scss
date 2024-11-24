@@ -14,12 +14,34 @@ body {
   @apply w-screen h-screen flex justify-center items-center;
 }
 
+@keyframes btn-animation {
+  0%{
+    width: 0;
+  }
+  100%{
+    width: 100%;
+  }
+}
+
 .btn{
-  @apply px-6 py-2 font-semibold bg-content text-bkg rounded-lg ;
+  @apply flex px-6 py-2 font-semibold bg-content text-bkg rounded-lg cursor-pointer capitalize relative;
 
   &:hover{
     @apply opacity-90;
   }
+
+  &.btn-animate{
+    @apply before:bg-bkg before:absolute before:h-full before:top-0 before:left-0 before:content-[''] before:opacity-10;
+
+    &:before{
+      animation: btn-animation 1s ease-in-out infinite;
+    }
+  }
+
+  &.btn-reload{
+    @apply w-[9rem] text-center;
+  }
+
 }
 
 .wrapper-div{
@@ -137,3 +159,40 @@ body {
 
   }
 }
+
+
+.input-row{
+  @apply flex flex-col md:flex-row gap-4;
+  .level-selection-div{
+    label {
+      @apply btn ;
+      input {
+        @apply invisible h-0 w-0;
+      }
+    }
+  }
+}
+
+.dropdown-container{
+  @apply relative;
+  .dropdown{
+    @apply absolute z-20;
+  }
+}
+
+.dropdown-container-app-level-selector-box{
+  @apply relative;
+  .dropdown-app-level-selector-box{
+    @apply absolute top-16 left-0 bg-content py-2 rounded-xl;
+    .input-row{
+      @apply flex flex-col gap-1;
+      label{
+        @apply w-full transition-all;
+        &:hover{
+          @apply bg-bkg text-content opacity-100 rounded-none;
+        }
+      }
+    }
+  }
+}
+

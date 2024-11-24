@@ -5,7 +5,7 @@ import {
   AnotherPersonMovesTypeWithNull,
   ChangeFunctionType,
   ColumnIdType,
-  MoveType, TDClassIdType, TicTacCellValueType,
+  MoveType, TDClassIdType,
   TurnType,
   WiningSequenceTypeWithNull
 } from '../types/index.js';
@@ -83,7 +83,6 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
       setClicked();
       appliedChangeTurn(getMoveType());
     } else {
-      console.log('clicked', clicked);
       (e.target as HTMLDivElement).classList.add(tdClassList.typeError);
       setTimeout(() => {
         (e.target as HTMLDivElement).classList.remove(tdClassList.typeError);

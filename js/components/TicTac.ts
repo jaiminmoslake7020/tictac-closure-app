@@ -2,17 +2,27 @@ import {createEL} from '../utils/index.js'
 import { TurnInfo } from './TurnInfo.js'
 import { TurnHandler } from './TurnHandler.js'
 import {
+  AppLevelType,
   TicTacTableType,
   TurnHandlerType,
   TurnInfoType,
 } from '../types/index.js';
 import {TicTacTable} from './TicTacTable.js';
 
-export const TicTac = () => {
+export const TicTac = ( appLevelArg: AppLevelType ) => {
   let wrapperDiv :undefined | HTMLDivElement;
   let turnInfoP: TurnInfoType | undefined;
   let turnHandler: TurnHandlerType | undefined;
   let ticTacTableType: TicTacTableType | undefined;
+  let appLevel = appLevelArg ;
+
+  const setAppLevel = (item: AppLevelType) => {
+    appLevel = item;
+  }
+
+  const getAppLevel = () : AppLevelType => {
+    return appLevel;
+  }
 
   const getWrapperDiv = () : HTMLDivElement => {
     return wrapperDiv as HTMLDivElement;
@@ -42,16 +52,21 @@ export const TicTac = () => {
     return ticTacTableType as TicTacTableType;
   }
 
+  const onLevelChange = (l: AppLevelType) => {
+    setAppLevel( l );
+    reload();
+  }
+
   const getTurnInfoP = () : TurnInfoType => {
     if ( !turnInfoP ) {
       const t = getTurnHandlerType();
-      setTurnInfoP( TurnInfo( t.getTurn() ) );
+      setTurnInfoP( TurnInfo( t.getTurn() , appLevel , onLevelChange ) );
     }
     return turnInfoP as TurnInfoType;
   }
 
   const reload = () => {
-    setTurnHandlerType( TurnHandler() );
+    setTurnHandlerType( TurnHandler( appLevel ) );
     const t = getTurnHandlerType();
     const table = getTicTacTable();
     table.reset();
@@ -66,9 +81,9 @@ export const TicTac = () => {
   }
 
   const render = () => {
-    setTurnHandlerType( TurnHandler() );
+    setTurnHandlerType( TurnHandler( appLevel ) );
     const t = getTurnHandlerType();
-    setTurnInfoP( TurnInfo( t.getTurn() ) );
+    setTurnInfoP( TurnInfo( t.getTurn() , appLevel , onLevelChange ) );
     setWrapperDiv( createEL('div') as HTMLDivElement );
     getWrapperDiv().append( getTurnInfoP().render() );
     const table = TicTacTable( getTurnHandlerType , updateInfo );

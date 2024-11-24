@@ -54,11 +54,28 @@ body {
   @apply w-screen h-screen flex justify-center items-center;
 }
 
+@keyframes btn-animation {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
 .btn {
-  @apply px-6 py-2 font-semibold bg-content text-bkg rounded-lg;
+  @apply flex px-6 py-2 font-semibold bg-content text-bkg rounded-lg cursor-pointer capitalize relative;
 }
 .btn:hover {
   @apply opacity-90;
+}
+.btn.btn-animate {
+  @apply before:bg-bkg before:absolute before:h-full before:top-0 before:left-0 before:content-[""] before:opacity-10;
+}
+.btn.btn-animate:before {
+  animation: btn-animation 1s ease-in-out infinite;
+}
+.btn.btn-reload {
+  @apply w-[9rem] text-center;
 }
 
 .wrapper-div {
@@ -90,7 +107,7 @@ body {
   @apply flex w-full gap-4;
 }
 .tic-tac-table .tic-tac-cell {
-  @apply border border-content w-[33%] font-bold text-2xl relative aspect-square rounded;
+  @apply border border-content w-[33%] font-bold text-2xl relative aspect-square rounded cursor-pointer;
   @apply transition-all delay-75;
 }
 .tic-tac-table .tic-tac-cell.type-O {
@@ -143,6 +160,39 @@ body {
 }
 .tic-tac-table .tic-tac-cell .tic-tac-cell-value {
   @apply flex justify-center items-center w-full h-full text-3xl;
+}
+
+.input-row {
+  @apply flex flex-col md:flex-row gap-4;
+}
+.input-row .level-selection-div label {
+  @apply btn;
+}
+.input-row .level-selection-div label input {
+  @apply invisible h-0 w-0;
+}
+
+.dropdown-container {
+  @apply relative;
+}
+.dropdown-container .dropdown {
+  @apply absolute z-20;
+}
+
+.dropdown-container-app-level-selector-box {
+  @apply relative;
+}
+.dropdown-container-app-level-selector-box .dropdown-app-level-selector-box {
+  @apply absolute top-16 left-0 bg-content py-2 rounded-xl;
+}
+.dropdown-container-app-level-selector-box .dropdown-app-level-selector-box .input-row {
+  @apply flex flex-col gap-1;
+}
+.dropdown-container-app-level-selector-box .dropdown-app-level-selector-box .input-row label {
+  @apply w-full transition-all;
+}
+.dropdown-container-app-level-selector-box .dropdown-app-level-selector-box .input-row label:hover {
+  @apply bg-bkg text-content opacity-100 rounded-none;
 }
 
 /*# sourceMappingURL=output.css.map */
