@@ -1,6 +1,7 @@
-import {createEL, findEl} from '../utils/index.js'
+import {createEL} from '../utils/index.js'
 import {AppLevelType, TurnType, WinnerType} from '../types/index.js';
 import {AskForAppLevelType} from './AskForAppLevelType.js';
+import {Button} from './base/Button.js';
 
 let reloadTime = 20;
 
@@ -36,38 +37,30 @@ export const TurnInfo = (turn: TurnType, appLevel: AppLevelType, onLevelChange: 
         button.innerHTML = 'Reload - '+time+'s';
         setTimeout(addRestartButtonText, 1000, button, reload, time - 1);
       }
+    } else {
+      console.log('getButtonEnabled is diabled')
     }
   }
 
   const addRestartButton = ( reload : Function) => {
-    const button = createEL('button');
-    button.classList.add('btn');
-    button.classList.add('btn-reload')
-    button.classList.add('btn-animate');
-    button.setAttribute('type','button')
-    button.addEventListener('click', () => {
+    return Button( 'Reload - '+reloadTime+'s', ' btn btn-reload btn-animate ' , () => {
       setButtonEnabled( false );
       reload();
     });
-    setButtonEnabled( true );
-    button.innerHTML = 'Reload - '+reloadTime+'s';
-    return button;
   }
 
   const changeAppLevelButton = () => {
     const div2 = createEL('div');
     div2.classList.add('dropdown-container');
     div2.classList.add('dropdown-container-app-level-selector-box');
-    const b = createEL('button');
-    b.setAttribute('type', 'button');
-    b.classList.add('btn');
-    b.innerHTML = appLevel;
-    b.addEventListener('click', () => {
+
+    const b = Button( appLevel, 'btn' , (e) => {
+      const btn = e.target as HTMLButtonElement;
       const dropdownDiv = createEL('div');
       dropdownDiv.classList.add('dropdown');
       dropdownDiv.classList.add('dropdown-app-level-selector-box');
       const a = AskForAppLevelType( (l:AppLevelType) => {
-        b.innerHTML = l;
+        btn.innerHTML = l;
         dropdownDiv.remove();
         setButtonEnabled( false );
         onLevelChange(l);
@@ -78,6 +71,7 @@ export const TurnInfo = (turn: TurnType, appLevel: AppLevelType, onLevelChange: 
         div2.append(dropdownDiv);
       }
     });
+
     div2.append(b);
     return div2;
   }
@@ -101,8 +95,10 @@ export const TurnInfo = (turn: TurnType, appLevel: AppLevelType, onLevelChange: 
         p.classList.add('you-win');
         p.innerHTML = 'Found Winner: "O"';
       }
-      div.append(addRestartButton( reload ));
-      setTimeout(addRestartButtonText, 1000, findEl('.btn.btn-reload'), reload, reloadTime - 1);
+      setButtonEnabled( true );
+      const btn = addRestartButton( reload );
+      div.append(btn);
+      setTimeout(addRestartButtonText, 1000, btn, reload, reloadTime - 1);
     }
   }
 
