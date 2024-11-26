@@ -1,18 +1,21 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "es6",
-    "rootDir": "./js",
-    "sourceMap": true,
-    "outDir": "./dist/js",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "target": "ES5",
+    "module": "ES6",
+    "moduleResolution": "Node",
+    "outDir": "./build/app",
+    "rootDir": "./app",
     "strict": true,
-    "allowImportingTsExtensions": false,
-    "noEmit":false,
-    "declaration":true,
-    "declarationDir": "./dist/types",
-    "composite": true
-  }
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "declarationDir": "./build/types",
+    "sourceMap": true,
+    "lib": ["DOM", "ES2020"],
+    "types": [],
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
+  },
+  "include": ["app"],
+  "exclude": ["node_modules", "dist", "build"]
 }

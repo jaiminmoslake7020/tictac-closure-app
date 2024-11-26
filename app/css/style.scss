@@ -1,0 +1,204 @@
+@use "base/index";
+
+
+
+@layer base{
+  .tic-tac-width {
+    @apply w-[90%] md:w-[60%] lg:max-w-[40rem];
+  }
+}
+
+body {
+  @apply bg-bkg text-bkg;
+  @apply text-4xl;
+}
+
+
+#root {
+  @apply w-screen h-screen flex justify-center items-center;
+}
+
+@keyframes btn-animation {
+  0%{
+    width: 0;
+  }
+  100%{
+    width: 100%;
+  }
+}
+
+.btn{
+  @apply flex px-6 py-2 font-semibold bg-content text-bkg rounded-lg cursor-pointer capitalize relative;
+
+  &:hover{
+    @apply opacity-90;
+  }
+
+  &.btn-animate{
+    @apply before:bg-bkg before:absolute before:h-full before:top-0 before:left-0 before:content-[''] before:opacity-10;
+
+    &:before{
+      animation: btn-animation 1s ease-in-out infinite;
+    }
+  }
+
+  &.btn-reload{
+    @apply w-[9rem] text-center;
+  }
+
+}
+
+.wrapper-div{
+  @apply w-full flex flex-col items-center gap-8;
+
+  .info-tab{
+    @apply flex-wrap justify-center md:flex-nowrap tic-tac-width flex items-center min-h-[2.5rem];
+    @apply gap-4 md:justify-between;
+
+    .info-p{
+      @apply font-semibold;
+      @apply w-full md:w-fit text-center md:text-left;
+    }
+
+    .winner-found{
+      @apply text-blue-300;
+      @apply w-full md:w-fit text-center md:text-left;
+
+      &.you-lost{
+        @apply text-red-300;
+      }
+
+      &.you-win{
+        @apply text-green-300;
+      }
+
+    }
+  }
+}
+
+.tic-tac-table{
+  @apply tic-tac-width flex flex-col gap-4;
+
+  .tic-tac-table-body{
+    @apply w-full flex flex-col gap-4;
+  }
+
+  .tic-tac-row{
+    @apply flex w-full gap-4;
+  }
+  .tic-tac-cell {
+    @apply border border-content w-[33%] font-bold text-2xl relative aspect-square rounded cursor-pointer;
+    @apply transition-all delay-75;
+
+    &.type-O{
+      @apply cursor-not-allowed;
+    }
+
+    &.type-X{
+      @apply bg-content text-bkg cursor-not-allowed origin-center;
+      transform: rotate3d(1,0,0, -90deg);
+
+      &.stop-animate-move-x{
+        transform: rotate3d(0,0,0,0deg);
+      }
+
+      &.type-Success{
+        transform: rotate3d(0,0,0,0deg) scale(110%);
+
+        &.stop-animate-move-success{
+          transform: rotate3d(0,0,0,0deg) scale(100%);
+
+          .tic-tac-cell-value{
+            @apply text-6xl;
+          }
+
+        }
+
+        &.stop-animate-move-x{
+          transform: rotate3d(0,0,0,0deg) scale(110%);
+
+          &.stop-animate-move-success{
+            transform: rotate3d(0,0,0,0deg) scale(100%);
+
+            .tic-tac-cell-value{
+              @apply text-6xl;
+            }
+
+          }
+        }
+
+      }
+
+    }
+
+    &.type-Disabled{
+      @apply cursor-not-allowed;
+    }
+
+    &.type-Error{
+      @apply bg-red-300 text-red-600;
+    }
+
+    &.type-Success{
+      @apply bg-green-300 text-white scale-110;
+
+      &.stop-animate-move-success{
+        @apply scale-100;
+
+        .tic-tac-cell-value{
+          @apply text-6xl;
+        }
+
+      }
+    }
+
+    .tic-tac-cell-span{
+      @apply absolute top-2 right-2 text-xs text-white hidden ;
+      @apply delay-75;
+      transition: font-size;
+    }
+
+    .tic-tac-cell-value{
+      @apply flex justify-center items-center w-full h-full text-3xl;
+    }
+
+
+  }
+}
+
+
+.input-row{
+  @apply flex flex-col md:flex-row gap-4;
+  .level-selection-div{
+    label {
+      @apply btn ;
+      input {
+        @apply invisible h-0 w-0;
+      }
+    }
+  }
+}
+
+.dropdown-container{
+  @apply relative;
+  .dropdown{
+    @apply absolute z-20;
+  }
+}
+
+.dropdown-container-app-level-selector-box{
+  @apply relative;
+  .dropdown-app-level-selector-box{
+    @apply absolute top-16 left-0 bg-content py-2 rounded-xl;
+    .input-row{
+      @apply flex flex-col gap-1;
+      label{
+        @apply w-full transition-all;
+        &:hover{
+          @apply bg-bkg text-content opacity-100 rounded-none;
+        }
+      }
+    }
+  }
+}
+
