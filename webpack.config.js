@@ -11,7 +11,7 @@ module.exports = env  => ({
   ],
   target: 'es5',
   resolve: {
-    extensions: ['.ts','.js']
+    extensions: env.production ? ['.ts'] : ['.ts','.js']
   },
   module: {
     rules: [
