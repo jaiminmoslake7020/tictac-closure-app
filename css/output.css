@@ -43,7 +43,7 @@
 }
 @layer base {
   .tic-tac-width {
-    @apply w-[90%] md:w-[50%] lg:max-w-[30vw];
+    @apply w-[90%] md:w-[60%] lg:max-w-[40rem];
   }
 }
 body {
@@ -82,13 +82,16 @@ body {
   @apply w-full flex flex-col items-center gap-8;
 }
 .wrapper-div .info-tab {
-  @apply tic-tac-width flex justify-between items-center min-h-[2.5rem];
+  @apply flex-wrap justify-center md:flex-nowrap tic-tac-width flex items-center min-h-[2.5rem];
+  @apply gap-4 md:justify-between;
 }
 .wrapper-div .info-tab .info-p {
   @apply font-semibold;
+  @apply w-full md:w-fit text-center md:text-left;
 }
 .wrapper-div .info-tab .winner-found {
   @apply text-blue-300;
+  @apply w-full md:w-fit text-center md:text-left;
 }
 .wrapper-div .info-tab .winner-found.you-lost {
   @apply text-red-300;
