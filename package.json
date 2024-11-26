@@ -11,7 +11,7 @@
   "scripts": {
     "build": "rm -rf build && npx webpack --mode production --env=production",
     "build:dev": "rm -rf build && npx webpack --mode development --env=development",
-    "dev": "webpack serve --mode development --stats-error-details"
+    "dev": "webpack serve --mode development --stats-error-details --env=development"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
