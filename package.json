@@ -9,8 +9,8 @@
   "license": "",
   "author": "",
   "scripts": {
-    "build": "rm -rf build && npx webpack --mode production",
-    "build:dev": "rm -rf build && npx webpack --mode development",
+    "build": "rm -rf build && npx webpack --mode production --env=production",
+    "build:dev": "rm -rf build && npx webpack --mode development --env=development",
     "dev": "webpack serve --mode development --stats-error-details"
   },
   "devDependencies": {
