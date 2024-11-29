@@ -13,11 +13,6 @@ const RestartGameButtonController = () : RestartGameButtonControllerType => {
   const getButtonEnabled = () => buttonEnabled
 
   const setButtonEnabled = (item:boolean) => {
-    if (item) {
-      console.log('Auto Restart is turned on')
-    } else {
-      console.log('Auto Restart is turned off')
-    }
     buttonEnabled = item;
   }
 
