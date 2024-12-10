@@ -1,14 +1,12 @@
 import {InfoTab, InfoTabType} from './InfoTab';
-import { TurnHandler } from './TurnHandler'
+import { TurnHandler } from '../business-logic/TurnHandler'
 import {
   TicTacTableType,
   TurnHandlerType,
 } from '../types';
 import {TicTacTable} from './TicTacTable';
 import {
-  InitializeContextsFunctionType,
-  AppLevelHookType,
-  useContextAppLevelType
+  InitializeContextsFunctionType
 } from '../contexts';
 import {useDiv} from './base/Div';
 
@@ -17,7 +15,6 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
   let turnHandler: TurnHandlerType | undefined;
   let ticTacTableType: TicTacTableType | undefined;
 
-  const { getAppLevelType  } = useContextAppLevelType( contextsData ) as AppLevelHookType;
   const {
     getDiv: getWrapperDiv,
     setDiv: setWrapperDiv
@@ -44,41 +41,33 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
   }
 
   const reload = () => {
-    setTurnHandlerType( TurnHandler( getAppLevelType() ) );
+    setTurnHandlerType( TurnHandler( contextsData ) );
     const t = getTurnHandlerType();
     const table = getTicTacTable();
     table.reset();
-    getInfoTabDiv().addTurn( t.getTurn() );
+    getInfoTabDiv().addTurn();
   }
 
   const getInfoTabDiv = () : InfoTabType => {
     if ( !infoTabDiv ) {
       const t = getTurnHandlerType();
-      setInfoTabDiv( InfoTab( t.getTurn(), reload, contextsData ) );
+      setInfoTabDiv( InfoTab( reload, contextsData ) );
     }
     return infoTabDiv as InfoTabType;
   }
 
   const updateInfo = () => {
-    const {
-      getTurn, getWinner
-    } = getTurnHandlerType();
-    if (getWinner() !== null) {
-      getInfoTabDiv().addWinner( getWinner() );
-      getInfoTabDiv().addRestartGameButton(reload);
-    } else {
-      getInfoTabDiv().updateTurn( getTurn() );
-    }
+    getInfoTabDiv().updateInfo(reload);
   }
 
   const render = () => {
-    setTurnHandlerType( TurnHandler( getAppLevelType() ) );
+    setTurnHandlerType( TurnHandler( contextsData ) );
     const t = getTurnHandlerType();
-    setInfoTabDiv( InfoTab( t.getTurn() , reload, contextsData ) );
+    setInfoTabDiv( InfoTab( reload, contextsData ) );
     setWrapperDiv( 'wrapper-div' );
     getWrapperDiv().append( getInfoTabDiv().render() );
-    getInfoTabDiv().addTurn( t.getTurn() );
-    const table = TicTacTable( getTurnHandlerType , updateInfo );
+    getInfoTabDiv().addTurn();
+    const table = TicTacTable( getTurnHandlerType , updateInfo , contextsData );
     setTicTacTable(table);
     getWrapperDiv().append(table.render());
     return getWrapperDiv();

@@ -2,37 +2,20 @@ import {findEl} from '../utils';
 import {TicTacCellIdentifier} from './TicTacCellIdentifier'
 import {TicTacCellValue} from './TicTacCellValue'
 import {
-  AnotherPersonMovesTypeWithNull,
   ChangeFunctionType,
   ColumnIdType,
-  MoveType, TDClassIdType,
-  TurnType,
-  WiningSequenceTypeWithNull
+  MovePositionType, TDClassIdType,
+  TurnType
 } from '../types';
-
-const StopAnimateMoveX = 200;
-
-const stopAnimateMoveSuccess = () => {
-  let StopAnimateMoveSuccess = 100;
-
-  const get = () => {
-    return StopAnimateMoveSuccess;
-  }
-
-  const reset = () => {
-    StopAnimateMoveSuccess = 100;
-  }
-
-  const increment = () => {
-    StopAnimateMoveSuccess += 300;
-  }
-
-  return {
-    get,
-    increment,
-    reset
-  };
-}
+import {
+  InitializeContextsFunctionType,
+  isItRemoteGame,
+  isItRemotePlayerTurn,
+  useContextTurnStorage,
+  useContextWinnerSeq
+} from '../contexts';
+import {stopAnimateMoveSuccess, StopAnimateMoveX} from '../helpers';
+import {turnData} from '../data';
 
 const {
   get: getStopAnimateMoveSuccess,
@@ -51,11 +34,11 @@ export const tdClassList = {
 } as Record<TDClassIdType, string>
 
 
-export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: TurnType, changeTurn: ChangeFunctionType) => {
+export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: TurnType, changeTurn: ChangeFunctionType, contextData: InitializeContextsFunctionType) => {
   let clicked = false;
 
-  const getMoveType = (): MoveType => {
-    return columnId.replace('-', '') as MoveType
+  const getMoveType = (): MovePositionType => {
+    return columnId.replace('-', '') as MovePositionType
   }
 
   const setClicked = () => {
@@ -95,7 +78,7 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
     setTimeout(() => {
       newElement.classList.add(tdClassList.stopAnimateMoveX);
     }, StopAnimateMoveX);
-    const cv = TicTacCellValue( 'X' );
+    const cv = TicTacCellValue( turnData.anotherTurn );
     newElement.append(cv.render());
     setClicked();
   }
@@ -118,7 +101,11 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
     resetStopAnimateMoveSuccess();
   }
 
-  const update = (newTurn: TurnType, newChangeTurn: ChangeFunctionType, winnerSequence: WiningSequenceTypeWithNull, anotherPersonMoves: AnotherPersonMovesTypeWithNull) => {
+  const update = (newTurn: TurnType, newChangeTurn: ChangeFunctionType) => {
+    const { getAnotherPlayerTurns } = useContextTurnStorage(contextData);
+    const { getWinnerSequence } = useContextWinnerSeq(contextData);
+    const anotherPersonMoves = getAnotherPlayerTurns();
+    const winnerSequence = getWinnerSequence();
     const element = findEl('#column-' + columnId);
 
     // Clone the element
@@ -169,7 +156,11 @@ export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, turn: Tur
     td.setAttribute('id', 'column-' + columnId);
     td.classList.add('tic-tac-cell');
     td.append(id.render());
-    td.addEventListener('click', onClick.bind(null, turn, changeTurn) );
+    if ( isItRemoteGame(contextData) && isItRemotePlayerTurn(contextData) ) {
+      td.classList.add(tdClassList.typeDisabled);
+    } else {
+      td.addEventListener('click', onClick.bind(null, turn, changeTurn) );
+    }
     // console.log('event listener added', 'column-'+columnId)
     return td;
   }

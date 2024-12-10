@@ -1,44 +1,41 @@
-import { TurnType, WinnerType} from '../types';
-import {InitializeContextsFunctionType} from '../contexts';
-import {Winner, WinnerFunctionType} from './Winner';
+import {
+  InitializeContextsFunctionType,
+  useContextGameType,
+  useContextWinner
+} from '../contexts';
+import {Winner} from './Winner';
 import {WhosTurn, WhosTurnFunctionType} from './WhosTurn';
 import {ChangeAppLevelInfoTabButton, ChangeAppLevelInfoTabButtonType} from './ChangeAppLevelInfoTabButton';
-import {useDiv} from './base/Div';
+import {useDiv, useState} from './base/Div';
 import {RestartGameButton, RestartGameButtonType} from './RestartGameButton';
 
 export type InfoTabType = {
   render : () => HTMLDivElement,
-  addTurn:  (newTurn: TurnType) => void,
-  updateTurn:  (newTurn: TurnType) => void,
-  removeTurn: () => void,
-  addWinner: (winnerValue: WinnerType) => void,
-  addRestartGameButton: (reload: Function) => void,
-  getInfoDiv: () => HTMLDivElement,
-  setInfoDiv: (classList?: string) => void
+  addTurn:  () => void,
+  updateInfo: (reload: () => void) => void,
 };
 
-export const InfoTab = (turn: TurnType, onLevelChange: () => void, contextsData: InitializeContextsFunctionType) :InfoTabType => {
+export const InfoTab = (onLevelChange: () => void, contextsData: InitializeContextsFunctionType) :InfoTabType => {
+
+  const {
+    getGameType
+  } = useContextGameType( contextsData );
 
   const {
     getDiv,
     setDiv
   } = useDiv();
 
-  let whosTurn : undefined | WhosTurnFunctionType ;
-  const setWhosTurn = (item: WhosTurnFunctionType | undefined) => {
-    whosTurn = item;
-  }
-  const getWhosTurn = () : WhosTurnFunctionType | undefined  => {
-    return whosTurn as WhosTurnFunctionType;
-  }
+  const {
+    get : getWhosTurn,
+    set : setWhosTurn
+  } = useState();
 
-  let winner : undefined | WinnerFunctionType ;
-  const setWinner = (item: WinnerFunctionType | undefined) => {
-    winner = item;
-  }
-  const getWinner = () => {
-    return winner as WinnerFunctionType;
-  }
+  const {
+    get : getWinner,
+    set : setWinner
+  } = useState();
+
 
   let restartGameButton : undefined | RestartGameButtonType ;
   const setRestartGameButton = (item : RestartGameButtonType | undefined ) => {
@@ -62,8 +59,7 @@ export const InfoTab = (turn: TurnType, onLevelChange: () => void, contextsData:
     removeRestartButton();
   }
 
-  const render = () => {
-    setDiv('info-tab');
+  const addChangeLevelBtn = () => {
     setChangeLevelBtn(
       ChangeAppLevelInfoTabButton(contextsData, () => {
         reset();
@@ -71,19 +67,20 @@ export const InfoTab = (turn: TurnType, onLevelChange: () => void, contextsData:
       })
     );
     getDiv().append(getChangeLevelBtn().render());
+  }
+
+  const render = () => {
+    setDiv('info-tab');
+    if ( getGameType() === 'computer-program' ) {
+      addChangeLevelBtn();
+    }
     return getDiv();
   }
 
-  const addTurn = (newTurn: TurnType) => {
-    setWhosTurn( WhosTurn() );
-    const w = (getWhosTurn() as WhosTurnFunctionType);
-    getDiv().prepend( w.render() );
-    w.update( newTurn );
-  }
-
-  const updateTurn = (newTurn: TurnType) => {
-    const w = (getWhosTurn() as WhosTurnFunctionType);
-    w.update( newTurn );
+  const addTurn = () => {
+    setWhosTurn( WhosTurn( contextsData ) );
+    getDiv().prepend( (getWhosTurn() as WhosTurnFunctionType).render() );
+    (getWhosTurn() as WhosTurnFunctionType).updateTurn();
   }
 
   const removeTurn = () => {
@@ -94,11 +91,11 @@ export const InfoTab = (turn: TurnType, onLevelChange: () => void, contextsData:
     }
   }
 
-  const addWinner = (winnerValue: WinnerType) => {
+  const addWinner = () => {
     removeTurn();
-    setWinner( Winner() );
+    setWinner( Winner( contextsData ) );
     getDiv().prepend( getWinner().render() );
-    getWinner().update( winnerValue );
+    getWinner().update();
   }
 
   const removeWinner = () => {
@@ -132,14 +129,37 @@ export const InfoTab = (turn: TurnType, onLevelChange: () => void, contextsData:
     getDiv().append((getRestartGameButton() as RestartGameButtonType).render());
   }
 
+  const updateInfo = (reload: () => void) => {
+    const { getWinner } = useContextWinner(contextsData);
+    if ( getWinner() !== null) {
+      addWinner();
+      addRestartGameButton(reload);
+    } else {
+      (getWhosTurn() as WhosTurnFunctionType).updateTurn();
+    }
+  }
+
   return {
     render,
-    updateTurn,
-    addWinner,
-    addRestartGameButton,
     addTurn,
-    removeTurn,
-    setInfoDiv: setDiv,
-    getInfoDiv: getDiv,
+    updateInfo
   }
 }
+
+
+
+// let whosTurn : undefined | WhosTurnFunctionType ;
+// const setWhosTurn = (item: WhosTurnFunctionType | undefined) => {
+//   whosTurn = item;
+// }
+// const getWhosTurn = () : WhosTurnFunctionType | undefined  => {
+//   return whosTurn as WhosTurnFunctionType;
+// }
+
+// let winner : undefined | WinnerFunctionType ;
+// const setWinner = (item: WinnerFunctionType | undefined) => {
+//   winner = item;
+// }
+// const getWinner = () => {
+//   return winner as WinnerFunctionType;
+// }

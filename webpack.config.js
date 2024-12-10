@@ -2,6 +2,19 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+// Load environment variables
+const env = dotenv.config().parsed;
+
+// Convert environment variables to stringified format for DefinePlugin
+const envKeys = Object.keys(env).reduce((prev, next) => {
+  prev[`process.env.${next}`] = JSON.stringify(env[next]);
+  return prev;
+}, {});
+
+console.log('envKeys', envKeys);
 
 module.exports = env  => ({
   entry: env.production ? './app/index.ts' : [
@@ -41,11 +54,13 @@ module.exports = env  => ({
     clean: true                              // Clears old files from the dist folder
   },
   devServer: {
+    server: 'https',
     open: true,
     port: 3000,
     hot: true
   },
   plugins: [
+    new webpack.DefinePlugin(envKeys),
     new HtmlWebpackPlugin({
       template: './public/index.html',
       inject: 'body'

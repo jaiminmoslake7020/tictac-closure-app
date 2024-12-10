@@ -1,8 +1,9 @@
-import {MoveType, TicTacCellRowFunctionType, TurnHandlerType} from '../types';
+import {MovePositionType, TicTacCellRowFunctionType, TurnHandlerType} from '../types';
 import {createEL} from '../utils';
 import {TicTacCellRow} from './TicTacCellRow';
+import {InitializeContextsFunctionType} from '../contexts';
 
-export const TicTacTable = ( getTurnHandlerType: () => TurnHandlerType , updateInfo : () => void ) => {
+export const TicTacTable = ( getTurnHandlerType: () => TurnHandlerType , updateInfo : () => void, contextData: InitializeContextsFunctionType ) => {
 
   let ticTacTable : undefined | HTMLDivElement;
   let ticTacTableBody : undefined | HTMLDivElement;
@@ -31,17 +32,14 @@ export const TicTacTable = ( getTurnHandlerType: () => TurnHandlerType , updateI
 
   const trArray = [] as TicTacCellRowFunctionType[];
 
-  const handleChangeTurn = (v: MoveType) => {
+  const handleChangeTurn = (v: MovePositionType) => {
     const {
-      changeTurn,  getTurn, getWinner, getWinnerSequence, getAnotherPersonTurns
+      changeTurn,  getTurn,
     } = getTurnHandlerType();
     changeTurn(v);
     const newTurn = getTurn();
-    const winner = getWinner();
-    const winnerSequence = getWinnerSequence();
-    const anotherPersonTurns = getAnotherPersonTurns();
     for (let i = 0 ; i < 3 ; i++)  {
-      trArray[i].update( newTurn , handleChangeTurn, winnerSequence, anotherPersonTurns);
+      trArray[i].update( newTurn , handleChangeTurn );
     }
     updateInfo();
   }
@@ -54,7 +52,7 @@ export const TicTacTable = ( getTurnHandlerType: () => TurnHandlerType , updateI
     } = getTurnHandlerType();
     for (let i = 0 ; i < 3 ; i++)  {
       const turn = getTurn();
-      const tr = TicTacCellRow( i + 1 ,  turn, handleChangeTurn );
+      const tr = TicTacCellRow( i + 1 ,  turn, handleChangeTurn , contextData);
       getTicTacTable().append(tr.render());
       trArray.push(tr);
     }

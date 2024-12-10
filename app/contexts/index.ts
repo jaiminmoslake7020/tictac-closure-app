@@ -1,35 +1,12 @@
-import {AppLevelType} from '../types';
-import {appLevelList} from '../helpers';
-
-export type AppLevelHookType = {
-  getAppLevelType: () => AppLevelType,
-  setAppLevelType: (v:AppLevelType) => void,
-};
-
-// hooks should be component based
-export const useAppLevel = () :AppLevelHookType => {
-  let appLevelType: undefined | AppLevelType;
-
-  const setAppLevelType = (item: AppLevelType) => {
-    localStorage.setItem('appLevelType', item);
-    appLevelType = item;
-  }
-
-  const getAppLevelType = () : AppLevelType => {
-    const appLevelTypeStorage  = localStorage.getItem('appLevelType');
-    if ( appLevelTypeStorage && Object.keys(appLevelList).includes( appLevelTypeStorage ) ) {
-      setAppLevelType( appLevelTypeStorage as AppLevelType );
-    } else if ( appLevelTypeStorage ) {
-      localStorage.removeItem('appLevelType');
-    }
-    return appLevelType as AppLevelType;
-  }
-
-  return {
-    getAppLevelType,
-    setAppLevelType
-  }
-}
+import {AppLevelHookType, useAppLevel} from './useAppLevel';
+import {GameTypeHookType, useGameLevel} from './useGameLevel';
+import {AnotherPlayerHookType, useAnotherPlayer} from './useAnotherPlayer';
+import {CurrentMoveHookType, useCurrentMove} from './useCurrentMove';
+import {UserSessionHookType, useUserSession} from './useUser';
+import {useTurnStorageHook, UseTurnStorageHookType} from './useTurnStorageHook';
+import {useWinnerSeqHook, UseWinnerSeqHookType} from './useWinnerSeqHook';
+import {useWinnerHook, UseWinnerHookType} from './useWinnerHook';
+import {useTurnHook, UseTurnHookType} from './useTurnType';
 
 export type InitializeContextsFunctionType = {
   addContext: (name: string, value: any) => void,
@@ -59,15 +36,22 @@ export const initializeContexts = () : InitializeContextsFunctionType => {
   }
 }
 
-export type contextType = 'AppLevelType';
+export type contextType = 'AppLevelType' | 'GameType' | 'AnotherPlayer' | 'CurrentMove' | 'User' | 'TurnStorage' | 'WinnerSeq' | 'Winner' | 'TurnType';
 
 export const contextsMap = {
-  AppLevelType: 'AppLevelType'
+  AppLevelType: 'AppLevelType',
+  GameType: 'GameType',
+  AnotherPlayer: 'AnotherPlayer',
+  CurrentMove: 'CurrentMove',
+  User: 'User',
+  TurnStorage: 'TurnStorage',
+  WinnerSeq: 'WinnerSeq',
+  Winner: 'Winner',
+  TurnType: 'TurnType'
 } as Record<contextType, contextType>;
 
 // contexts should be global and share state between app or atlest nodeTree where it starts
 export const useContexts = (contextName: string, contextsMapList : InitializeContextsFunctionType) => {
-
   const {
     addContext,
     getContext,
@@ -81,10 +65,120 @@ export const useContexts = (contextName: string, contextsMapList : InitializeCon
     const firstInstance = useAppLevel();
     addContext(contextName, firstInstance);
     return firstInstance as AppLevelHookType;
+  } else if (contextName === contextsMap.GameType) {
+    if ( hasContext(contextName) ) {
+      return getContext(contextName);
+    }
+    const firstInstance = useGameLevel();
+    addContext(contextName, firstInstance);
+    return firstInstance as GameTypeHookType;
+  } else if (contextName === contextsMap.AnotherPlayer) {
+    if ( hasContext(contextName) ) {
+      return getContext(contextName);
+    }
+    const firstInstance = useAnotherPlayer();
+    addContext(contextName, firstInstance);
+    return firstInstance as AnotherPlayerHookType;
+  } else if (contextName === contextsMap.CurrentMove) {
+    if ( hasContext(contextName) ) {
+      return getContext(contextName);
+    }
+    const firstInstance = useCurrentMove();
+    addContext(contextName, firstInstance);
+    return firstInstance as CurrentMoveHookType;
+  } else if (contextName === contextsMap.User) {
+    if ( hasContext(contextName) ) {
+      return getContext(contextName);
+    }
+    const firstInstance = useUserSession();
+    addContext(contextName, firstInstance);
+    return firstInstance as UserSessionHookType;
+  } else if (contextName === contextsMap.TurnStorage ) {
+    if ( hasContext(contextName) ) {
+      return getContext(contextName);
+    }
+    const firstInstance = useTurnStorageHook();
+    addContext(contextName, firstInstance);
+    return firstInstance as UseTurnStorageHookType;
+  } else if (contextName === contextsMap.WinnerSeq ) {
+    if ( hasContext(contextName) ) {
+      return getContext(contextName);
+    }
+    const firstInstance = useWinnerSeqHook();
+    addContext(contextName, firstInstance);
+    return firstInstance as UseWinnerSeqHookType;
+  } else if (contextName === contextsMap.Winner ) {
+    if ( hasContext(contextName) ) {
+      return getContext(contextName);
+    }
+    const firstInstance = useWinnerHook();
+    addContext(contextName, firstInstance);
+    return firstInstance as UseWinnerHookType;
+  } else if (contextName === contextsMap.TurnType ) {
+    if ( hasContext(contextName) ) {
+      return getContext(contextName);
+    }
+    const firstInstance = useTurnHook();
+    addContext(contextName, firstInstance);
+    return firstInstance as UseTurnHookType;
   }
-}
 
+}
 
 export const useContextAppLevelType = (contextsData : InitializeContextsFunctionType) : AppLevelHookType => {
   return  useContexts( contextsMap.AppLevelType , contextsData ) as AppLevelHookType;
+}
+
+export const useContextGameType = (contextsData : InitializeContextsFunctionType) : GameTypeHookType => {
+  return  useContexts( contextsMap.GameType , contextsData ) as GameTypeHookType;
+}
+
+export const useContextAnotherPlayer = (contextsData : InitializeContextsFunctionType) : AnotherPlayerHookType => {
+  return  useContexts( contextsMap.AnotherPlayer , contextsData ) as AnotherPlayerHookType;
+}
+
+export const useContextCurrentMove = (contextsData : InitializeContextsFunctionType) : CurrentMoveHookType => {
+  return  useContexts( contextsMap.CurrentMove , contextsData ) as CurrentMoveHookType;
+}
+
+export const useContextUserSession = (contextsData : InitializeContextsFunctionType) : UserSessionHookType => {
+  return  useContexts( contextsMap.User , contextsData ) as UserSessionHookType;
+}
+
+export const useContextTurnStorage = (contextsData : InitializeContextsFunctionType) : UseTurnStorageHookType => {
+  return  useContexts( contextsMap.User , contextsData ) as UseTurnStorageHookType;
+}
+
+export const useContextWinner = (contextsData : InitializeContextsFunctionType) : UseWinnerHookType => {
+  return  useContexts( contextsMap.User , contextsData ) as UseWinnerHookType;
+}
+
+export const useContextWinnerSeq = (contextsData : InitializeContextsFunctionType) : UseWinnerSeqHookType => {
+  return  useContexts( contextsMap.User , contextsData ) as UseWinnerSeqHookType;
+}
+
+export const useContextTurnHookType = (contextsData : InitializeContextsFunctionType) : UseTurnHookType => {
+  return  useContexts( contextsMap.TurnType , contextsData ) as UseTurnHookType;
+}
+
+export const isItRemoteGame = (contextsData:InitializeContextsFunctionType) : boolean => {
+  const {
+    getGameType
+  } = useContextGameType( contextsData );
+
+  return getGameType() === 'remote-friend-player' || getGameType() === 'remote-random-player';
+}
+
+export const isItRemotePlayerTurn = (contextsData:InitializeContextsFunctionType) : boolean => {
+  const {
+    getCurrentMove
+  } = useContextCurrentMove( contextsData );
+
+  const {
+    getUser
+  } = useContextUserSession( contextsData );
+
+  const currentMove = getCurrentMove();
+  const user = getUser();
+  return currentMove !== user.id
 }

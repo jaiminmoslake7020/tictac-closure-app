@@ -1,5 +1,6 @@
-@use "base/index";
-
+@use "base";
+@use "components";
+@use "pages/user";
 
 
 @layer base{
@@ -43,6 +44,14 @@ body {
 
   &.btn-reload{
     @apply w-[9rem] text-center;
+  }
+
+  &.inverse-btn{
+    @apply text-content bg-bkg;
+
+    &:hover{
+      @apply bg-opacity-70;
+    }
   }
 
 }

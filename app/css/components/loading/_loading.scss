@@ -1,0 +1,11 @@
+.loading-wrapper{
+  @apply fixed top-0 left-0 right-0 bottom-0 bg-content bg-opacity-60 text-bkg z-50 ;
+  @apply flex justify-center items-center;
+  .loading-wrapper-child{
+    @apply w-fit flex justify-center;
+    .loading-text{
+      @apply text-8xl text-bkg;
+      animation-duration: 2s;
+    }
+  }
+}

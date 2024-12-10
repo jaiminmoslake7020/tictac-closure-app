@@ -25,9 +25,39 @@ export const DropdownContainer = (classList: string) => {
 }
 
 
+export type useStateType = {
+  get: () => any,
+  set: (item: any) => void,
+  remove: () => any
+};
+
+export const useState = () : useStateType => {
+
+  let item : any = undefined;
+
+  const get = () : any => {
+    return item;
+  }
+
+  const set = (itemValue: any) => {
+    item =  itemValue;
+  }
+
+  const remove = () =>{
+    item = undefined;
+  }
+
+  return {
+    get,
+    set,
+    remove
+  }
+}
+
 export type useDivType = {
   getDiv: () => HTMLDivElement,
-  setDiv: (classList?: string) => void
+  setDiv: (classList?: string) => void,
+  removeDiv: () => void
 };
 
 export const useDiv = () : useDivType => {
@@ -41,8 +71,16 @@ export const useDiv = () : useDivType => {
     div = Div(classList);
   }
 
+  const removeDiv = () => {
+    if (getDiv()) {
+      (getDiv() as HTMLDivElement).remove()
+    }
+    div = undefined
+  }
+
   return {
     getDiv,
-    setDiv
+    setDiv,
+    removeDiv
   }
 }

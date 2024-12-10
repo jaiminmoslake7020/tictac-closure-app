@@ -11,7 +11,8 @@ export const Button = (btnLabel: string, btnClassList: string, onClick: EventLis
 
 export type useButtonType = {
   getButton: () => HTMLButtonElement,
-  setButton: (btnLabel: string, btnClassList: string, onClick: EventListenerOrEventListenerObject) => void
+  setButton: (btnLabel: string, btnClassList: string, onClick: EventListenerOrEventListenerObject) => void,
+  removeButton: () => void
 };
 
 export const useButton = () : useButtonType => {
@@ -25,8 +26,16 @@ export const useButton = () : useButtonType => {
     button = Button(btnLabel, btnClassList, onClick);
   }
 
+  const removeButton = () => {
+    if (getButton()) {
+      (getButton() as HTMLButtonElement).remove()
+    }
+    button = undefined
+  }
+
   return {
     getButton,
-    setButton
+    setButton,
+    removeButton
   }
 }

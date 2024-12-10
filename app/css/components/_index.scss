@@ -1,0 +1,18 @@
+@use "loading/loading";
+
+
+.radio-btn {
+  @apply btn ;
+  @apply flex justify-center;
+  input {
+    @apply invisible h-0 w-0;
+  }
+}
+
+.player-selection-form{
+  @apply flex flex-col gap-4;
+}
+
+.room-selection-form{
+  @apply flex flex-col gap-4;
+}

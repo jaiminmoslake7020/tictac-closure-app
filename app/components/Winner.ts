@@ -1,5 +1,5 @@
 import {P} from './base/Text';
-import {WinnerType} from '../types';
+import {InitializeContextsFunctionType, useContextWinner} from '../contexts';
 
 export type WinnerFunctionType = {
   render: () => HTMLParagraphElement,
@@ -8,10 +8,15 @@ export type WinnerFunctionType = {
   removeText: () => void,
   setP: (v:HTMLParagraphElement) => void,
   getP: () => HTMLParagraphElement,
-  update: (v: WinnerType) => void
+  update: () => void
 };
 
-export const Winner = () : WinnerFunctionType => {
+export const Winner = (
+  contextsData: InitializeContextsFunctionType
+) : WinnerFunctionType => {
+
+  const { getWinner } = useContextWinner(contextsData);
+
   let p : undefined | HTMLParagraphElement;
 
   const setP = (item: HTMLParagraphElement) =>{
@@ -26,7 +31,8 @@ export const Winner = () : WinnerFunctionType => {
     return getP();
   }
 
-  const update = (v:WinnerType) => {
+  const update = () => {
+    const v = getWinner();
     if (v === "NONE") {
       getP().innerHTML = 'You both loose.';
     } else if (v === "X") {

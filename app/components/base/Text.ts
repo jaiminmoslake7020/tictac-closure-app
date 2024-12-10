@@ -35,3 +35,34 @@ export const H5 = (text: string, classList?: string) : HTMLHeadingElement => {
 export const H6 = (text: string, classList?: string) : HTMLHeadingElement => {
   return Text('h6', text, classList) as HTMLHeadingElement;
 }
+
+export type useSpanType = {
+  getSpan: () => HTMLButtonElement,
+  setSpan: (classList?: string) => void,
+  removeSpan: () => void
+};
+
+export const useSpan = () : useSpanType => {
+  let span : undefined | HTMLSpanElement;
+
+  const getSpan = () => {
+    return span as HTMLButtonElement;
+  }
+
+  const setSpan = (classList?: string) => {
+    span = Span('', classList);
+  }
+
+  const removeSpan = () => {
+    if (getSpan()) {
+      (getSpan() as HTMLSpanElement).remove()
+    }
+    span = undefined
+  }
+
+  return {
+    getSpan,
+    setSpan,
+    removeSpan
+  }
+}

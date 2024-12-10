@@ -23,3 +23,49 @@ export const applyClassList = (el: any | HTMLElement, classList: string) :any | 
   });
   return el;
 }
+
+export const getRandomInt = (min:number, max:number) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min; // The +1 ensures the max is inclusive
+}
+
+export type HistoryType = {
+  pushState: (url:string) => void,
+  replaceState: (url:string) => void
+}
+
+export const History = () : HistoryType => {
+
+  const pushState = (url: string)=> {
+    window.history.pushState(null, 'undefined', url);
+  }
+
+  const replaceState = (url: string)=> {
+    window.history.replaceState(null, 'undefined', url);
+  }
+
+  return {
+    pushState,
+    replaceState
+  };
+}
+
+export const getBrowserName = () => {
+  const userAgent = navigator.userAgent;
+  if (userAgent.includes("Chrome") && !userAgent.includes("Edg") && !userAgent.includes("OPR")) {
+    return "Google Chrome";
+  } else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) {
+    return "Safari";
+  } else if (userAgent.includes("Firefox")) {
+    return "Mozilla Firefox";
+  } else if (userAgent.includes("Edg")) {
+    return "Microsoft Edge";
+  } else if (userAgent.includes("OPR") || userAgent.includes("Opera")) {
+    return "Opera";
+  } else if (userAgent.includes("MSIE") || userAgent.includes("Trident")) {
+    return "Internet Explorer";
+  } else {
+    return "Unknown Browser";
+  }
+}
