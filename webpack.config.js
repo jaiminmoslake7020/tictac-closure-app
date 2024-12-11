@@ -22,12 +22,12 @@ module.exports = env  => ({
     'webpack/hot/dev-server',  // Required for HMR
     './app/index.ts',
   ],
-  target: 'es5',
+  target: env.production ? 'es5' : 'es6',
   resolve: {
     extensions: env.production ? ['.ts'] : ['.ts','.js']
   },
   module: {
-    rules: [
+    rules: env.production ? [
       {
         test: /\.scss$/, // Handle CSS files
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
@@ -35,6 +35,23 @@ module.exports = env  => ({
       {
         test: /\.ts?$/,
         use: ['babel-loader', 'ts-loader'],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.(png|jpg|gif|svg|woff|woff2|eot|ttf|otf|json)$/,
+        type: 'asset/resource', // Automatically handles these files
+        generator: {
+          filename: 'assets/[name][hash][ext]', // Output directory and filename
+        },
+      },
+    ] : [
+      {
+        test: /\.scss$/, // Handle CSS files
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+      },
+      {
+        test: /\.ts?$/,
+        use: ['ts-loader'],
         exclude: /node_modules/
       },
       {

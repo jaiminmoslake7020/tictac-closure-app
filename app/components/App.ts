@@ -7,6 +7,7 @@ import {addDoc, collection, doc, getDoc, updateDoc, getFirestore, onSnapshot, se
 import {getFirestoreObject} from '../firebase';
 import {Game} from './Game';
 import {UserType} from '../types';
+import {initializeContexts, InitializeContextsFunctionType, useContextUserSession} from '../contexts';
 
 export const ButtonGroup = (btnClick: () => void) => {
   const {getDiv: getUserDiv, setDiv: setUserDiv, removeDiv} = useDiv();
@@ -61,7 +62,11 @@ export const Loader = () => {
   }
 }
 
-export const User = (setUser: (u:UserType) => void) => {
+export const User = (contextsData: InitializeContextsFunctionType, initGame: () => void) => {
+  const {
+    setUser, checkUserExists
+  } = useContextUserSession(contextsData);
+
   const {getDiv: getUserDiv, setDiv: setUserDiv, removeDiv} = useDiv();
   const {getDiv: getUserInputContainerDiv, setDiv: setUserInputContainerDiv, removeDiv: removeDiv1} = useDiv();
   const {getInput, setInput, removeInput} = useTextInput();
@@ -94,11 +99,10 @@ export const User = (setUser: (u:UserType) => void) => {
         id: userDoc.id,
         username: v
       }
-      localStorage.setItem('user', JSON.stringify(t));
-
       remove();
       stopLoader();
       setUser(t);
+      initGame();
     } else {
       getUserInputContainerDiv().classList.add('input-error');
       getSpan().innerText = 'Name should be at least 3 characters long.';
@@ -106,8 +110,8 @@ export const User = (setUser: (u:UserType) => void) => {
   }
 
   const render = () => {
-    const userJson  = localStorage.getItem('user');
-    if (userJson !== null) {
+    const userJson  = checkUserExists();
+    if (userJson) {
       console.log("userJson", userJson);
       return undefined;
     } else {
@@ -152,18 +156,15 @@ export const keepSessionAliveInterval = async () => {
 
 export const App = () => {
 
-  const setUser = (u: UserType) => {
-    console.log('u', u);
-    initGame();
-  }
+  const contextsData = initializeContexts();
 
   const initGame = () => {
-    const t = Game();
+    const t = Game(contextsData);
     t.init();
   }
 
   const init = () => {
-    const t = User(setUser);
+    const t = User(contextsData , initGame);
     const f = t.render();
     if ( f ) {
       appendEl('#root', f);

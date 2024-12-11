@@ -7,6 +7,7 @@ import {useTurnStorageHook, UseTurnStorageHookType} from './useTurnStorageHook';
 import {useWinnerSeqHook, UseWinnerSeqHookType} from './useWinnerSeqHook';
 import {useWinnerHook, UseWinnerHookType} from './useWinnerHook';
 import {useTurnHook, UseTurnHookType} from './useTurnType';
+import {useRoomCodeIdHook, UseRoomCodeIdHookType} from './useRoomCodeId';
 
 export type InitializeContextsFunctionType = {
   addContext: (name: string, value: any) => void,
@@ -36,7 +37,7 @@ export const initializeContexts = () : InitializeContextsFunctionType => {
   }
 }
 
-export type contextType = 'AppLevelType' | 'GameType' | 'AnotherPlayer' | 'CurrentMove' | 'User' | 'TurnStorage' | 'WinnerSeq' | 'Winner' | 'TurnType';
+export type contextType = 'AppLevelType' | 'GameType' | 'AnotherPlayer' | 'CurrentMove' | 'User' | 'TurnStorage' | 'WinnerSeq' | 'Winner' | 'TurnType' | 'RoomCodeId';
 
 export const contextsMap = {
   AppLevelType: 'AppLevelType',
@@ -47,7 +48,8 @@ export const contextsMap = {
   TurnStorage: 'TurnStorage',
   WinnerSeq: 'WinnerSeq',
   Winner: 'Winner',
-  TurnType: 'TurnType'
+  TurnType: 'TurnType',
+  RoomCodeId: 'RoomCodeId'
 } as Record<contextType, contextType>;
 
 // contexts should be global and share state between app or atlest nodeTree where it starts
@@ -121,6 +123,13 @@ export const useContexts = (contextName: string, contextsMapList : InitializeCon
     const firstInstance = useTurnHook();
     addContext(contextName, firstInstance);
     return firstInstance as UseTurnHookType;
+  } else if (contextName === contextsMap.RoomCodeId ) {
+    if ( hasContext(contextName) ) {
+      return getContext(contextName);
+    }
+    const firstInstance = useRoomCodeIdHook();
+    addContext(contextName, firstInstance);
+    return firstInstance as UseRoomCodeIdHookType;
   }
 
 }
@@ -146,19 +155,23 @@ export const useContextUserSession = (contextsData : InitializeContextsFunctionT
 }
 
 export const useContextTurnStorage = (contextsData : InitializeContextsFunctionType) : UseTurnStorageHookType => {
-  return  useContexts( contextsMap.User , contextsData ) as UseTurnStorageHookType;
+  return  useContexts( contextsMap.TurnStorage , contextsData ) as UseTurnStorageHookType;
 }
 
 export const useContextWinner = (contextsData : InitializeContextsFunctionType) : UseWinnerHookType => {
-  return  useContexts( contextsMap.User , contextsData ) as UseWinnerHookType;
+  return  useContexts( contextsMap.Winner , contextsData ) as UseWinnerHookType;
 }
 
 export const useContextWinnerSeq = (contextsData : InitializeContextsFunctionType) : UseWinnerSeqHookType => {
-  return  useContexts( contextsMap.User , contextsData ) as UseWinnerSeqHookType;
+  return  useContexts( contextsMap.WinnerSeq , contextsData ) as UseWinnerSeqHookType;
 }
 
 export const useContextTurnHookType = (contextsData : InitializeContextsFunctionType) : UseTurnHookType => {
   return  useContexts( contextsMap.TurnType , contextsData ) as UseTurnHookType;
+}
+
+export const useContextRoomCodeId = (contextsData : InitializeContextsFunctionType) : UseRoomCodeIdHookType => {
+  return  useContexts( contextsMap.RoomCodeId , contextsData ) as UseRoomCodeIdHookType;
 }
 
 export const isItRemoteGame = (contextsData:InitializeContextsFunctionType) : boolean => {

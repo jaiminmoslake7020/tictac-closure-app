@@ -1,6 +1,7 @@
 import {InfoTab, InfoTabType} from './InfoTab';
 import { TurnHandler } from '../business-logic/TurnHandler'
 import {
+  MovePositionType,
   TicTacTableType,
   TurnHandlerType,
 } from '../types';
@@ -40,8 +41,13 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
     return ticTacTableType as TicTacTableType;
   }
 
+  const anotherPersonMadeMove = async ( v: MovePositionType ) => {
+    updateInfo();
+    await getTicTacTable().updateOtherPersonMove( v );
+  }
+
   const reload = () => {
-    setTurnHandlerType( TurnHandler( contextsData ) );
+    setTurnHandlerType( TurnHandler( contextsData , anotherPersonMadeMove ) );
     const t = getTurnHandlerType();
     const table = getTicTacTable();
     table.reset();
@@ -61,7 +67,7 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
   }
 
   const render = () => {
-    setTurnHandlerType( TurnHandler( contextsData ) );
+    setTurnHandlerType( TurnHandler( contextsData , anotherPersonMadeMove ) );
     const t = getTurnHandlerType();
     setInfoTabDiv( InfoTab( reload, contextsData ) );
     setWrapperDiv( 'wrapper-div' );

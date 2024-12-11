@@ -1,7 +1,7 @@
 import { createEL } from '../utils';
 import {TurnType} from '../types';
 
-export const TicTacCellValue = (v: TurnType) => {
+export const TicTacCellValue = () => {
   let div : undefined | HTMLDivElement;
 
   const getDiv = () : HTMLDivElement => {
@@ -15,11 +15,20 @@ export const TicTacCellValue = (v: TurnType) => {
   const render = () => {
     setDiv( createEL('div') as HTMLDivElement );
     getDiv().classList.add('tic-tac-cell-value');
-    getDiv().innerHTML = v;
     return getDiv();
   }
 
+  const addText = (v: TurnType) => {
+    getDiv().innerHTML = v;
+  }
+
+  const removeText = (v: TurnType) => {
+    getDiv().innerHTML = '';
+  }
+
   return {
-    render
+    render,
+    addText,
+    removeText
   }
 }

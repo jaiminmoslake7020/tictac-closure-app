@@ -7,7 +7,7 @@ import {
 } from '../types';
 import {InitializeContextsFunctionType} from '../contexts';
 
-export const TicTacCellRow = (rowId: number, turn: TurnType, changeTurn: ChangeFunctionType, contextData: InitializeContextsFunctionType) => {
+export const TicTacCellRow = (rowId: number, changeTurn: ChangeFunctionType, contextData: InitializeContextsFunctionType) => {
 
   const tdArray = [] as TicTacCellFunctionType[];
 
@@ -16,22 +16,22 @@ export const TicTacCellRow = (rowId: number, turn: TurnType, changeTurn: ChangeF
     tr.classList.add('tic-tac-row')
     tr.setAttribute('id', 'row-'+rowId);
     for (let i = 0 ; i < 3 ; i++)  {
-      const td = TicTacCell( rowId+'-'+(i + 1) as ColumnIdType , i === 0 && rowId === 1 , turn, changeTurn, contextData);
+      const td = TicTacCell( rowId+'-'+(i + 1) as ColumnIdType , i === 0 && rowId === 1 , changeTurn, contextData);
       tdArray.push(td);
       tr.append(td.render());
     }
     return tr as HTMLTableRowElement;
   }
 
-  const update = (newTurn: TurnType, newChangeTurn: ChangeFunctionType) => {
+  const update = (newChangeTurn: ChangeFunctionType) => {
     for (let i = 0 ; i < 3 ; i++)  {
-      tdArray[i].update(newTurn, newChangeTurn);
+      tdArray[i].update(newChangeTurn);
     }
   }
 
-  const reset = ( newTurn: TurnType, newChangeTurn: ChangeFunctionType ) => {
+  const reset = (newChangeTurn: ChangeFunctionType ) => {
     for (let i = 0 ; i < 3 ; i++)  {
-      tdArray[i].reset( newTurn, newChangeTurn );
+      tdArray[i].reset(newChangeTurn );
     }
   }
 

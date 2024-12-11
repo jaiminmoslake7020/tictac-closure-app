@@ -1,7 +1,7 @@
 import { createEL } from '../utils';
 import {ColumnIdType} from '../types';
 
-export const TicTacCellIdentifier = (columnId:ColumnIdType, firstTime: boolean) => {
+export const TicTacCellIdentifier = (columnId:ColumnIdType) => {
 
   const render = () => {
     const span = createEL('span');

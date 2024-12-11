@@ -3,6 +3,7 @@ import {UserType} from '../types';
 export type UserSessionHookType = {
   getUser: () => UserType,
   setUser: (v:UserType) => void,
+  checkUserExists: () => boolean
 };
 
 // hooks should be component based
@@ -16,9 +17,13 @@ export const useUserSession = () :UserSessionHookType => {
     user = item;
   }
 
+  const checkUserExists = () : boolean => {
+    return localStorage.getItem('user') !== null ;
+  }
+
   const getUser = () : UserType => {
     const userStorage  = JSON.parse((localStorage.getItem('user') as string)) as UserType;
-    if ( userStorage && userStorage.id && userStorage.username ) {
+    if ( userStorage && userStorage.id && userStorage.username && !user ) {
       setUser( userStorage as UserType );
     }
     return user as UserType;
@@ -26,7 +31,8 @@ export const useUserSession = () :UserSessionHookType => {
 
   return {
     getUser,
-    setUser
+    setUser,
+    checkUserExists
   }
 }
 

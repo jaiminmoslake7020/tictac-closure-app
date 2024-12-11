@@ -13,24 +13,24 @@ export type AnotherPersonMovePositionsTypeWithNull = MovePositionType[] | null;
 
 export type TurnStorageType = Record<TurnType, MovePositionType[]>;
 
-export type ChangeFunctionType = ( i: MovePositionType ) => void;
+export type ChangeFunctionType = ( i: MovePositionType ) => Promise<void>;
 export type TicTacCellRowRenderFunctionType = () => HTMLDivElement
-export type TicTacCellRowUpdateFunctionType = (newTurn: TurnType, newChangeTurn: ChangeFunctionType) => void
+export type TicTacCellRowUpdateFunctionType = (newChangeTurn: ChangeFunctionType) => void
 
 export type TicTacCellRowFunctionType = {
   render: TicTacCellRowRenderFunctionType,
   update: TicTacCellRowUpdateFunctionType,
-  reset: ( newTurn: TurnType, newChangeTurn: ChangeFunctionType ) => void
+  reset: (newChangeTurn: ChangeFunctionType ) => void
 }
 
 
 export type TicTacCellRenderFunctionType = () => HTMLDivElement
-export type TicTacCellUpdateFunctionType = (newTurn: TurnType, newChangeTurn: ChangeFunctionType) => void
+export type TicTacCellUpdateFunctionType = (newChangeTurn: ChangeFunctionType) => void
 
 export type TicTacCellFunctionType = {
   render: TicTacCellRenderFunctionType,
   update: TicTacCellUpdateFunctionType,
-  reset: ( newTurn: TurnType, newChangeTurn: ChangeFunctionType ) => void
+  reset: (newChangeTurn: ChangeFunctionType ) => void
 }
 
 export type TicTacFunctionReturnType = {
@@ -46,7 +46,8 @@ export type TurnHandlerType = {
 
 export type TicTacTableType = {
   render: () => HTMLDivElement,
-  reset: () => void
+  reset: () => void,
+  updateOtherPersonMove: (v:MovePositionType) => Promise<void>
 }
 
 export type TicTacCellValueType = {
@@ -75,6 +76,7 @@ export type UserType = {
 };
 
 export type RoomReadyResponseType = {
+  roomCode: string,
   anotherPlayer: UserType,
   currentMove: string
 };

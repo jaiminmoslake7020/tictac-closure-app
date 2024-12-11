@@ -8,19 +8,21 @@ import {
   AnotherPlayerHookType,
 } from '../contexts/useAnotherPlayer';
 import {
-  initializeContexts, useContextAnotherPlayer, useContextCurrentMove,
-  useContextGameType
+  initializeContexts, InitializeContextsFunctionType, useContextAnotherPlayer, useContextCurrentMove,
+  useContextGameType, useContextRoomCodeId
 } from '../contexts';
 import {OpponentType, RoomReadyResponseType} from '../types';
 import {RoomSelection} from './RoomSelection';
 import {CurrentMoveHookType} from '../contexts/useCurrentMove';
+import {UseRoomCodeIdHookType} from '../contexts/useRoomCodeId';
 
-export const Game = () => {
+export const Game = ( contextsData: InitializeContextsFunctionType ) => {
 
-  const contextsData = initializeContexts();
   const { setGameType  } = useContextGameType( contextsData ) as GameTypeHookType;
   const { setAnotherPlayer } = useContextAnotherPlayer(contextsData) as AnotherPlayerHookType;
   const { setCurrentMove } = useContextCurrentMove(contextsData) as CurrentMoveHookType;
+  const { setRoomCodeId } = useContextRoomCodeId(contextsData) as UseRoomCodeIdHookType;
+
 
   const onLevelSelected = () => {
     LoadTicTacApp( contextsData ).render();
@@ -36,6 +38,7 @@ export const Game = () => {
 
   const onRoomSelected = (v:RoomReadyResponseType) => {
     console.log('onRoomSelected', v);
+    setRoomCodeId(v.roomCode);
     setAnotherPlayer(v.anotherPlayer);
     setCurrentMove(v.currentMove);
     setGameType('remote-friend-player');
@@ -43,7 +46,7 @@ export const Game = () => {
   }
 
   const askRoomSelection = () => {
-    const t = RoomSelection( onRoomSelected );
+    const t = RoomSelection( contextsData , onRoomSelected );
     const f = t.render();
     if ( f ) {
       appendEl('#root', f);
@@ -62,6 +65,7 @@ export const Game = () => {
   const init = () => {
     if (getBrowserName() === "Google Chrome") {
       onRoomSelected({
+        roomCode: 'ruXYWs7WAFdh5CuR8FvT',
         anotherPlayer: {
           id: 'vGKtmDa38Ky8CcOFnNld',
           username: "Armenia"
@@ -70,6 +74,7 @@ export const Game = () => {
       });
     } else {
       onRoomSelected({
+        roomCode: 'ruXYWs7WAFdh5CuR8FvT',
         anotherPlayer: {
           id: 'g6XKVylf1PVXpAjC2iPv',
           username: 'Michel'

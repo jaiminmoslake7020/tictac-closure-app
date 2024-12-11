@@ -12,6 +12,7 @@ export const useTurnStorageHook = () : UseTurnStorageHookType => {
   let turnStorage = {} as TurnStorageType;
 
   const setTurnStorage = (v:TurnStorageType) => {
+    console.log('setTurnStorage', v);
     turnStorage = v;
   }
 
