@@ -1,30 +1,22 @@
-import {Button, useButton,
-  Div,
-  Dropdown,
-  DropdownContainer,
-  useState,
-  useDiv,
-  Text, P, Span, H1, H2, H3, H4, H5, H6,  useSpan,
-  RadioButton,
+import {Button, useButton, useButtonType} from './Button';
+import {Div, Dropdown, DropdownContainer, useStateType, useState, useDivType, useDiv} from './Div';
+import {
   Label,
   Input,
   TextInput,
   CheckboxInput,
   RadioInput,
   useTextInput,
-  useForm,
-  useButtonType,
-  useDivType,
-  useStateType,
-  useSpanType,
   useTextInputType,
+  useForm,
   useFormType,
-} from './html';
-
+} from './Input';
 import {
-  Loader,
-  LoaderType
-} from './ux';
+  RadioButton
+} from './RadioButton';
+import {
+  Text, P, Span, H1, H2, H3, H4, H5, H6, useSpanType, useSpan,
+} from './Text';
 
 
 export type {
@@ -33,7 +25,6 @@ export type {
   useSpanType,
   useTextInputType,
   useFormType,
-  LoaderType
 };
 
 export  {
@@ -54,5 +45,4 @@ export  {
   RadioInput,
   useTextInput,
   useForm,
-  Loader
 };

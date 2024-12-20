@@ -14,7 +14,18 @@
     "lib": ["DOM", "ES2020"],
     "types": ["node"],
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@business-logic/*": ["business-logic/*"],
+      "@components/*": ["components/*"],
+      "@contexts/*": ["contexts/*"],
+      "@data/*": ["data/*"],
+      "@firebase/*": ["firebase/*"],
+      "@helpers/*": ["helpers/*"],
+      "@hooks/*": ["hooks/*"],
+      "@types/*": ["types/*"],
+      "@utils/*": ["utils/*"]
+    }
   },
   "include": ["app"],
   "exclude": ["node_modules", "dist", "build"]
