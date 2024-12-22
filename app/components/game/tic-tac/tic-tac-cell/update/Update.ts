@@ -3,10 +3,10 @@ import {
   isItRemotePlayerTurn,
   useContextTurnStorage,
   useContextWinnerSeq
-} from '../../../../../contexts';
-import {ChangeFunctionType, ColumnIdType, MovePositionType} from '../../../../../types';
-import {addClickListener, removeClickListener} from '../Onclick/OnClick';
-import {anotherPersonMove, checkWinnerIsAvailable, getTd, tdClassList} from '../Common';
+} from '@contexts/index';
+import {ChangeFunctionType, ColumnIdType, MovePositionType} from '@types-dir/index';
+import {addClickListener, removeClickListener} from '@tic-tac/tic-tac-cell/Onclick/OnClick';
+import {anotherPersonMove, checkWinnerIsAvailable, getTd, tdClassList} from '@tic-tac/tic-tac-cell/Common';
 
 export const Update = (
   contextData: InitializeContextsFunctionType,
@@ -21,7 +21,7 @@ export const Update = (
   removeClickListener( columnId );
   if ( isItRemoteGame(contextData) && isItRemotePlayerTurn(contextData) ) {
     if (!getTd(columnId).classList.contains(tdClassList.typeDisabled)) {
-      console.log('disbaleing as it is other player move');
+      // console.log('disbaleing as it is other player move');
       getTd(columnId).classList.add( tdClassList.typeDisabled );
     }
   } else if (Array.isArray(anotherPersonMoves) && winnerSequence === null) {

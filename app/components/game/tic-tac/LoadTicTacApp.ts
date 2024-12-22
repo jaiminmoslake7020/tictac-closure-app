@@ -1,7 +1,7 @@
-import {TicTacFunctionReturnType} from '../../../types';
+import {TicTacFunctionReturnType} from '@types-dir/index';
 import {TicTac} from './TicTac';
-import {appendEl} from '../../../utils';
-import {InitializeContextsFunctionType} from '../../../contexts';
+import {appendEl} from '@utils/index';
+import {InitializeContextsFunctionType} from '@contexts/index';
 
 export const LoadTicTacApp = (contextsData: InitializeContextsFunctionType) => {
   const t = TicTac( contextsData ) as TicTacFunctionReturnType;

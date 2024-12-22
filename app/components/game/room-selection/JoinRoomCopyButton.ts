@@ -1,7 +1,7 @@
-import {useDiv, useState} from '../../base';
-import {useButton} from '../../base';
-import {H2, P} from '../../base';
-import {copyTextToClipboard} from '../../../utils';
+import {useDiv, useState} from '@components/base';
+import {useButton} from '@components/base';
+import {H2, P} from '@components/base';
+import {copyTextToClipboard} from '@utils/index';
 
 export type JoinRoomCopyButtonType = {
   render: () => HTMLDivElement,

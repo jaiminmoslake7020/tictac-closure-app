@@ -1,11 +1,10 @@
-import { createEL } from '../../../utils';
-import { TicTacCell } from './TicTacCell';
+import { createEL } from '@utils/index';
+import { TicTacCell } from '@tic-tac/tic-tac-cell/TicTacCell';
 import {
   ChangeFunctionType,
   ColumnIdType, TicTacCellFunctionType,
-  TurnType,
-} from '../../../types';
-import {InitializeContextsFunctionType} from '../../../contexts';
+} from '@types-dir/index';
+import {InitializeContextsFunctionType} from '@contexts/index';
 
 export const TicTacCellRow = (rowId: number, changeTurn: ChangeFunctionType, contextData: InitializeContextsFunctionType) => {
 

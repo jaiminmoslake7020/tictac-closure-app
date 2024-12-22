@@ -1,4 +1,4 @@
-import { createEL, findEl } from '../utils';
+import { createEL, findEl } from '@utils/index';
 
 export const AddStyle = (className: string, cssStyleClassData: string) => {
   let styleEl = findEl('#style');

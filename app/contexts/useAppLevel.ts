@@ -1,5 +1,5 @@
-import {AppLevelType} from '../types';
-import {appLevelList} from '../helpers';
+import {AppLevelType} from '@types-dir/index';
+import {appLevelList} from '@helpers/index';
 
 export type AppLevelHookType = {
   getAppLevelType: () => AppLevelType,

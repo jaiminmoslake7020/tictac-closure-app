@@ -1,4 +1,4 @@
-import {UserType} from '../types';
+import {UserType} from '@types-dir/index';
 
 export type AnotherPlayerHookType = {
   getAnotherPlayer: () => UserType,

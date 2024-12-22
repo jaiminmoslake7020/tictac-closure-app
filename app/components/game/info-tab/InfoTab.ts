@@ -2,11 +2,11 @@ import {
   InitializeContextsFunctionType,
   useContextGameType,
   useContextWinner
-} from '../../../contexts';
+} from '@contexts/index';
 import {Winner} from './Winner';
 import {WhosTurn, WhosTurnFunctionType} from './WhosTurn';
 import {ChangeAppLevelInfoTabButton, ChangeAppLevelInfoTabButtonType} from './ChangeAppLevelInfoTabButton';
-import {useDiv, useState} from '../../base';
+import {useDiv, useState} from '@components/base';
 import {RestartGameButton, RestartGameButtonType} from './RestartGameButton';
 
 export type InfoTabType = {
@@ -92,6 +92,7 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
   }
 
   const addWinner = () => {
+    // console.log("addWinner");
     removeTurn();
     setWinner( Winner( contextsData ) );
     getDiv().prepend( getWinner().render() );
@@ -130,8 +131,10 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
   }
 
   const updateInfo = (reload: () => void) => {
+    // console.log('updateInfo');
     const { getWinner } = useContextWinner(contextsData);
     if ( getWinner() !== null) {
+      // console.log('getWinner');
       addWinner();
       addRestartGameButton(reload);
     } else {

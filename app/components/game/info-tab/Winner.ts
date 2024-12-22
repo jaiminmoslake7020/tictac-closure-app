@@ -1,5 +1,5 @@
-import {P} from '../../base';
-import {InitializeContextsFunctionType, useContextWinner} from '../../../contexts';
+import {P} from '@components/base';
+import {InitializeContextsFunctionType, useContextWinner} from '@contexts/index';
 
 export type WinnerFunctionType = {
   render: () => HTMLParagraphElement,
@@ -27,6 +27,7 @@ export const Winner = (
   }
 
   const render = () => {
+    // console.log('winner-render');
     setP( P('', 'winner-found') )
     return getP();
   }

@@ -1,7 +1,7 @@
-import {appendEl} from '../utils';
+import {appendEl} from '@utils/index';
 import {Game} from './game/Game';
 import {User} from './user/User';
-import {initializeContexts} from '../contexts';
+import {initializeContexts} from '@contexts/index';
 
 export const App = () => {
 

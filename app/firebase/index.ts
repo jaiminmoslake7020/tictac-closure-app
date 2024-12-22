@@ -2,7 +2,7 @@ import {addDoc, collection, doc, getDoc, getFirestore, onSnapshot, setDoc, updat
 import {Firestore} from '@firebase/firestore';
 import {FirebaseApp} from '@firebase/app';
 import {initializeApp} from 'firebase/app';
-import {MovePositionType, TurnType} from '../types';
+import {MovePositionType} from '@types-dir/index';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_CONFIG_API_KEY as string,
@@ -31,10 +31,10 @@ export const listenToDocument = (collectionName:string, documentId: string, onRe
 
   const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
     if (docSnapshot.exists()) {
-      console.log("Document data:", docSnapshot.data()); // Current document data
+      // console.log("Document data:", docSnapshot.data()); // Current document data
       onRetrieve( docSnapshot.data() );
     } else {
-      console.log("No such document!");
+      // console.log("No such document!");
     }
   }, (error) => {
     console.error("Error listening to document changes:", error);
@@ -50,10 +50,10 @@ export const listenToCollection = (collectionName:string, onRetrieve: (d:any, le
 
   const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
     const length = snapshot.docChanges().length;
-    console.log('snapshot.docChanges()', );
+    // console.log('snapshot.docChanges()', );
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
-        console.log("New document added: ", change.doc.data());
+        // console.log("New document added: ", change.doc.data());
         onRetrieve( change.doc.data() , length );
       }
     });
@@ -79,7 +79,7 @@ export const updateDocument = async (roomCode: string, currentMove: string) => {
   try {
     const f = getFirestoreObject();
     const docRef = doc(f, `rooms`, roomCode);
-    console.log('new CurrentMove updateDocument', currentMove)
+    // console.log('new CurrentMove updateDocument', currentMove)
     const updatedDocData = {currentMove};
     await updateDoc(docRef, updatedDocData);
   } catch (e) {
@@ -96,3 +96,36 @@ export const getDocument = async (roomCode: string) => {
     console.log('e', e);
   }
 };
+
+export const addUser = async (username: string) => {
+  const f = getFirestoreObject();
+  const userCollection = collection(f, 'users');
+  return await addDoc(userCollection, {
+    username
+  });
+}
+
+export const updateUser = async (userId: string, time: number) => {
+  const f = getFirestoreObject();
+  const docRef = doc(f, 'users', userId);
+  await updateDoc(docRef, {
+    live: time
+  });
+}
+
+export const roomData = async (roomCode: string) => {
+  const f = getFirestoreObject();
+  const docRef = doc(f, 'rooms', roomCode);
+  return await getDoc(docRef);
+}
+
+export const roomExists = async (roomCode: string) => {
+  const docSnap = await roomData(roomCode);
+  return docSnap.exists();
+}
+
+export const joinRoom = async (roomCode: string, updatedDocData: any) : Promise<void> => {
+  const f = getFirestoreObject();
+  const docRef = doc(f, 'rooms', roomCode);
+  await updateDoc(docRef, updatedDocData);
+}

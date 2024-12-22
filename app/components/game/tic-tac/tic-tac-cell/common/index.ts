@@ -5,17 +5,17 @@ import {
   TdCollection,
   TdCellCollection,
   StopAnimateMoveX
-} from '../../../../../helpers';
+} from '@helpers/index';
 import {
   ColumnIdType,
   MovePositionType,
   TDClassIdType,
   WiningSequenceType,
-} from '../../../../../types';
-import {TicTacCellValue} from '../../TicTacCellValue';
-import {InitializeContextsFunctionType, useContextTurnStorage, useContextWinnerSeq} from '../../../../../contexts';
+} from '@types-dir/index';
+import {TicTacCellValue} from '@tic-tac/tic-tac-cell/TicTacCellValue';
+import {InitializeContextsFunctionType, useContextTurnStorage, useContextWinnerSeq} from '@contexts/index';
 
-console.log("common/index");
+// console.log("common/index");
 
 const {
   get: getStopAnimateMoveSuccess,
@@ -78,7 +78,7 @@ export const anotherPersonMove = (columnId: ColumnIdType) => {
   if (!newElement) {
     console.error("newElement should not be undefined", newElement);
   }
-  console.log("newElement", newElement);
+  // console.log("newElement", newElement);
 
   newElement.classList.add(tdClassList.typeX);
   setTimeout(() => {

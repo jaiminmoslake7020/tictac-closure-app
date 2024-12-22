@@ -1,7 +1,7 @@
-import {RoomReadyResponseType} from '../../../types';
-import {useDiv, useState} from '../../base';
-import {H2, Span} from '../../base';
-import {listenToDocument} from '../../../firebase';
+import {RoomReadyResponseType} from '@types-dir/index';
+import {useDiv, useState} from '@components/base';
+import {H2, Span} from '@components/base';
+import {listenToDocument} from '@firebase-dir/index';
 
 export const WaitingRoom = (roomCodeId: string, onRoomReady: (v: RoomReadyResponseType) => void) => {
   const {
@@ -35,14 +35,14 @@ export const WaitingRoom = (roomCodeId: string, onRoomReady: (v: RoomReadyRespon
       if (d['creator'] && d['joiner'] && d['currentMove']) {
         remove();
         unsubscribe();
-        console.log('unsubscribed', d);
+        // console.log('unsubscribed', d);
         onRoomReady({
           roomCode: roomCodeId,
           anotherPlayer: d.joiner,
           currentMove: d['currentMove']
         });
       } else {
-        console.log('d is not ready', d);
+        // console.log('d is not ready', d);
       }
     });
 

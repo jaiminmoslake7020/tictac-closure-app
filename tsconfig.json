@@ -15,16 +15,18 @@
     "types": ["node"],
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
+    "baseUrl": ".",
     "paths": {
-      "@business-logic/*": ["business-logic/*"],
-      "@components/*": ["components/*"],
-      "@contexts/*": ["contexts/*"],
-      "@data/*": ["data/*"],
-      "@firebase/*": ["firebase/*"],
-      "@helpers/*": ["helpers/*"],
-      "@hooks/*": ["hooks/*"],
-      "@types/*": ["types/*"],
-      "@utils/*": ["utils/*"]
+      "@business-logic/*": ["app/business-logic/*"],
+      "@components/*": ["app/components/*"],
+      "@tic-tac/*": ["app/components/game/tic-tac/*"],
+      "@contexts/*": ["app/contexts/*"],
+      "@data/*": ["app/data/*"],
+      "@firebase-dir/*": ["app/firebase/*"],
+      "@helpers/*": ["app/helpers/*"],
+      "@hooks/*": ["app/hooks/*"],
+      "@types-dir/*": ["app/types/*"],
+      "@utils/*": ["app/utils/*"]
     }
   },
   "include": ["app"],

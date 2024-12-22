@@ -1,5 +1,5 @@
-import {TurnType} from '../types';
-import {turnData} from '../data';
+import {TurnType} from '@types-dir/index';
+import {turnData} from '@data/index';
 
 export type UseTurnHookType = {
   getTurn: () => TurnType,

@@ -66,6 +66,14 @@ body {
     .info-p{
       @apply font-semibold;
       @apply w-full md:w-fit text-center md:text-left;
+
+      &.player-text{
+        @apply px-4 py-2 ;
+        &.user-is-player{
+          @apply text-blue-700 font-bold bg-content rounded-lg;
+        }
+        &.user-is-not-a-player{}
+      }
     }
 
     .winner-found{

@@ -9,6 +9,19 @@ import {useWinnerHook, UseWinnerHookType} from './useWinnerHook';
 import {useTurnHook, UseTurnHookType} from './useTurnType';
 import {useRoomCodeIdHook, UseRoomCodeIdHookType} from './useRoomCodeId';
 
+export type {
+  AppLevelHookType,
+  GameTypeHookType,
+  AnotherPlayerHookType,
+  CurrentMoveHookType,
+  UserSessionHookType,
+  UseTurnStorageHookType,
+  UseWinnerSeqHookType,
+  UseWinnerHookType,
+  UseTurnHookType,
+  UseRoomCodeIdHookType
+};
+
 export type InitializeContextsFunctionType = {
   addContext: (name: string, value: any) => void,
   getContext: (name:string) => any,

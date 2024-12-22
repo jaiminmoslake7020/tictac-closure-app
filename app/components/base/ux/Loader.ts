@@ -1,7 +1,7 @@
-import {appendEl} from '../../../utils';
+import {appendEl} from '@utils/index';
 import {
   useDiv, useSpan
-} from '../html';
+} from '@components/base/html';
 
 export type LoaderType = {
   showLoader: () => void,

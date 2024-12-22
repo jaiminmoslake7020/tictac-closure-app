@@ -1,4 +1,4 @@
-import {WiningSequenceTypeWithNull} from '../types';
+import {WiningSequenceTypeWithNull} from '@types-dir/index';
 
 export type UseWinnerSeqHookType = {
   getWinnerSequence: () => WiningSequenceTypeWithNull,

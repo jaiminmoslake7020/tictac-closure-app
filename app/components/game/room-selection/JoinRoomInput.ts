@@ -1,13 +1,12 @@
-import {InitializeContextsFunctionType, useContextUserSession} from '../../../contexts';
-import {RoomReadyResponseType, UserType} from '../../../types';
-import {useDiv, useState} from '../../base';
-import {Label, useTextInput} from '../../base';
-import {useButton} from '../../base';
-import {Loader} from '../../base';
-import {getFirestoreObject} from '../../../firebase';
-import {doc, getDoc, updateDoc} from 'firebase/firestore';
-import {getRandomInt} from '../../../utils';
-import {H2, Span} from '../../base';
+import {InitializeContextsFunctionType, useContextUserSession} from '@contexts/index';
+import {RoomReadyResponseType, UserType} from '@types-dir/index';
+import {useDiv, useState} from '@components/base';
+import {Label, useTextInput} from '@components/base';
+import {useButton} from '@components/base';
+import {Loader} from '@components/base';
+import {joinRoom, roomData} from '@firebase-dir/index';
+import {getRandomInt} from '@utils/index';
+import {H2, Span} from '@components/base';
 
 export type JoinRoomInputType = {
   render: () => HTMLDivElement,
@@ -55,13 +54,14 @@ export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRo
     if (roomCode.length > 0) {
 
       showLoader();
-      const f = getFirestoreObject();
-      const docRef = doc(f, 'rooms', roomCode);
-      const docSnap = await getDoc(docRef);
+      const docSnap = await roomData(roomCode);
       if (docSnap.exists()) {
-        const data = docSnap.data();
+        const data  = docSnap.data() as {
+          'creator': UserType,
+          'joiner'?: UserType
+        };
         if (data['creator'] && !data['joiner']) {
-          console.log("Document data:", data); // Retrieve the document data
+          // console.log("Document data:", data); // Retrieve the document data
 
           const {
             getUser
@@ -74,7 +74,7 @@ export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRo
             joiner: userItem,
             currentMove
           };
-          await updateDoc(docRef, updatedDocData);
+          await joinRoom(roomCode, updatedDocData);
           remove();
           stopLoader();
 

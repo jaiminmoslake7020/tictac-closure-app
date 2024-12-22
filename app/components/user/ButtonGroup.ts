@@ -1,4 +1,4 @@
-import {useButton, useDiv} from '../base';
+import {useButton, useDiv} from '@components/base';
 
 export const ButtonGroup = (btnClick: () => void) => {
   const {getDiv: getUserDiv, setDiv: setUserDiv, removeDiv} = useDiv();

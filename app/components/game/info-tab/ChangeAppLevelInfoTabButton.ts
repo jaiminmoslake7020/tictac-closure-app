@@ -1,6 +1,6 @@
-import {WinnerType} from '../../../types';
+import {WinnerType} from '@types-dir/index';
 import {AppLevelTypeDropdown} from './AppLevelTypeDropdown';
-import {InitializeContextsFunctionType} from '../../../contexts';
+import {InitializeContextsFunctionType} from '@contexts/index';
 
 export type ChangeAppLevelInfoTabButtonType = {
   setDiv: (v:HTMLDivElement) => void,

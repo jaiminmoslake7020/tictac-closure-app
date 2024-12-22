@@ -1,5 +1,5 @@
-import {MovePositionType, MovePositionTypeWithNull, TurnType, WinnerType} from '../../types';
-import {turnData, winnerData} from '../../data';
+import {MovePositionType, MovePositionTypeWithNull, WinnerType} from '@types-dir/index';
+import {turnData, winnerData} from '@data/index';
 import { WhenOneInSequence } from './WhenOneInSequence';
 import { FindAnotherEasy } from './FindAnotherEasy';
 import {
@@ -7,7 +7,7 @@ import {
   useContextTurnStorage,
   useContextWinner,
   useContextWinnerSeq
-} from '../../contexts';
+} from '@contexts/index';
 
 export const FindAnotherMedium = (
   contextsData: InitializeContextsFunctionType,

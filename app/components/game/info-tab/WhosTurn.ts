@@ -1,12 +1,11 @@
-import {P} from '../../base';
-import {TurnType} from '../../../types';
+import {P} from '@components/base';
 import {
-  InitializeContextsFunctionType, isItRemotePlayerTurn,
+  InitializeContextsFunctionType, isItRemoteGame, isItRemotePlayerTurn,
   useContextAnotherPlayer,
   useContextGameType,
   useContextTurnHookType,
   useContextUserSession
-} from '../../../contexts';
+} from '@contexts/index';
 
 export type WhosTurnFunctionType = {
   render: () => HTMLParagraphElement,
@@ -41,12 +40,25 @@ export const WhosTurn = (contextsData: InitializeContextsFunctionType) : WhosTur
   }
 
   const render = () => {
-    setP( P('', 'info-p') );
+    setP( P('', 'info-p player-text') );
     return getP();
   }
 
-  const update = (newV: TurnType | string ) => {
-    getP().innerHTML = 'Current Turn: "'+newV+'"';
+  const updateClasses = () => {
+    if (isItRemoteGame(contextsData)) {
+      if ( !isItRemotePlayerTurn(contextsData) ) {
+        getP().classList.remove('user-is-not-a-player');
+        getP().classList.add('user-is-player');
+      } else {
+        getP().classList.add('user-is-not-a-player');
+        getP().classList.remove('user-is-player');
+      }
+    }
+  }
+
+  const update = (text: string) => {
+    getP().innerHTML = text;
+    updateClasses();
   }
 
   const remove = () => {
@@ -55,10 +67,9 @@ export const WhosTurn = (contextsData: InitializeContextsFunctionType) : WhosTur
 
   const getPlayerName = () : string => {
     if ( !isItRemotePlayerTurn(contextsData) ) {
-      const user = getUser();
-      return user.username;
+      return 'Your Turn';
     }
-    return getAnotherPlayer().username;
+    return 'Current Turn: "'+getAnotherPlayer().username+'"';
   }
 
   const updateTurn = () => {

@@ -1,7 +1,7 @@
-import {OpponentType, PlayerType} from '../../types';
-import {useDiv} from '../base';
-import {useForm} from '../base';
-import {History} from '../../utils';
+import {OpponentType, PlayerType} from '@types-dir/index';
+import {useDiv} from '@components/base';
+import {useForm} from '@components/base';
+import {History} from '@utils/index';
 import {PlayerSelectionItem, PlayerSelectionItemType} from './PlayerSelectionItem';
 
 export type PlayerSelectionType = {

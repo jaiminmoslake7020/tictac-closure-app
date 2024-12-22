@@ -1,18 +1,18 @@
 import {
   MovePositionType, TurnHandlerType, TurnType,
-} from '../types';
+} from '@types-dir/index';
 import { CheckWinner } from './CheckWinner';
 import {
   InitializeContextsFunctionType, useContextAnotherPlayer, useContextCurrentMove,
   useContextGameType, useContextRoomCodeId,
   useContextTurnHookType,
   useContextTurnStorage, useContextUserSession
-} from '../contexts';
+} from '@contexts/index';
 import {ComputerProgramMove} from './ComputerProgram/ComputerProgramMove';
 import {RemoteFriendPlayer} from './RemoteFriendPlayer/RemoteFriendPlayer';
-import {insertNewDocument, updateDocument} from '../firebase';
-import {CurrentMoveHookType} from '../contexts/useCurrentMove';
-import {turnData} from '../data';
+import {insertNewDocument, updateDocument} from '@firebase-dir/index';
+import {CurrentMoveHookType} from '@contexts/index';
+import {turnData} from '@data/index';
 
 export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anotherPersonMadeMove: ( v: MovePositionType ) => Promise<void> ) : TurnHandlerType => {
 
@@ -73,7 +73,7 @@ export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anoth
   }
 
   const printData = () => {
-    console.log('turnStorage');
+    // console.log('turnStorage');
   }
 
   if (

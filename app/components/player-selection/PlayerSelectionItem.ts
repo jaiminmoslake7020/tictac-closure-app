@@ -1,5 +1,5 @@
-import {useDiv} from './base';
-import {RadioButton} from './base';
+import {useDiv} from '@components/base';
+import {RadioButton} from '@components/base';
 
 export type PlayerSelectionItemType = {
   render: () => HTMLDivElement,

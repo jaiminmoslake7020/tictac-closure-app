@@ -1,7 +1,7 @@
-import {getTd, getTdCell, tdClassList, setUnClicked, resetStopAnimateMoveSuccess} from '../Common';
-import {ChangeFunctionType, ColumnIdType, TDClassIdType} from '../../../../../types';
-import {InitializeContextsFunctionType} from '../../../../../contexts';
-import {addClickListener, removeClickListener} from '../Onclick/OnClick';
+import {getTd, getTdCell, tdClassList, setUnClicked, resetStopAnimateMoveSuccess} from '@tic-tac/tic-tac-cell/Common';
+import {ChangeFunctionType, ColumnIdType, TDClassIdType} from '@types-dir/index';
+import {InitializeContextsFunctionType} from '@contexts/index';
+import {addClickListener, removeClickListener} from '@tic-tac/tic-tac-cell/Onclick/OnClick';
 
 const removeAllNewClasses = (
   columnId: ColumnIdType,

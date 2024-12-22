@@ -1,7 +1,6 @@
-import {InitializeContextsFunctionType, useContextUserSession} from '../../contexts';
-import {Label, Loader, useDiv, useSpan, useState, useTextInput} from '../base';
-import {getFirestoreObject} from '../../firebase';
-import {addDoc, collection} from 'firebase/firestore';
+import {InitializeContextsFunctionType, useContextUserSession} from '@contexts/index';
+import {Label, Loader, useDiv, useSpan, useState, useTextInput} from '@components/base';
+import {addUser} from '@firebase-dir/index';
 import {ButtonGroup} from './ButtonGroup';
 
 export const User = (contextsData: InitializeContextsFunctionType, initGame: () => void) => {
@@ -32,11 +31,7 @@ export const User = (contextsData: InitializeContextsFunctionType, initGame: () 
       getUserInputContainerDiv().classList.remove('input-error');
       getSpan().innerText = '';
 
-      const f = getFirestoreObject();
-      const userCollection = collection(f, 'users');
-      let userDoc = await addDoc(userCollection, {
-        username: v
-      });
+      const userDoc = await addUser(v);
       const t = {
         id: userDoc.id,
         username: v
@@ -54,7 +49,7 @@ export const User = (contextsData: InitializeContextsFunctionType, initGame: () 
   const render = () => {
     const userJson = checkUserExists();
     if (userJson) {
-      console.log("userJson", userJson);
+      // console.log("userJson", userJson);
       return undefined;
     } else {
       setUserDiv('user-div-container');

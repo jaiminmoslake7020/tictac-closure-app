@@ -1,4 +1,4 @@
-import {MovePositionType, TurnType, WiningSequenceType} from '../types';
+import {MovePositionType, TurnType, WiningSequenceType} from '@types-dir/index';
 
 export const winnerData = [
   ['11', '22', '33'],

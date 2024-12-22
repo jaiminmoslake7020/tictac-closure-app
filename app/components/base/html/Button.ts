@@ -1,4 +1,4 @@
-import {applyClassList, createEL} from '../../../utils';
+import {applyClassList, createEL} from '@utils/index';
 
 export const Button = (btnLabel: string, btnClassList: string, onClick: EventListenerOrEventListenerObject) : HTMLButtonElement => {
   let button = createEL('button') as HTMLButtonElement;

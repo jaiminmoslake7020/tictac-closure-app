@@ -1,5 +1,5 @@
-import { createEL } from '../../../utils';
-import {ColumnIdType} from '../../../types';
+import { createEL } from '@utils/index';
+import {ColumnIdType} from '@types-dir/index';
 
 export const TicTacCellIdentifier = (columnId:ColumnIdType) => {
 

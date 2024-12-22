@@ -1,7 +1,7 @@
-import {TicTacCellValue} from '../../TicTacCellValue';
-import {addFn, getClicked, getFn, getTd, getTdCell, hasFn, hasTdCell, setClicked, tdClassList} from '../Common';
-import {ChangeFunctionType, ColumnIdType, MovePositionType, TurnType} from '../../../../../types';
-import {InitializeContextsFunctionType, useContextTurnHookType} from '../../../../../contexts';
+import {TicTacCellValue} from '@tic-tac/tic-tac-cell/TicTacCellValue';
+import {addFn, getClicked, getFn, getTd, getTdCell, hasFn, hasTdCell, setClicked, tdClassList} from '@tic-tac/tic-tac-cell/Common';
+import {ChangeFunctionType, ColumnIdType, MovePositionType, TurnType} from '@types-dir/index';
+import {InitializeContextsFunctionType, useContextTurnHookType} from '@contexts/index';
 
 export const OnClick = async (
   appliedTurn: TurnType, appliedChangeTurn: ChangeFunctionType, columnId: ColumnIdType, e: Event,
@@ -33,7 +33,7 @@ export const removeClickListener = (columnId: ColumnIdType) => {
     console.log('removeEventListener');
     getTd(columnId).removeEventListener('click', getFn(columnId) )
   } else {
-    console.log('removeEventListener not exists');
+    // console.log('removeEventListener not exists');
   }
 }
 
@@ -45,7 +45,7 @@ export const addClickListener = (
   if (getTd(columnId).classList.contains(tdClassList.typeDisabled)) {
     getTd(columnId).classList.remove( tdClassList.typeDisabled );
   }
-  console.log('addClickListener', columnId);
+  // console.log('addClickListener', columnId);
   const {getTurn} = useContextTurnHookType(contextData);
   const newTurn = getTurn();
   const onClickFunction = OnClick.bind(null, newTurn, newChangeTurn, columnId);

@@ -1,4 +1,4 @@
-import {AppLevelType, ColumnIdType} from '../types';
+import {AppLevelType, ColumnIdType} from '@types-dir/index';
 
 export const appLevelList = {
   easy: 'easy',

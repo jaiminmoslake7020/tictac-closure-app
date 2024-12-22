@@ -24,7 +24,19 @@ module.exports = env  => ({
   ],
   target: env.production ? 'es5' : 'es6',
   resolve: {
-    extensions: env.production ? ['.ts'] : ['.ts','.js']
+    extensions: env.production ? ['.ts'] : ['.ts','.js'],
+    alias: {
+      '@business-logic': path.resolve(__dirname, 'app/business-logic'),
+      '@components': path.resolve(__dirname, 'app/components'),
+      "@tic-tac": path.resolve(__dirname, "app/components/game/tic-tac"),
+      '@contexts': path.resolve(__dirname, 'app/contexts'),
+      '@data': path.resolve(__dirname, 'app/data'),
+      '@firebase-dir': path.resolve(__dirname, 'app/firebase'),
+      '@helpers': path.resolve(__dirname, 'app/helpers'),
+      '@hooks': path.resolve(__dirname, 'app/hooks'),
+      '@types-dir': path.resolve(__dirname, 'app/types'),
+      '@utils': path.resolve(__dirname, 'app/utils')
+    }
   },
   module: {
     rules: env.production ? [

@@ -1,11 +1,11 @@
-import { TurnType, WiningSequenceType, WinnerType } from '../types';
-import { winnerData } from '../data';
+import { TurnType, WiningSequenceType, WinnerType } from '@types-dir/index';
+import { winnerData } from '@data/index';
 import {
   InitializeContextsFunctionType,
   useContextTurnStorage,
   useContextWinner,
   useContextWinnerSeq
-} from '../contexts';
+} from '@contexts/index';
 
 export const CheckWinner = (
   contextsData: InitializeContextsFunctionType

@@ -1,4 +1,4 @@
-import {applyClassList, createEL} from '../../../utils';
+import {applyClassList, createEL} from '@utils/index';
 
 export const Div = (classList?: string) => {
   let div = createEL('div');

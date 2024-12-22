@@ -1,4 +1,4 @@
-import {MovePositionType, WiningSequenceType} from '../../types';
+import {MovePositionType, WiningSequenceType} from '@types-dir/index';
 
 export const WhenOneInSequence = (
   seq: WiningSequenceType,

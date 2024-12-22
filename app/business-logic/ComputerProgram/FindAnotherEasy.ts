@@ -1,6 +1,6 @@
-import {MovePositionType, TurnType} from '../../types';
-import {allData} from '../../data';
-import {InitializeContextsFunctionType, useContextTurnStorage} from '../../contexts';
+import {MovePositionType, TurnType} from '@types-dir/index';
+import {allData} from '@data/index';
+import {InitializeContextsFunctionType, useContextTurnStorage} from '@contexts/index';
 
 export const FindAnotherEasy = (
   contextsData: InitializeContextsFunctionType

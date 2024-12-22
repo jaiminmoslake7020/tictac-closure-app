@@ -1,5 +1,5 @@
-import { createEL } from '../../../utils';
-import {TurnType} from '../../../types';
+import { createEL } from '@utils/index';
+import {TurnType} from '@types-dir/index';
 
 export const TicTacCellValue = () => {
   let div : undefined | HTMLDivElement;

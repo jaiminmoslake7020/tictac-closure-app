@@ -1,4 +1,4 @@
-import {applyClassList, createEL} from '../../../utils';
+import {applyClassList, createEL} from '@utils/index';
 
 export const Label = (classList?: string) : HTMLLabelElement => {
   let label = createEL('label') as HTMLLabelElement;

@@ -1,4 +1,4 @@
-import {applyClassList, createEL} from '../../../utils';
+import {applyClassList, createEL} from '@utils/index';
 
 export const Text = (as: 'p' | 'span' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6',text: string, classList?: string) => {
   let el = createEL(as);

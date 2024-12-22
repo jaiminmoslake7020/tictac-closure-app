@@ -1,4 +1,4 @@
-import {WinnerType} from '../types';
+import {WinnerType} from '@types-dir/index';
 
 export type UseWinnerHookType = {
   getWinner: () => WinnerType,

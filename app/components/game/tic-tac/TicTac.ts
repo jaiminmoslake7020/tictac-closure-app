@@ -1,15 +1,15 @@
-import {InfoTab, InfoTabType} from '../info-tab/InfoTab';
-import { TurnHandler } from '../../../business-logic/TurnHandler'
+import {InfoTab, InfoTabType} from '@components/game/info-tab/InfoTab';
+import { TurnHandler } from '@business-logic/TurnHandler'
 import {
   MovePositionType,
   TicTacTableType,
   TurnHandlerType,
-} from '../../../types';
+} from '@types-dir/index';
 import {TicTacTable} from './TicTacTable';
 import {
-  InitializeContextsFunctionType
-} from '../../../contexts';
-import {useDiv} from '../../base';
+  InitializeContextsFunctionType, isItRemoteGame
+} from '@contexts/index';
+import {useDiv} from '@components/base';
 
 export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
   let infoTabDiv: InfoTabType | undefined;
@@ -42,8 +42,14 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
   }
 
   const anotherPersonMadeMove = async ( v: MovePositionType ) => {
-    updateInfo();
+    // console.log('anotherPersonMadeMove updateInfo');
     await getTicTacTable().updateOtherPersonMove( v );
+  }
+
+  const startGame = () => {
+    if (isItRemoteGame(contextsData)) {
+
+    }
   }
 
   const reload = () => {

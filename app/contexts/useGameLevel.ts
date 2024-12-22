@@ -1,4 +1,4 @@
-import { OpponentType } from '../types';
+import { OpponentType } from '@types-dir/index';
 
 export type GameTypeHookType = {
   getGameType: () => OpponentType,

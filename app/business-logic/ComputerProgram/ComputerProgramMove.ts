@@ -1,15 +1,15 @@
-import {appLevelList} from '../../helpers';
+import {appLevelList} from '@helpers/index';
 import {FindAnotherEasy} from './FindAnotherEasy';
 import {FindAnotherMedium} from './FindAnotherMedium';
 import {FindAnotherHard} from './FindAnotherHard';
-import {CheckWinner} from '../CheckWinner';
+import {CheckWinner} from '@business-logic/CheckWinner';
 import {
   InitializeContextsFunctionType,
   useContextAppLevelType,
   useContextTurnStorage,
   useContextWinner
-} from '../../contexts';
-import {turnData} from '../../data';
+} from '@contexts/index';
+import {turnData} from '@data/index';
 
 export const ComputerProgramMove = (
   contextsData : InitializeContextsFunctionType

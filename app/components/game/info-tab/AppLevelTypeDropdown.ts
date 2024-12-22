@@ -1,7 +1,7 @@
-import {Button} from '../../base';
+import {Button} from '@components/base';
 import {AskForAppLevelType} from './AskForAppLevelType';
-import {InitializeContextsFunctionType, useContextAppLevelType} from '../../../contexts';
-import {Dropdown, DropdownContainer} from '../../base';
+import {InitializeContextsFunctionType, useContextAppLevelType} from '@contexts/index';
+import {Dropdown, DropdownContainer} from '@components/base';
 
 export const AppLevelTypeDropdown = (contextsData: InitializeContextsFunctionType, onLevelChange: () => void) => {
 

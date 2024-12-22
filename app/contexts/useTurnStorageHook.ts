@@ -1,5 +1,5 @@
-import {AnotherPersonMovePositionsTypeWithNull, MovePositionType, TurnStorageType, TurnType} from '../types';
-import {turnData} from '../data';
+import {AnotherPersonMovePositionsTypeWithNull, MovePositionType, TurnStorageType, TurnType} from '@types-dir/index';
+import {turnData} from '@data/index';
 
 export type UseTurnStorageHookType = {
   getTurnStorage: () => TurnStorageType,
@@ -12,7 +12,7 @@ export const useTurnStorageHook = () : UseTurnStorageHookType => {
   let turnStorage = {} as TurnStorageType;
 
   const setTurnStorage = (v:TurnStorageType) => {
-    console.log('setTurnStorage', v);
+    // console.log('setTurnStorage', v);
     turnStorage = v;
   }
 
