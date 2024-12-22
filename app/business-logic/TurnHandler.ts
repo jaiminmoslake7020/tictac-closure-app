@@ -16,7 +16,7 @@ import {turnData} from '@data/index';
 
 export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anotherPersonMadeMove: ( v: MovePositionType ) => Promise<void> ) : TurnHandlerType => {
 
-  const { getCurrentMove, setCurrentMove } = useContextCurrentMove(contextsData) as CurrentMoveHookType;
+  const { setCurrentMove } = useContextCurrentMove(contextsData) as CurrentMoveHookType;
 
   const {
     getGameType

@@ -1,6 +1,6 @@
 import {useButton} from '@components/base';
 
-let reloadTime = 20;
+const reloadTime = 20;
 
 export type RestartGameButtonControllerType = {
   getButtonEnabled: () => boolean,

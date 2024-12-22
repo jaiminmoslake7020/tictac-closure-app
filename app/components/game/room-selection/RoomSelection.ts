@@ -72,7 +72,7 @@ export const RoomSelection = (contextsData: InitializeContextsFunctionType, onRo
     const u = JSON.parse(localStorage.getItem('user') as string) as UserType;
     const f = getFirestoreObject();
     const roomCollection = collection(f, 'rooms');
-    let roomDoc = await addDoc(roomCollection, {
+    const roomDoc = await addDoc(roomCollection, {
       creator: u
     });
     const t = {

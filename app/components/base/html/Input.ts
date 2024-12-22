@@ -20,19 +20,19 @@ export const Input = (name: string, value: string, id: string, classList?: strin
 }
 
 export const TextInput = (name: string, value: string, id: string, classList?: string) => {
-  const input = Input(name, value, id);
+  const input = Input(name, value, id, classList);
   input.setAttribute('type', 'text');
   return input;
 }
 
 export const CheckboxInput = (name: string, value: string, id: string, classList?: string) => {
-  const input = Input(name, value, id);
+  const input = Input(name, value, id, classList);
   input.setAttribute('type', 'checkbox');
   return input;
 }
 
 export const RadioInput = (name: string, value: string, id: string, classList?: string) => {
-  const input = Input(name, value, id);
+  const input = Input(name, value, id, classList);
   input.setAttribute('type', 'radio');
   return input;
 }

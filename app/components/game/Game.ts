@@ -1,4 +1,4 @@
-import {appendEl, getBrowserName} from '@utils/index'
+import {appendEl} from '@utils/index'
 import { AskForAppLevelType } from '@components/game/info-tab/AskForAppLevelType';
 import { LoadTicTacApp } from './tic-tac/LoadTicTacApp';
 import {

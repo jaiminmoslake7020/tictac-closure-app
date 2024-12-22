@@ -1,11 +1,9 @@
-import {WinnerType} from '@types-dir/index';
 import {AppLevelTypeDropdown} from './AppLevelTypeDropdown';
 import {InitializeContextsFunctionType} from '@contexts/index';
 
 export type ChangeAppLevelInfoTabButtonType = {
   setDiv: (v:HTMLDivElement) => void,
   getDiv: () => HTMLDivElement,
-  update: (v: WinnerType) => void,
   render: () => HTMLDivElement,
   remove: () => void,
 };
@@ -27,10 +25,6 @@ export const ChangeAppLevelInfoTabButton = (contextsData: InitializeContextsFunc
     return getDiv();
   }
 
-  const update = (v:WinnerType) => {
-
-  }
-
   const remove = () => {
     getDiv().remove();
   }
@@ -39,7 +33,6 @@ export const ChangeAppLevelInfoTabButton = (contextsData: InitializeContextsFunc
     setDiv,
     getDiv,
     render,
-    remove,
-    update
+    remove
   }
 }

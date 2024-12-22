@@ -46,15 +46,15 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
     await getTicTacTable().updateOtherPersonMove( v );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const startGame = () => {
+    // eslint-disable-next-line no-empty
     if (isItRemoteGame(contextsData)) {
-
     }
   }
 
   const reload = () => {
     setTurnHandlerType( TurnHandler( contextsData , anotherPersonMadeMove ) );
-    const t = getTurnHandlerType();
     const table = getTicTacTable();
     table.reset();
     getInfoTabDiv().addTurn();
@@ -62,7 +62,6 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
 
   const getInfoTabDiv = () : InfoTabType => {
     if ( !infoTabDiv ) {
-      const t = getTurnHandlerType();
       setInfoTabDiv( InfoTab( reload, contextsData ) );
     }
     return infoTabDiv as InfoTabType;
@@ -74,7 +73,6 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
 
   const render = () => {
     setTurnHandlerType( TurnHandler( contextsData , anotherPersonMadeMove ) );
-    const t = getTurnHandlerType();
     setInfoTabDiv( InfoTab( reload, contextsData ) );
     setWrapperDiv( 'wrapper-div' );
     getWrapperDiv().append( getInfoTabDiv().render() );

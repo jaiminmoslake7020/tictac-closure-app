@@ -22,7 +22,7 @@ export const TicTacCellValue = () => {
     getDiv().innerHTML = v;
   }
 
-  const removeText = (v: TurnType) => {
+  const removeText = () => {
     getDiv().innerHTML = '';
   }
 

@@ -39,7 +39,7 @@ export const JoinRoomCopyButton = (roomId: string, onRoomCodeCopied: () => void)
     const p = P(roomId, 'room-code');
     set(p);
     getDiv2().append(get())
-    setButton('Copy Room Code', 'btn inverse-btn join-btn', (e) => {
+    setButton('Copy Room Code', 'btn inverse-btn join-btn', () => {
       copyTextToClipboard(roomId);
       remove();
       onRoomCodeCopied();

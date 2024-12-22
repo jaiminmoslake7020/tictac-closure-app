@@ -4,7 +4,6 @@ import {
   useContextAnotherPlayer,
   useContextGameType,
   useContextTurnHookType,
-  useContextUserSession
 } from '@contexts/index';
 
 export type WhosTurnFunctionType = {
@@ -22,10 +21,6 @@ export const WhosTurn = (contextsData: InitializeContextsFunctionType) : WhosTur
   const {
     getAnotherPlayer
   } = useContextAnotherPlayer( contextsData );
-
-  const {
-    getUser
-  } = useContextUserSession( contextsData );
 
   const {
     getTurn

@@ -1,7 +1,7 @@
 import {MovePositionType, TicTacCellRowFunctionType, TicTacTableType, TurnHandlerType} from '@types-dir/index';
 import {createEL} from '@utils/index';
 import {TicTacCellRow} from './TicTacCellRow';
-import {InitializeContextsFunctionType, useContextGameType} from '@contexts/index';
+import {InitializeContextsFunctionType} from '@contexts/index';
 
 export const TicTacTable = ( getTurnHandlerType: () => TurnHandlerType , updateInfo : () => void, contextData: InitializeContextsFunctionType ) : TicTacTableType => {
 
@@ -29,11 +29,6 @@ export const TicTacTable = ( getTurnHandlerType: () => TurnHandlerType , updateI
   const setTicTacTableBody = (item: HTMLDivElement) => {
     ticTacTableBody = item;
   }
-
-  const {
-    getGameType
-  } = useContextGameType(contextData);
-  const gameType = getGameType();
 
   const trArray = [] as TicTacCellRowFunctionType[];
 
@@ -69,12 +64,10 @@ export const TicTacTable = ( getTurnHandlerType: () => TurnHandlerType , updateI
     }
   }
 
-  const updateOtherPersonMove = async (v:MovePositionType) => {
-    // console.log('updateOtherPersonMove', v);
+  const updateOtherPersonMove = async () => {
     for (let i = 0 ; i < 3 ; i++)  {
       trArray[i].update(handleChangeTurn);
     }
-    // console.log('updateOtherPersonMove updateInfo');
     updateInfo();
   }
 

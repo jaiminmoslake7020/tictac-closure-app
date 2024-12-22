@@ -4,7 +4,7 @@ import {ChangeFunctionType, ColumnIdType, MovePositionType, TurnType} from '@typ
 import {InitializeContextsFunctionType, useContextTurnHookType} from '@contexts/index';
 
 export const OnClick = async (
-  appliedTurn: TurnType, appliedChangeTurn: ChangeFunctionType, columnId: ColumnIdType, e: Event,
+  appliedTurn: TurnType, appliedChangeTurn: ChangeFunctionType, columnId: ColumnIdType,
 ) => {
   const moveType = columnId.replace('-', '') as MovePositionType;
   const clicked = getClicked( columnId );
@@ -28,12 +28,9 @@ export const OnClick = async (
 }
 
 export const removeClickListener = (columnId: ColumnIdType) => {
-  const newElement = getTd(columnId) as HTMLDivElement;
   if ( hasFn(columnId) ) {
     console.log('removeEventListener');
     getTd(columnId).removeEventListener('click', getFn(columnId) )
-  } else {
-    // console.log('removeEventListener not exists');
   }
 }
 

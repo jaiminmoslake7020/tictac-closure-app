@@ -33,7 +33,7 @@ export const stopAnimateMoveSuccess = () => {
 
 
 export const clickedHelper = () => {
-  let clickedCollection : Map<ColumnIdType, boolean> = new Map();
+  const clickedCollection : Map<ColumnIdType, boolean> = new Map();
 
   const setClicked = (columnId : ColumnIdType) => {
     clickedCollection.set(columnId, true);
@@ -61,7 +61,7 @@ export const clickedHelper = () => {
 
 
 export const OnClickCollection = () => {
-  let functionCollection : Map<ColumnIdType, any> = new Map();
+  const functionCollection : Map<ColumnIdType, any> = new Map();
 
   const addFn = (id: ColumnIdType, fun: any) => {
     functionCollection.set(id, fun)
@@ -82,7 +82,7 @@ export const OnClickCollection = () => {
 
 
 export const TdCollection = () => {
-  let TdCollectionVar : Map<ColumnIdType, HTMLDivElement> = new Map();
+  const TdCollectionVar : Map<ColumnIdType, HTMLDivElement> = new Map();
 
   const addTd = (id: ColumnIdType, el: HTMLDivElement) => {
     TdCollectionVar.set(id, el)
@@ -102,7 +102,7 @@ export const TdCollection = () => {
 }
 
 export const TdCellCollection = () => {
-  let TdCellCollectionVar : Map<ColumnIdType, any> = new Map();
+  const TdCellCollectionVar : Map<ColumnIdType, any> = new Map();
 
   const addTdCell = (id: ColumnIdType, fun: any) => {
     TdCellCollectionVar.set(id, fun)
