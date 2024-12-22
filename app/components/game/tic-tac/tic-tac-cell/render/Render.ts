@@ -1,8 +1,8 @@
 import {InitializeContextsFunctionType, isItRemoteGame, isItRemotePlayerTurn} from '@contexts/index';
 import {ChangeFunctionType, ColumnIdType} from '@types-dir/index';
 import {TicTacCellIdentifier} from '@tic-tac/tic-tac-cell/TicTacCellIdentifier';
-import {addTd, getTd, tdClassList} from '@tic-tac/tic-tac-cell/Common';
-import {addClickListener} from '@tic-tac/tic-tac-cell/Onclick/OnClick';
+import {addTd, getTd, tdClassList} from '@tic-tac/tic-tac-cell/common';
+import {addClickListener} from '@tic-tac/tic-tac-cell/on-click/OnClick';
 
 export const Render = (
   contextData: InitializeContextsFunctionType,

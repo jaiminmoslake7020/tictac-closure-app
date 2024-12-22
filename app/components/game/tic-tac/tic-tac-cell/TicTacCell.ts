@@ -1,8 +1,8 @@
 import {ChangeFunctionType, ColumnIdType} from '@types-dir/index';
 import {InitializeContextsFunctionType} from '@contexts/index';
-import {Reset} from './Reset/Reset';
-import {Update} from './Update/Update';
-import {Render} from './Render/Render';
+import {Reset} from './reset/Reset';
+import {Update} from './update/Update';
+import {Render} from './render/Render';
 
 export const TicTacCell = (columnId: ColumnIdType, firstTime: boolean, changeTurn: ChangeFunctionType, contextData: InitializeContextsFunctionType) => {
 

@@ -1,5 +1,5 @@
 import {TicTacCellValue} from '@tic-tac/tic-tac-cell/TicTacCellValue';
-import {addFn, getClicked, getFn, getTd, getTdCell, hasFn, hasTdCell, setClicked, tdClassList} from '@tic-tac/tic-tac-cell/Common';
+import {addFn, getClicked, getFn, getTd, getTdCell, hasFn, hasTdCell, setClicked, tdClassList} from '@tic-tac/tic-tac-cell/common';
 import {ChangeFunctionType, ColumnIdType, MovePositionType, TurnType} from '@types-dir/index';
 import {InitializeContextsFunctionType, useContextTurnHookType} from '@contexts/index';
 

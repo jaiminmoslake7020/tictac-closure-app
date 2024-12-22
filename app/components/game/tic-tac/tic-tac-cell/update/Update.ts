@@ -5,8 +5,8 @@ import {
   useContextWinnerSeq
 } from '@contexts/index';
 import {ChangeFunctionType, ColumnIdType, MovePositionType} from '@types-dir/index';
-import {addClickListener, removeClickListener} from '@tic-tac/tic-tac-cell/Onclick/OnClick';
-import {anotherPersonMove, checkWinnerIsAvailable, getTd, tdClassList} from '@tic-tac/tic-tac-cell/Common';
+import {addClickListener, removeClickListener} from '@tic-tac/tic-tac-cell/on-click/OnClick';
+import {anotherPersonMove, checkWinnerIsAvailable, getTd, tdClassList} from '@tic-tac/tic-tac-cell/common';
 
 export const Update = (
   contextData: InitializeContextsFunctionType,
