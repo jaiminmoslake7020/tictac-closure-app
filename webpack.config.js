@@ -12,10 +12,18 @@ console.log('FIREBASE_CONFIG_API_KEY URL:', process.env.FIREBASE_CONFIG_API_KEY)
 console.log('FIREBASE_CONFIG_AUTH_DOMAIN Key:', process.env.FIREBASE_CONFIG_AUTH_DOMAIN);
 
 // Convert environment variables to stringified format for DefinePlugin
-const envKeys = Object.keys(env).reduce((prev, next) => {
+const envKeys = env.production ? Object.keys(env).reduce((prev, next) => {
   prev[`process.env.${next}`] = JSON.stringify(env[next]);
   return prev;
-}, {});
+}, {}) : {
+  'process.env.FIREBASE_CONFIG_API_KEY': JSON.stringify(process.env.FIREBASE_CONFIG_API_KEY),
+  'process.env.FIREBASE_CONFIG_AUTH_DOMAIN': JSON.stringify(process.env.FIREBASE_CONFIG_AUTH_DOMAIN),
+  'process.env.FIREBASE_CONFIG_PROJECT_ID': JSON.stringify(process.env.FIREBASE_CONFIG_PROJECT_ID),
+  'process.env.FIREBASE_CONFIG_STORAGE_BUCKET': JSON.stringify(process.env.FIREBASE_CONFIG_STORAGE_BUCKET),
+  'process.env.FIREBASE_CONFIG_MESSAGING_SENDER_ID': JSON.stringify(process.env.FIREBASE_CONFIG_MESSAGING_SENDER_ID),
+  'process.env.FIREBASE_CONFIG_APP_ID': JSON.stringify(process.env.FIREBASE_CONFIG_APP_ID),
+  'process.env.FIREBASE_CONFIG_MEASUREMENT_ID': JSON.stringify(process.env.FIREBASE_CONFIG_MEASUREMENT_ID)
+};
 
 console.log('envKeys', envKeys);
 
