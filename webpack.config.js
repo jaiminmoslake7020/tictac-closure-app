@@ -5,10 +5,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 
-// Load environment variables
-const env = dotenv.config().parsed;
 
 console.log('FIREBASE_API_KEY', process.env.FIREBASE_API_KEY);
+
+// Load environment variables
+const env = dotenv.config().parsed;
 
 // Convert environment variables to stringified format for DefinePlugin
 const envKeys = !process.env.FIREBASE_API_KEY ? Object.keys(env).reduce((prev, next) => {
