@@ -1,19 +1,15 @@
 import {InitializeContextsFunctionType, useContextUserSession} from '@contexts/index';
 import {RoomReadyResponseType, UserType} from '@types-dir/index';
-import {useDiv, useState} from '@components/base';
-import {Label, useTextInput} from '@components/base';
-import {useButton} from '@components/base';
-import {Loader} from '@components/base';
-import {joinRoom, roomData} from '@firebase-dir/index';
-import {getRandomInt} from '@utils/index';
-import {H2, Span} from '@components/base';
+import { useDiv, useState, Label, useTextInput, useButton, Loader, H2, Span } from '@components/base';
+import {joinRoom, getRoomData} from '@firebase-dir/index';
+
 
 export type JoinRoomInputType = {
   render: () => HTMLDivElement,
   remove: () => void
 };
 
-export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRoomReady: (v: RoomReadyResponseType) => void): JoinRoomInputType => {
+export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRoomReady: (v: RoomReadyResponseType) => Promise<void>): JoinRoomInputType => {
 
   const {
     getDiv, setDiv, removeDiv
@@ -54,8 +50,8 @@ export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRo
     if (roomCode.length > 0) {
 
       showLoader();
-      const docSnap = await roomData(roomCode);
-      if (docSnap.exists()) {
+      const docSnap = await getRoomData(roomCode);
+      if (docSnap?.exists()) {
         const data  = docSnap.data() as {
           'creator': UserType,
           'joiner'?: UserType
@@ -67,23 +63,15 @@ export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRo
             getUser
           } = useContextUserSession(contextsData);
           const userItem = getUser() as UserType;
-          const idArray = [data['creator'] as UserType, userItem] as UserType[];
-          const number = getRandomInt(0, 1);
-          const currentMove = idArray[number].id;
-          const updatedDocData = {
-            joiner: userItem,
-            currentMove
-          };
+          const updatedDocData = {joiner: userItem};
           await joinRoom(roomCode, updatedDocData);
           remove();
           stopLoader();
-
-          onRoomReady({
+          await onRoomReady({
             roomCode: roomCode,
             anotherPlayer: data['creator'] as UserType,
-            currentMove
+            playerType: 'joiner'
           });
-
         } else {
           get3().innerText = 'Please input correct code.';
           getDivOne().classList.add('input-error');

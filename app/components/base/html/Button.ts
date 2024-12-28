@@ -1,11 +1,36 @@
 import {applyClassList, createEL} from '@utils/index';
+import {useSpan} from '@components/base';
 
 export const Button = (btnLabel: string, btnClassList: string, onClick: EventListenerOrEventListenerObject) : HTMLButtonElement => {
   let button = createEL('button') as HTMLButtonElement;
-  button = applyClassList(button, btnClassList);
+  if (btnClassList !== '') {
+    button = applyClassList(button, btnClassList);
+  }
   button.setAttribute('type', 'button');
   button.addEventListener('click', onClick );
   button.innerHTML = btnLabel;
+  return button;
+}
+
+export const IconButton = (btnLabel: string, btnClassList: string, icon: string , onClick: EventListenerOrEventListenerObject) : HTMLButtonElement => {
+  let button = Button('', btnClassList+' btn-icon ', onClick) as HTMLButtonElement;
+
+  const {
+    getSpan,
+    setSpan,
+  } = useSpan();
+  setSpan('');
+  getSpan().innerText = btnLabel;
+
+  const {
+    getSpan: getSpanOne,
+    setSpan: setSpanOne,
+  } = useSpan();
+  setSpanOne(icon);
+
+  button.append(getSpanOne());
+  button.append(getSpan());
+
   return button;
 }
 

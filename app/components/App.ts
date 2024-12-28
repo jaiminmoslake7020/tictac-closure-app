@@ -1,4 +1,4 @@
-import {appendEl} from '@utils/index';
+import {addToRoot, appendEl} from '@utils/index';
 import {Game} from './game/Game';
 import {User} from './user/User';
 import {initializeContexts} from '@contexts/index';
@@ -8,7 +8,7 @@ export const App = () => {
   const contextsData = initializeContexts();
 
   const initGame = () => {
-    const t = Game(contextsData);
+    const t = Game(contextsData, init);
     t.init();
   }
 
@@ -16,9 +16,9 @@ export const App = () => {
     const t = User(contextsData, initGame);
     const f = t.render();
     if (f) {
-      appendEl('#root', f);
+      addToRoot(f);
     } else {
-      // keepSessionAliveInterval();
+      // keepSessionAliveInterval(contextsData);
       initGame();
     }
   }

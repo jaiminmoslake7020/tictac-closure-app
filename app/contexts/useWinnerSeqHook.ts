@@ -2,7 +2,8 @@ import {WiningSequenceTypeWithNull} from '@types-dir/index';
 
 export type UseWinnerSeqHookType = {
   getWinnerSequence: () => WiningSequenceTypeWithNull,
-  setWinnerSequence: (v: WiningSequenceTypeWithNull) => void
+  setWinnerSequence: (v: WiningSequenceTypeWithNull) => void,
+  removeWinnerSequence: () => void
 };
 
 export const useWinnerSeqHook = () : UseWinnerSeqHookType => {
@@ -16,7 +17,11 @@ export const useWinnerSeqHook = () : UseWinnerSeqHookType => {
     return winnerSequence;
   }
 
+  const removeWinnerSequence = () => {
+    winnerSequence = null;
+  }
+
   return {
-    getWinnerSequence, setWinnerSequence
+    getWinnerSequence, setWinnerSequence, removeWinnerSequence
   };
 }

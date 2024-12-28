@@ -35,7 +35,8 @@ module.exports = env  => ({
       '@helpers': path.resolve(__dirname, 'app/helpers'),
       '@hooks': path.resolve(__dirname, 'app/hooks'),
       '@types-dir': path.resolve(__dirname, 'app/types'),
-      '@utils': path.resolve(__dirname, 'app/utils')
+      '@utils': path.resolve(__dirname, 'app/utils'),
+      '@session': path.resolve(__dirname, 'app/session')
     }
   },
   module: {

@@ -1,4 +1,5 @@
 import {AppLevelType, ColumnIdType} from '@types-dir/index';
+import {TicTacCellValueType} from '@tic-tac/tic-tac-cell/TicTacCellValue';
 
 export const appLevelList = {
   easy: 'easy',
@@ -102,14 +103,14 @@ export const TdCollection = () => {
 }
 
 export const TdCellCollection = () => {
-  const TdCellCollectionVar : Map<ColumnIdType, any> = new Map();
+  const TdCellCollectionVar : Map<ColumnIdType, TicTacCellValueType> = new Map();
 
-  const addTdCell = (id: ColumnIdType, fun: any) => {
+  const addTdCell = (id: ColumnIdType, fun: TicTacCellValueType) => {
     TdCellCollectionVar.set(id, fun)
   }
 
   const getTdCell = (id: ColumnIdType) => {
-    return TdCellCollectionVar.get(id)
+    return TdCellCollectionVar.get(id) as TicTacCellValueType;
   }
 
   const hasTdCell = (id: ColumnIdType) => {

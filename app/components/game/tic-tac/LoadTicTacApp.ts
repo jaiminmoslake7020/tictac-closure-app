@@ -1,15 +1,42 @@
-import {TicTacFunctionReturnType} from '@types-dir/index';
-import {TicTac} from './TicTac';
-import {appendEl} from '@utils/index';
+import {TicTac, TicTacType} from './TicTac';
 import {InitializeContextsFunctionType} from '@contexts/index';
+import {useDiv, useState} from '@components/base';
 
-export const LoadTicTacApp = (contextsData: InitializeContextsFunctionType) => {
-  const t = TicTac( contextsData ) as TicTacFunctionReturnType;
+export type LoadTicTacAppType = {
+  render: () => HTMLDivElement;
+}
+
+export const LoadTicTacApp = (contextsData: InitializeContextsFunctionType) : LoadTicTacAppType => {
+  const {
+    getDiv, setDiv
+  } = useDiv();
+  const {
+    getDiv: getDivOne, setDiv: setDivOne
+  } = useDiv();
+
+  const {
+    get, set
+  } = useState() as {
+    get: () => TicTacType,
+    set: (item: TicTacType) => void
+  };
+
   const render = () => {
-    appendEl('#root', t.render());
+    set( TicTac( contextsData )  );
+
+    setDiv('main');
+    setDivOne('content-wrapper');
+    getDivOne().append(
+      get().render()
+    );
+
+    getDiv().append(getDivOne())
+
     window.history.pushState(null, '', '#/app');
+    return getDiv();
   }
+
   return {
-    render
+    render,
   }
 }

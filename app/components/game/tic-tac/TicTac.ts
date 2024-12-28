@@ -1,17 +1,34 @@
 import {InfoTab, InfoTabType} from '@components/game/info-tab/InfoTab';
 import { TurnHandler } from '@business-logic/TurnHandler'
 import {
-  MovePositionType,
+  FirebaseGameType, GamePlayerType,
+  MovePositionType, PlayerType,
   TicTacTableType,
-  TurnHandlerType,
+  TurnHandlerType, UserType,
 } from '@types-dir/index';
 import {TicTacTable} from './TicTacTable';
 import {
-  InitializeContextsFunctionType, isItRemoteGame
+  InitializeContextsFunctionType,
+  isItRemoteGame,
+  useContextCurrentMove,
+  useContextTurnHookType,
+  useContextTurnStorage,
+  useContextWinner,
+  useContextWinnerSeq,
+  useContextUserSession,
+  useContextRoomCodeId,
+  UseRoomCodeIdHookType,
+  useContextGameId,
+  getRandomMove
 } from '@contexts/index';
 import {useDiv} from '@components/base';
+import {createGame, onGameCreated} from '@firebase-dir/game';
 
-export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
+export type TicTacType = {
+  render: () => HTMLDivElement;
+}
+
+export const TicTac = ( contextsData: InitializeContextsFunctionType) :TicTacType => {
   let infoTabDiv: InfoTabType | undefined;
   let turnHandler: TurnHandlerType | undefined;
   let ticTacTableType: TicTacTableType | undefined;
@@ -46,18 +63,86 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
     await getTicTacTable().updateOtherPersonMove( v );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const startGame = () => {
-    // eslint-disable-next-line no-empty
-    if (isItRemoteGame(contextsData)) {
-    }
-  }
+  const resetGame = (playerType: GamePlayerType) => {
 
-  const reload = () => {
+    if (playerType === 'joiner') {
+      //remove winner
+      getInfoTabDiv().resetApp();
+    }
+
+    const {
+      removeWinner
+    } = useContextWinner( contextsData );
+    const {
+      getUser
+    } = useContextUserSession( contextsData );
+    const {
+      removeWinnerSequence
+    } = useContextWinnerSeq( contextsData );
+    const {
+      resetTurnStorage
+    } = useContextTurnStorage( contextsData );
+
+    removeWinner();
+    removeWinnerSequence();
+    resetTurnStorage();
+
+    if (isItRemoteGame(contextsData)) {
+      const {
+        getCurrentMove
+      } = useContextCurrentMove( contextsData );
+      const {
+        setUserTurn, setAnotherUserTurn
+      } = useContextTurnHookType( contextsData );
+      if (getCurrentMove() === getUser().id) {
+        setUserTurn();
+      } else {
+        setAnotherUserTurn();
+      }
+    }
+
     setTurnHandlerType( TurnHandler( contextsData , anotherPersonMadeMove ) );
     const table = getTicTacTable();
     table.reset();
     getInfoTabDiv().addTurn();
+  }
+
+  const reStartGame = async () => {
+    const {
+      setGameId, getGameId, removeGameId, hasGameId
+    } = useContextGameId(contextsData);
+    const {
+      setCurrentMove
+    } = useContextCurrentMove(contextsData);
+    const {
+      getRoomCodeId
+    } = useContextRoomCodeId(contextsData);
+    const {
+      getUser
+    } = useContextUserSession( contextsData );
+
+    const roomCodeId = getRoomCodeId();
+    const userItem = getUser() as UserType;
+    const currentMove = getRandomMove(contextsData);
+    const g = await createGame(roomCodeId, currentMove, userItem.id);
+    if (g) {
+      console.log('Game started', g.id);
+      setGameId(g.id);
+      setCurrentMove(currentMove);
+      resetGame('creator');
+    } else {
+      // TODO: Show error message
+      console.log('Error creating game');
+    }
+  }
+
+  const reload = async () => {
+    if (isItRemoteGame(contextsData)) {
+      await reStartGame();
+    } else {
+      console.log("resetGame");
+      resetGame('creator');
+    }
   }
 
   const getInfoTabDiv = () : InfoTabType => {
@@ -71,6 +156,33 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
     getInfoTabDiv().updateInfo(reload);
   }
 
+  const addRestartGameListener = () => {
+    console.log('addRestartGameListener');
+    const { getRoomCodeId } = useContextRoomCodeId(contextsData) as UseRoomCodeIdHookType;
+    const { getGameId, setGameId } = useContextGameId(contextsData);
+    const { setCurrentMove } = useContextCurrentMove(contextsData);
+    const {
+      getUser
+    } = useContextUserSession( contextsData );
+    onGameCreated(getRoomCodeId(), async (d: FirebaseGameType, gameId: string) => {
+      if (
+        getUser().id !== d.creator &&
+        gameId !== getGameId()
+      ) {
+        console.log('TICTAC 2 NEW GAME', gameId);
+        setGameId(gameId);
+        setCurrentMove(d.currentMove);
+        resetGame('joiner');
+      } else {
+        if (getUser().id === d.creator) {
+          console.log('TICTAC SAME USER ');
+        } else if (gameId === getGameId()) {
+          console.log('TICTAC SAME GAME');
+        }
+      }
+    });
+  }
+
   const render = () => {
     setTurnHandlerType( TurnHandler( contextsData , anotherPersonMadeMove ) );
     setInfoTabDiv( InfoTab( reload, contextsData ) );
@@ -80,6 +192,7 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType ) => {
     const table = TicTacTable( getTurnHandlerType , updateInfo , contextsData );
     setTicTacTable(table);
     getWrapperDiv().append(table.render());
+    addRestartGameListener();
     return getWrapperDiv();
   }
 

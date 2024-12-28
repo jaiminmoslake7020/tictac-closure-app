@@ -6,6 +6,7 @@ export type UseTurnStorageHookType = {
   addNewTurn: (move: MovePositionType, turn: TurnType) => void,
   getPlayerTurns: () => AnotherPersonMovePositionsTypeWithNull,
   getAnotherPlayerTurns: () => AnotherPersonMovePositionsTypeWithNull,
+  resetTurnStorage: () => void
 };
 
 export const useTurnStorageHook = () : UseTurnStorageHookType => {
@@ -39,7 +40,11 @@ export const useTurnStorageHook = () : UseTurnStorageHookType => {
     return turnStorage[turnData.anotherTurn] ? turnStorage[turnData.anotherTurn] : null;
   }
 
+  const resetTurnStorage = () => {
+    turnStorage = {};
+  }
+
   return {
-    getTurnStorage, addNewTurn, getPlayerTurns, getAnotherPlayerTurns
+    getTurnStorage, addNewTurn, getPlayerTurns, getAnotherPlayerTurns, resetTurnStorage
   };
 }

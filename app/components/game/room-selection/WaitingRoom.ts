@@ -1,9 +1,9 @@
 import {RoomReadyResponseType} from '@types-dir/index';
 import {useDiv, useState} from '@components/base';
 import {H2, Span} from '@components/base';
-import {listenToDocument} from '@firebase-dir/index';
+import {onRoomGotReady} from '@firebase-dir/room';
 
-export const WaitingRoom = (roomCodeId: string, onRoomReady: (v: RoomReadyResponseType) => void) => {
+export const WaitingRoom = (roomCodeId: string, onRoomReady: (v: RoomReadyResponseType) => Promise<void>) => {
   const {
     getDiv, setDiv, removeDiv
   } = useDiv();
@@ -23,7 +23,7 @@ export const WaitingRoom = (roomCodeId: string, onRoomReady: (v: RoomReadyRespon
   const render = () => {
     setDiv('loading-room');
     setDivOne('loading-room-icon');
-    const h2 = H2('Waiting for your friend to join room!');
+    const h2 = H2('Waiting for your friend to join room! Room code is copied and ready to share!');
     set(h2);
     const span = Span('', 'fas fa-cog fa-spin');
     set2(span)
@@ -31,19 +31,12 @@ export const WaitingRoom = (roomCodeId: string, onRoomReady: (v: RoomReadyRespon
     getDiv().append(get());
     getDiv().append(getDivOne());
 
-    const unsubscribe = listenToDocument('rooms', roomCodeId, (d: any) => {
-      if (d['creator'] && d['joiner'] && d['currentMove']) {
-        remove();
-        unsubscribe();
-        // console.log('unsubscribed', d);
-        onRoomReady({
-          roomCode: roomCodeId,
-          anotherPlayer: d.joiner,
-          currentMove: d['currentMove']
-        });
-      } else {
-        // console.log('d is not ready', d);
-      }
+    onRoomGotReady(roomCodeId, async (v:Partial<RoomReadyResponseType>) => {
+      remove();
+      await onRoomReady({
+        ...v,
+        playerType: 'creator'
+      } as RoomReadyResponseType);
     });
 
     return getDiv();

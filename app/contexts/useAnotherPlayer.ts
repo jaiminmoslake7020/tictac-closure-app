@@ -1,12 +1,12 @@
 import {UserType} from '@types-dir/index';
 
-export type AnotherPlayerHookType = {
+export type UseAnotherPlayerHookType = {
   getAnotherPlayer: () => UserType,
   setAnotherPlayer: (v:UserType) => void,
 };
 
 // hooks should be component based
-export const useAnotherPlayer = () :AnotherPlayerHookType => {
+export const useAnotherPlayer = () :UseAnotherPlayerHookType => {
   let gameType: undefined | UserType;
 
   const setAnotherPlayer = (item: UserType) => {

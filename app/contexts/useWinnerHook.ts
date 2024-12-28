@@ -2,7 +2,8 @@ import {WinnerType} from '@types-dir/index';
 
 export type UseWinnerHookType = {
   getWinner: () => WinnerType,
-  setWinner: (v: WinnerType) => void
+  setWinner: (v: WinnerType) => void,
+  removeWinner: () => void
 };
 
 export const useWinnerHook = () : UseWinnerHookType => {
@@ -16,7 +17,11 @@ export const useWinnerHook = () : UseWinnerHookType => {
     return winner;
   }
 
+  const removeWinner = () => {
+    winner = null
+  }
+
   return {
-    getWinner, setWinner
+    getWinner, setWinner, removeWinner
   };
 }

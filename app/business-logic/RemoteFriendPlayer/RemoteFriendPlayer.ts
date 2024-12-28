@@ -1,10 +1,9 @@
-import {InitializeContextsFunctionType, useContextRoomCodeId} from '@contexts/index';
+import {getTurnStorageCollectionPath, InitializeContextsFunctionType} from '@contexts/index';
 import {listenToCollection } from '@firebase-dir/index';
 
 export const RemoteFriendPlayer = (contextsData:InitializeContextsFunctionType, addNewMove: (d:any) => void) => {
-  const { getRoomCodeId } = useContextRoomCodeId( contextsData );
-  const roomCodeId = getRoomCodeId();
-  const unsubscribe = listenToCollection(`rooms/${roomCodeId}/turnStorage`, (d: any, changes: number) => {
+  const collectionName = getTurnStorageCollectionPath(contextsData);
+  const unsubscribe = listenToCollection(collectionName, (d: any, changes: number) => {
     // CheckWinner( contextsData );
     if ( changes === 9 ) {
       // console.log('no more moves', 1);

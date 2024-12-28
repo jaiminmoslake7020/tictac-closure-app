@@ -1,15 +1,14 @@
 import {OpponentType, PlayerType} from '@types-dir/index';
-import {useDiv} from '@components/base';
-import {useForm} from '@components/base';
+import { useDiv, useForm } from '@components/base';
 import {History} from '@utils/index';
-import {PlayerSelectionItem, PlayerSelectionItemType} from './PlayerSelectionItem';
+import {PlayerSelectionItem, type PlayerSelectionItemType} from './PlayerSelectionItem';
 
 export type PlayerSelectionType = {
   render : () => HTMLDivElement,
   remove : () => void
 };
 
-export const PlayerSelection = (onPlayerSelected: (v: OpponentType) => void) :PlayerSelectionType => {
+export const PlayerSelection = (onPlayerSelected: (v: OpponentType) => Promise<void> | void) :PlayerSelectionType => {
   const {
     getDiv, setDiv
   } = useDiv();
@@ -24,10 +23,12 @@ export const PlayerSelection = (onPlayerSelected: (v: OpponentType) => void) :Pl
     e.preventDefault();
   }
 
-  const players = [{
-    label: 'Remote Random Player',
-    value: 'remote-random-player'
-  }, {
+  // {
+  //   label: 'Remote Random Player',
+  //     value: 'remote-random-player'
+  // }
+
+  const players = [ {
     label: 'Remote Friend Player',
     value: 'remote-friend-player'
   }, {
@@ -43,9 +44,9 @@ export const PlayerSelection = (onPlayerSelected: (v: OpponentType) => void) :Pl
     setForm('player-selection-form', onFormSubmit, 'player-selection-form');
 
     players.forEach(({label,value}) => {
-      const item1 = PlayerSelectionItem(label, () => {
+      const item1 = PlayerSelectionItem(label, async () => {
         remove();
-        onPlayerSelected(value as OpponentType);
+        await onPlayerSelected(value as OpponentType);
       });
       playerItems.push(item1);
       getForm().append(item1.render());

@@ -33,10 +33,6 @@ export type TicTacCellFunctionType = {
   reset: (newChangeTurn: ChangeFunctionType ) => void
 }
 
-export type TicTacFunctionReturnType = {
-  render: () => HTMLDivElement,
-}
-
 export type TurnHandlerType = {
   turn: TurnType,
   changeTurn: ChangeFunctionType,
@@ -75,8 +71,64 @@ export type UserType = {
   username: string
 };
 
+export type GamePlayerType = 'creator' | 'joiner'
 export type RoomReadyResponseType = {
   roomCode: string,
   anotherPlayer: UserType,
-  currentMove: string
+  playerType: GamePlayerType
+};
+
+export type RoomExitedResponseType = {
+  exitedBy: string,
+};
+
+
+
+
+
+
+
+export type FirebaseUserType = {
+  username: string,
+  live?: number
+}
+
+export type FirebaseTurnStorageType = {
+  move: string,
+}
+
+export type FirebaseGameType = {
+  currentMove: string,
+  time: number,
+  winner?: string,
+  creator?: string,
+  turnStorage?: Record<MovePositionType, FirebaseTurnStorageType>,
+}
+
+export type FirebaseGameTypeDocumentReference = {
+  id: string,
+  data: () => FirebaseGameType,
+}
+
+export type FirebasePlayerType = {
+  id: string,
+  username: string
+}
+
+export type FirebaseRoomType = {
+  creator: FirebasePlayerType,
+  joiner?: FirebasePlayerType,
+  games: Record<string, FirebaseGameType>
+}
+
+export type FirebaseAppModelType = {
+  rooms: Record<string, FirebaseRoomType>,
+  users: Record<string, FirebaseUserType>
+};
+
+
+export type GameActionsType = {
+  exitGame: () => void,
+  exitRoom: () => void,
+  logout: () => void
 };

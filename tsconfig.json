@@ -26,7 +26,8 @@
       "@helpers/*": ["app/helpers/*"],
       "@hooks/*": ["app/hooks/*"],
       "@types-dir/*": ["app/types/*"],
-      "@utils/*": ["app/utils/*"]
+      "@utils/*": ["app/utils/*"],
+      "@session/*": ["app/session/*"]
     }
   },
   "include": ["app"],

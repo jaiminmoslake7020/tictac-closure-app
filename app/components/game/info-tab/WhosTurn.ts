@@ -2,7 +2,7 @@ import {P} from '@components/base';
 import {
   InitializeContextsFunctionType, isItRemoteGame, isItRemotePlayerTurn,
   useContextAnotherPlayer,
-  useContextGameType,
+  useContextOpponentType,
   useContextTurnHookType,
 } from '@contexts/index';
 
@@ -15,8 +15,8 @@ export type WhosTurnFunctionType = {
 export const WhosTurn = (contextsData: InitializeContextsFunctionType) : WhosTurnFunctionType => {
 
   const {
-    getGameType
-  } = useContextGameType( contextsData );
+    getOpponentType
+  } = useContextOpponentType( contextsData );
 
   const {
     getAnotherPlayer
@@ -68,10 +68,10 @@ export const WhosTurn = (contextsData: InitializeContextsFunctionType) : WhosTur
   }
 
   const updateTurn = () => {
-    if ( getGameType() === 'computer-program' ) {
+    if ( getOpponentType() === 'computer-program' ) {
       const newTurn = getTurn();
       update( newTurn );
-    } else if (getGameType() === 'remote-friend-player') {
+    } else if (getOpponentType() === 'remote-friend-player') {
       update( getPlayerName() );
     }
   }

@@ -1,5 +1,5 @@
 import {TicTacCellValue} from '@tic-tac/tic-tac-cell/TicTacCellValue';
-import {addFn, getClicked, getFn, getTd, getTdCell, hasFn, hasTdCell, setClicked, tdClassList} from '@tic-tac/tic-tac-cell/common';
+import {addFn, getClicked, getFn, getTd, getTdCell, hasFn, hasTdCell, setClicked, tdClassList, addTdCell} from '@tic-tac/tic-tac-cell/common';
 import {ChangeFunctionType, ColumnIdType, MovePositionType, TurnType} from '@types-dir/index';
 import {InitializeContextsFunctionType, useContextTurnHookType} from '@contexts/index';
 
@@ -16,6 +16,7 @@ export const OnClick = async (
       const cv = TicTacCellValue();
       getTd(columnId).append(cv.render());
       cv.addText( appliedTurn );
+      addTdCell(columnId, cv);
     }
     setClicked( columnId );
     await appliedChangeTurn(moveType);
@@ -29,7 +30,7 @@ export const OnClick = async (
 
 export const removeClickListener = (columnId: ColumnIdType) => {
   if ( hasFn(columnId) ) {
-    console.log('removeEventListener');
+    // console.log('removeEventListener');
     getTd(columnId).removeEventListener('click', getFn(columnId) )
   }
 }

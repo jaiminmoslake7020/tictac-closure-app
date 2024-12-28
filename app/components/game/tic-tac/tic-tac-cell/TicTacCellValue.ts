@@ -1,6 +1,12 @@
 import { createEL } from '@utils/index';
 import {TurnType} from '@types-dir/index';
 
+export type TicTacCellValueType = {
+  render: () => HTMLDivElement,
+  addText: (v: TurnType) => void,
+  removeText: () => void
+}
+
 export const TicTacCellValue = () => {
   let div : undefined | HTMLDivElement;
 

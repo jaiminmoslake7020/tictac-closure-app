@@ -17,9 +17,19 @@ export const appendEl = (identifier: string, anotherEL: HTMLElement) => {
   return el;
 }
 
+export const addToRoot = (anotherEL: HTMLElement) => {
+  const identifier = '#root';
+  findEl(identifier).innerHTML = '';
+
+  appendEl('#root', anotherEL);
+}
+
 export const applyClassList = (el: any | HTMLElement, classList: string) :any | HTMLElement => {
   classList.trim().split(' ').forEach((classItem: string) => {
-    el.classList.add( classItem.trim() );
+    const cl = classItem.trim();
+    if (cl) {
+      el.classList.add( cl );
+    }
   });
   return el;
 }

@@ -1,11 +1,11 @@
 @use "base";
 @use "components";
 @use "pages/user";
-
+@use "pages/opponent-selection";
 
 @layer base{
   .tic-tac-width {
-    @apply w-[90%] md:w-[60%] lg:max-w-[40rem];
+    @apply w-[90%] md:w-[70%] lg:max-w-[48rem];
   }
 }
 
@@ -16,6 +16,24 @@ body {
 
 #root {
   @apply w-screen h-screen flex justify-center items-center;
+
+  .main-wrapper{
+    @apply w-screen flex justify-center;
+  }
+
+  .main-content-wrapper{
+     @apply w-full flex justify-center;
+
+     .player-selection{
+       @apply tic-tac-width;
+     }
+
+     .main{
+       @apply tic-tac-width;
+     }
+
+  }
+
 }
 
 @keyframes btn-animation {

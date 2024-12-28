@@ -19,6 +19,9 @@ export const Update = (
   const anotherPersonMoves = getAnotherPlayerTurns();
   const winnerSequence = getWinnerSequence();
   removeClickListener( columnId );
+  if (winnerSequence !== null && Array.isArray(winnerSequence)) {
+    checkWinnerIsAvailable( contextData, columnId );
+  }
   if ( isItRemoteGame(contextData) && isItRemotePlayerTurn(contextData) ) {
     if (!getTd(columnId).classList.contains(tdClassList.typeDisabled)) {
       // console.log('disbaleing as it is other player move');
@@ -35,8 +38,6 @@ export const Update = (
   } else {
     if (winnerSequence === null) {
       addClickListener( contextData, columnId, newChangeTurn );
-    } else  {
-      checkWinnerIsAvailable(contextData, columnId);
     }
   }
 }

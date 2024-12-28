@@ -1,5 +1,11 @@
 import {P} from '@components/base';
-import {InitializeContextsFunctionType, useContextWinner} from '@contexts/index';
+import {
+  InitializeContextsFunctionType,
+  isItRemoteGame,
+  useContextAnotherPlayer,
+  useContextUserSession,
+  useContextWinner
+} from '@contexts/index';
 
 export type WinnerFunctionType = {
   render: () => HTMLParagraphElement,
@@ -36,6 +42,16 @@ export const Winner = (
     const v = getWinner();
     if (v === "NONE") {
       getP().innerHTML = 'You both loose.';
+    } else if (isItRemoteGame(contextsData)) {
+      const { getUser } = useContextUserSession( contextsData );
+      const { getAnotherPlayer } = useContextAnotherPlayer( contextsData );
+      if (v === "X") {
+        getP().classList.add('you-lost');
+        getP().innerHTML = 'Found Winner: '+getAnotherPlayer().username;
+      } else {
+        getP().classList.add('you-win');
+        getP().innerHTML = 'Found Winner: '+getUser().username;
+      }
     } else if (v === "X") {
       getP().classList.add('you-lost');
       getP().innerHTML = 'Found Winner: "X"';

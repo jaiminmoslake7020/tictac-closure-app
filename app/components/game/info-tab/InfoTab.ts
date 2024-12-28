@@ -1,9 +1,9 @@
 import {
   InitializeContextsFunctionType,
-  useContextGameType,
+  useContextOpponentType,
   useContextWinner
 } from '@contexts/index';
-import {Winner} from './Winner';
+import {Winner, WinnerFunctionType} from './Winner';
 import {WhosTurn, WhosTurnFunctionType} from './WhosTurn';
 import {ChangeAppLevelInfoTabButton, ChangeAppLevelInfoTabButtonType} from './ChangeAppLevelInfoTabButton';
 import {useDiv, useState} from '@components/base';
@@ -13,13 +13,14 @@ export type InfoTabType = {
   render : () => HTMLDivElement,
   addTurn:  () => void,
   updateInfo: (reload: () => void) => void,
+  resetApp: () => void
 };
 
 export const InfoTab = (onLevelChange: () => void, contextsData: InitializeContextsFunctionType) :InfoTabType => {
 
   const {
-    getGameType
-  } = useContextGameType( contextsData );
+    getOpponentType
+  } = useContextOpponentType( contextsData );
 
   const {
     getDiv,
@@ -28,14 +29,23 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
 
   const {
     get : getWhosTurn,
-    set : setWhosTurn
-  } = useState();
+    set : setWhosTurn,
+    remove : removeWhosTurn
+  } = useState() as {
+    get: () => WhosTurnFunctionType,
+    set: (item: WhosTurnFunctionType) => void,
+    remove: () => void
+  };
 
   const {
     get : getWinner,
-    set : setWinner
-  } = useState();
-
+    set : setWinner,
+    remove : removeWinnerFn
+  } = useState() as {
+    get: () => WinnerFunctionType,
+    set: (item: WinnerFunctionType) => void,
+    remove: () => void
+  };
 
   let restartGameButton : undefined | RestartGameButtonType ;
   const setRestartGameButton = (item : RestartGameButtonType | undefined ) => {
@@ -71,7 +81,7 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
 
   const render = () => {
     setDiv('info-tab');
-    if ( getGameType() === 'computer-program' ) {
+    if ( getOpponentType() === 'computer-program' ) {
       addChangeLevelBtn();
     }
     return getDiv();
@@ -87,7 +97,7 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
     const w = getWhosTurn();
     if (w) {
       (w as WhosTurnFunctionType).remove();
-      setWhosTurn(undefined);
+      removeWhosTurn();
     }
   }
 
@@ -102,8 +112,8 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
   const removeWinner = () => {
     const w = getWinner();
     if (w) {
-      (w as WhosTurnFunctionType).remove();
-      setWinner(undefined);
+      (w as WinnerFunctionType).remove();
+      removeWinnerFn();
     }
   }
 
@@ -142,10 +152,16 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
     }
   }
 
+  const resetApp = () => {
+    removeWinner();
+    removeRestartButton();
+  }
+
   return {
     render,
     addTurn,
-    updateInfo
+    updateInfo,
+    resetApp
   }
 }
 

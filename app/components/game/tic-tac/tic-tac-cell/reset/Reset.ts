@@ -1,6 +1,6 @@
 import {getTd, getTdCell, tdClassList, setUnClicked, resetStopAnimateMoveSuccess} from '@tic-tac/tic-tac-cell/common';
 import {ChangeFunctionType, ColumnIdType, TDClassIdType} from '@types-dir/index';
-import {InitializeContextsFunctionType} from '@contexts/index';
+import {InitializeContextsFunctionType, isItRemoteGame, isItRemotePlayerTurn} from '@contexts/index';
 import {addClickListener, removeClickListener} from '@tic-tac/tic-tac-cell/on-click/OnClick';
 
 const removeAllNewClasses = (
@@ -20,12 +20,16 @@ export const Reset = (
   newChangeTurn: ChangeFunctionType
 ) => {
   const cv = getTdCell(columnId);
-  if (cv !== null) {
-    cv.remove();
+  if (cv) {
+    cv.removeText();
   }
   removeClickListener(columnId);
-  addClickListener(contextData, columnId, newChangeTurn);
-  removeAllNewClasses(columnId);
   setUnClicked( columnId );
   resetStopAnimateMoveSuccess();
+  removeAllNewClasses(columnId);
+  if (isItRemoteGame(contextData) && isItRemotePlayerTurn(contextData)) {
+    getTd(columnId).classList.add(tdClassList.typeDisabled);
+  } else {
+    addClickListener(contextData, columnId, newChangeTurn);
+  }
 }

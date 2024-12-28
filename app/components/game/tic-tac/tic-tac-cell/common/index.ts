@@ -78,7 +78,6 @@ export const anotherPersonMove = (columnId: ColumnIdType) => {
   if (!newElement) {
     console.error("newElement should not be undefined", newElement);
   }
-  // console.log("newElement", newElement);
 
   newElement.classList.add(tdClassList.typeX);
   setTimeout(() => {
@@ -86,11 +85,12 @@ export const anotherPersonMove = (columnId: ColumnIdType) => {
   }, StopAnimateMoveX);
 
   if ( hasTdCell(columnId) ) {
-    console.error("newElement should not be undefined", newElement);
+    getTdCell(columnId).addText('X');
   } else {
     const cv = TicTacCellValue();
     newElement.append(cv.render());
     cv.addText('X');
+    addTdCell(columnId, cv);
   }
 
   setClicked(columnId);

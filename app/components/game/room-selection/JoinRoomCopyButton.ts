@@ -1,6 +1,4 @@
-import {useDiv, useState} from '@components/base';
-import {useButton} from '@components/base';
-import {H2, P} from '@components/base';
+import {useDiv, useState, useButton, H2, P} from '@components/base';
 import {copyTextToClipboard} from '@utils/index';
 
 export type JoinRoomCopyButtonType = {

@@ -3,7 +3,7 @@ import {createEL} from '@utils/index';
 import {appLevelList} from '@helpers/index';
 import {RadioButton} from '@components/base';
 import {Div} from '@components/base';
-import { InitializeContextsFunctionType, useContextAppLevelType} from '@contexts/index';
+import {InitializeContextsFunctionType, useContextAppLevelType} from '@contexts/index';
 
 export const AskForAppLevelType = ( onLevelSelected : () =>  void , ignoreLocalStorage:boolean = false , contextsData: InitializeContextsFunctionType ) => {
   const f = createEL('form');

@@ -30,16 +30,22 @@ export const User = (contextsData: InitializeContextsFunctionType, initGame: () 
       showLoader();
       getUserInputContainerDiv().classList.remove('input-error');
       getSpan().innerText = '';
-
       const userDoc = await addUser(v);
-      const t = {
-        id: userDoc.id,
-        username: v
+      if (userDoc) {
+        const t = {
+          id: userDoc?.id,
+          username: v
+        }
+        setUser(t);
+        remove();
+        stopLoader();
+        initGame();
+      } else {
+        remove();
+        stopLoader();
+        // TODO: call addError function here to show error message
+        console.log("Error adding user");
       }
-      remove();
-      stopLoader();
-      setUser(t);
-      initGame();
     } else {
       getUserInputContainerDiv().classList.add('input-error');
       getSpan().innerText = 'Name should be at least 3 characters long.';
@@ -49,6 +55,7 @@ export const User = (contextsData: InitializeContextsFunctionType, initGame: () 
   const render = () => {
     const userJson = checkUserExists();
     if (userJson) {
+      console.log("USER EXISTS");
       // console.log("userJson", userJson);
       return undefined;
     } else {

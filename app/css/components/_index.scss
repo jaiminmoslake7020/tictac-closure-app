@@ -16,3 +16,104 @@
 .room-selection-form{
   @apply flex flex-col gap-4;
 }
+
+
+
+
+
+
+.header-wrapper{
+  @apply absolute top-0 left-0 w-screen hidden md:flex;
+
+  .header {
+    @apply flex justify-end w-full;
+
+    .navbar-wrapper{
+      .navbar{
+        @apply flex gap-4 p-4 ;
+
+        .nav-link{
+          .btn.btn-icon{
+            @apply flex justify-start gap-2 items-center;
+          }
+        }
+
+      }
+    }
+
+  }
+
+}
+
+
+.sidebar-wrapper{
+  @apply absolute top-0 left-0 w-screen flex md:hidden ;
+
+  .sidebar{
+
+    .cls-btn-wrapper{
+      @apply absolute p-4 right-0 top-0;
+      .btn.btn-icon{
+        @apply rounded-full px-3 py-3;
+      }
+
+      .show-sidebar-btn{
+        @apply flex;
+      }
+
+      .close-sidebar-btn{
+        @apply hidden;
+      }
+
+    }
+
+    .navbar-wrapper{
+      @apply hidden;
+    }
+
+  }
+
+  &.open{
+    @apply h-[100dvh] md:h-screen ;
+
+    .sidebar{
+      @apply flex justify-center items-center h-full w-full relative bg-content bg-opacity-80 z-50;
+
+      .cls-btn-wrapper{
+        @apply absolute p-4 right-0 top-0;
+        .btn.btn-icon{
+          @apply bg-bkg text-content rounded-full px-3 py-3;
+        }
+
+        .show-sidebar-btn{
+          @apply hidden;
+        }
+
+        .close-sidebar-btn{
+          @apply flex;
+        }
+
+      }
+
+      .navbar-wrapper{
+        @apply block;
+
+        .navbar{
+          @apply flex flex-col gap-4 p-4 ;
+
+          .nav-link{
+            .btn.btn-icon{
+              @apply w-44;
+              @apply flex justify-center gap-2 items-center;
+              @apply bg-bkg text-content;
+            }
+          }
+
+        }
+      }
+
+    }
+
+  }
+
+}

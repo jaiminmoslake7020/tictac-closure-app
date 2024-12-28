@@ -40,7 +40,7 @@ export const RestartGameButton = ( reload: Function ) : RestartGameButtonType  =
         reload();
       } else {
         getButton().innerHTML = 'Reload - '+time+'s';
-        // setTimeout(changeRestartButtonText, 1000, reload, time - 1);
+        setTimeout(changeRestartButtonText, 1000, reload, time - 1);
       }
     }
   }

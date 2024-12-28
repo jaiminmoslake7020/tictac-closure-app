@@ -4,9 +4,8 @@ import {useForm} from '@components/base';
 import {History} from '@utils/index';
 import {RoomSelectionItem, RoomSelectionItemType} from './RoomSelectionItem';
 import {Loader} from '@components/base';
-import {getFirestoreObject} from '@firebase-dir/index';
-import {addDoc, collection} from '@firebase/firestore';
-import {InitializeContextsFunctionType} from '@contexts/index';
+import {createRoom as createRoomFirebase} from '@firebase-dir/index';
+import {InitializeContextsFunctionType, useContextUserSession} from '@contexts/index';
 import {WaitingRoom} from './WaitingRoom';
 import {JoinRoomInput} from './JoinRoomInput';
 import {JoinRoomCopyButton} from './JoinRoomCopyButton';
@@ -17,7 +16,7 @@ export type RoomSelectionType = {
 };
 
 
-export const RoomSelection = (contextsData: InitializeContextsFunctionType, onRoomReady: (v: RoomReadyResponseType) => void): RoomSelectionType => {
+export const RoomSelection = (contextsData: InitializeContextsFunctionType, onRoomReady: (v: RoomReadyResponseType) => Promise<void>): RoomSelectionType => {
   const {
     getDiv, setDiv, removeDiv
   } = useDiv();
@@ -25,6 +24,10 @@ export const RoomSelection = (contextsData: InitializeContextsFunctionType, onRo
   const {
     getForm, setForm, removeForm
   } = useForm();
+
+  const {
+    getUser
+  } = useContextUserSession(contextsData);
 
   const {pushState} = History();
   let roomFnArray = [] as RoomSelectionItemType[];
@@ -50,9 +53,9 @@ export const RoomSelection = (contextsData: InitializeContextsFunctionType, onRo
     removeForm();
   }
 
-  const onRoomJoined = (v: RoomReadyResponseType) => {
+  const onRoomJoined = async (v: RoomReadyResponseType) => {
     removeDiv();
-    onRoomReady(v);
+    await onRoomReady(v);
   }
 
   const joinRoom = async () => {
@@ -69,18 +72,15 @@ export const RoomSelection = (contextsData: InitializeContextsFunctionType, onRo
   const createRoom = async () => {
     removeComponentForm();
     showLoader();
-    const u = JSON.parse(localStorage.getItem('user') as string) as UserType;
-    const f = getFirestoreObject();
-    const roomCollection = collection(f, 'rooms');
-    const roomDoc = await addDoc(roomCollection, {
-      creator: u
-    });
-    const t = {
-      id: roomDoc.id,
+    const user = getUser() as UserType;
+    const roomCode = await createRoomFirebase(user);
+    if (roomCode) {
+      const j = JoinRoomCopyButton(roomCode, onRoomCodeCopied.bind(null, roomCode));
+      getDiv().append(j.render());
+    } else {
+      // TODO: add addError function which will call a toast
+      console.error('Error creating room');
     }
-    localStorage.setItem('currentRoom', JSON.stringify(t));
-    const j = JoinRoomCopyButton(roomDoc.id, onRoomCodeCopied.bind(null, roomDoc.id));
-    getDiv().append(j.render());
     stopLoader();
   }
 
