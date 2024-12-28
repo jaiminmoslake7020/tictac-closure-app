@@ -1,7 +1,10 @@
 import {Firestore} from '@firebase/firestore';
 import {FirebaseApp} from '@firebase/app';
 import {initializeApp} from 'firebase/app';
+import { getAnalytics } from "firebase/analytics";
 import {addDoc, collection, doc, getDoc, getFirestore, onSnapshot, setDoc, updateDoc} from 'firebase/firestore';
+import firebase from 'firebase/compat';
+import Analytics = firebase.analytics.Analytics;
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_CONFIG_API_KEY as string,
@@ -12,6 +15,8 @@ const firebaseConfig = {
   appId: process.env.FIREBASE_CONFIG_APP_ID as string,
   measurementId: process.env.FIREBASE_CONFIG_MEASUREMENT_ID as string,
 };
+// Initialize Firebase
+
 
 let firestore: undefined | Firestore;
 let app: undefined | FirebaseApp;
@@ -19,6 +24,7 @@ let app: undefined | FirebaseApp;
 export const getFirestoreObject = (): Firestore => {
   if (!firestore) {
     app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app) as Analytics;
     firestore = getFirestore(app);
   }
   return firestore;

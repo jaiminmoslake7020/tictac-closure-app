@@ -40,31 +40,14 @@ module.exports = env  => ({
     }
   },
   module: {
-    rules: env.production ? [
+    rules: [
       {
         test: /\.scss$/, // Handle CSS files
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
       },
       {
         test: /\.ts?$/,
-        use: ['babel-loader', 'ts-loader'],
-        exclude: /node_modules/
-      },
-      {
-        test: /\.(png|jpg|gif|svg|woff|woff2|eot|ttf|otf|json)$/,
-        type: 'asset/resource', // Automatically handles these files
-        generator: {
-          filename: 'assets/[name][hash][ext]', // Output directory and filename
-        },
-      },
-    ] : [
-      {
-        test: /\.scss$/, // Handle CSS files
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
-      },
-      {
-        test: /\.ts?$/,
-        use: ['ts-loader'],
+        use: env.production ? ['babel-loader', 'ts-loader'] : ['ts-loader'],
         exclude: /node_modules/
       },
       {
@@ -101,6 +84,14 @@ module.exports = env  => ({
     new CopyWebpackPlugin({
       patterns: [
         { from: 'public/assets', to: 'assets' }, // Copy static files
+        {
+          from: path.resolve(__dirname, 'public/404.html'), // Source file
+          to: path.resolve(__dirname, 'build/404.html'), // Destination file
+        },
+        {
+          from: path.resolve(__dirname, 'public/404.html'), // Source file
+          to: path.resolve(__dirname, 'build/404.html'), // Destination file
+        },
       ],
     }),
   ]
