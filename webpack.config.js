@@ -8,9 +8,6 @@ const dotenv = require('dotenv');
 // Load environment variables
 const env = dotenv.config().parsed;
 
-console.log('FIREBASE_CONFIG_API_KEY URL:', process.env.FIREBASE_CONFIG_API_KEY);
-console.log('FIREBASE_CONFIG_AUTH_DOMAIN Key:', process.env.FIREBASE_CONFIG_AUTH_DOMAIN);
-
 // Convert environment variables to stringified format for DefinePlugin
 const envKeys = env.production ? Object.keys(env).reduce((prev, next) => {
   prev[`process.env.${next}`] = JSON.stringify(env[next]);
