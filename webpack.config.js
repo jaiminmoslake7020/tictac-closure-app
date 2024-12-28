@@ -9,7 +9,7 @@ const dotenv = require('dotenv');
 const env = dotenv.config().parsed;
 
 // Convert environment variables to stringified format for DefinePlugin
-const envKeys = env.production ? Object.keys(env).reduce((prev, next) => {
+const envKeys = !env.production ? Object.keys(env).reduce((prev, next) => {
   prev[`process.env.${next}`] = JSON.stringify(env[next]);
   return prev;
 }, {}) : {
