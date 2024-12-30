@@ -2,6 +2,7 @@ import {useDiv} from '@components/base';
 import {Header} from '@components/layouts/header/Header';
 import {Sidebar} from '@components/layouts/sidebar/Sidebar';
 import {GameActionsType} from '@types-dir/index';
+import {NotificationWrapper} from '@components/base/ux/notification/NotificationWrapper';
 
 export const Layout = (d:HTMLElement, gameActions: GameActionsType) => {
   const {
@@ -10,6 +11,8 @@ export const Layout = (d:HTMLElement, gameActions: GameActionsType) => {
   const {
     getDiv: getDivOne, setDiv: setDivOne
   } = useDiv();
+
+  const nW = NotificationWrapper();
 
   setDiv('main-wrapper');
   const h = Header(gameActions);
@@ -20,6 +23,8 @@ export const Layout = (d:HTMLElement, gameActions: GameActionsType) => {
 
   setDivOne('main-content-wrapper');
   getDivOne().append(d);
+
+  getDiv().append(nW.render());
 
   getDiv().append(getDivOne())
   return getDiv();

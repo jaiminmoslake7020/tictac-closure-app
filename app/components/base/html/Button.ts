@@ -4,7 +4,10 @@ import {useSpan} from '@components/base';
 export const Button = (btnLabel: string, btnClassList: string, onClick: EventListenerOrEventListenerObject) : HTMLButtonElement => {
   let button = createEL('button') as HTMLButtonElement;
   if (btnClassList !== '') {
+    btnClassList = 'btn '+btnClassList;
     button = applyClassList(button, btnClassList);
+  } else {
+    button = applyClassList(button, 'btn');
   }
   button.setAttribute('type', 'button');
   button.addEventListener('click', onClick );

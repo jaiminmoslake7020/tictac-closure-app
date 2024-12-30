@@ -180,6 +180,8 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType) :TicTacTyp
           console.log('TICTAC SAME GAME');
         }
       }
+    }, () => {
+      console.log('Game started Game 2');
     });
   }
 

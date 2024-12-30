@@ -8,6 +8,7 @@ import {
 import {
   exitRoom as exitRoomFirebase
 } from '@firebase-dir/room';
+import {unliveUser} from '@firebase-dir/user';
 
 export const GameActions = ( contextsData: InitializeContextsFunctionType , onExitGame : () => void, onExitRoom : () => void, onLogout : () => void) => {
 
@@ -30,8 +31,9 @@ export const GameActions = ( contextsData: InitializeContextsFunctionType , onEx
     onExitRoom();
   }
 
-  const logout = () => {
+  const logout = async () => {
     document.querySelector('.main')?.remove();
+    await unliveUser(getUser().id);
     logoutUser();
     onLogout();
   }

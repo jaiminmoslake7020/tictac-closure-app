@@ -1,10 +1,11 @@
 import {Firestore} from '@firebase/firestore';
 import {FirebaseApp} from '@firebase/app';
+import { Auth, GoogleAuthProvider } from '@firebase/auth';
+import { Analytics } from '@firebase/analytics';
 import {initializeApp} from 'firebase/app';
 import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
 import {addDoc, collection, doc, getDoc, getFirestore, onSnapshot, setDoc, updateDoc} from 'firebase/firestore';
-import firebase from 'firebase/compat';
-import Analytics = firebase.analytics.Analytics;
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_CONFIG_API_KEY as string,
@@ -20,12 +21,33 @@ const firebaseConfig = {
 
 let firestore: undefined | Firestore;
 let app: undefined | FirebaseApp;
+let auth: undefined | Auth;
+let analytics: undefined | Analytics;
+
+export const getFirebaseApp = (): FirebaseApp => {
+  if (!app) {
+    app = initializeApp(firebaseConfig);
+  }
+  return app;
+}
+
+export const getFirestoreAuth = (): Auth => {
+  if (!auth) {
+    auth = getAuth(getFirebaseApp());
+  }
+  return auth as Auth;
+}
+
+export const getFirebaseAnalytics = (): Analytics => {
+  if (!auth) {
+    analytics = getAnalytics(getFirebaseApp());
+  }
+  return analytics as Analytics;
+}
 
 export const getFirestoreObject = (): Firestore => {
   if (!firestore) {
-    app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app) as Analytics;
-    firestore = getFirestore(app);
+    firestore = getFirestore(getFirebaseApp());
   }
   return firestore;
 }
@@ -70,7 +92,7 @@ export const listenToCollection = (collectionName:string, onRetrieve: (d:any, le
 }
 
 // Listen for real-time updates to a specific document
-export const listenToCollectionV2 = (collectionName:string, onRetrieve: (d:any, l: number) => void) => {
+export const listenToCollectionV2 = (collectionName:string, onRetrieve: (d:any, l: number) => void, onFinished: () => void) => {
   const db = getFirestoreObject();
   const collectionRef = collection(db, collectionName);
 
@@ -85,6 +107,10 @@ export const listenToCollectionV2 = (collectionName:string, onRetrieve: (d:any, 
     });
   }, (error) => {
     console.error("Error listening to collection changes:", error);
+    onFinished();
+  }, () => {
+    console.log('Listening to collection, ended');
+    onFinished();
   }); // Call this function to stop listening
 }
 

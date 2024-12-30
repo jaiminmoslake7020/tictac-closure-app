@@ -1,6 +1,13 @@
 @use "loading/loading";
 
 
+.btn.btn-icon{
+  @apply flex justify-start items-center gap-0;
+  &.with-text{
+    @apply gap-2;
+  }
+}
+
 .radio-btn {
   @apply btn ;
   @apply flex justify-center;
@@ -16,8 +23,6 @@
 .room-selection-form{
   @apply flex flex-col gap-4;
 }
-
-
 
 
 
@@ -114,6 +119,74 @@
 
     }
 
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.notification-wrapper {
+  @apply fixed top-0 right-0 w-full h-fit z-50 p-4;
+}
+.notification {
+  @apply flex flex-col items-end justify-center;
+}
+
+.notification-item-wrapper {
+}
+
+.notification-item {
+  @apply flex flex-col border border-gray-200 px-4 py-2 rounded-lg w-[400px] relative;
+
+  &.notification-success {
+    @apply bg-green-100 text-green-800;
+  }
+  &.notification-error {
+    @apply bg-red-100 text-red-800;
+  }
+  &.notification-warning {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+  &.notification-info {
+    @apply bg-blue-100 text-blue-800;
+  }
+}
+
+.notification-title {
+  @apply text-sm font-semibold mb-1;
+}
+
+.notification-message {
+  @apply text-sm text-gray-700;
+}
+
+.notification-item-secondary-action-wrapper {
+  @apply mt-2;
+}
+
+.notification-close {
+  @apply absolute top-2 right-4;
+}
+
+.notification-close-btn {
+  @apply text-gray-500 hover:text-gray-700 gap-0 px-[10px] py-[6px] rounded-[50%] text-sm !important;
+  @apply flex justify-center items-center;
+}
+
+.notification-secondary-action{
+  @apply flex w-full justify-end gap-4;
+
+  .btn{
+    @apply scale-75;
   }
 
 }

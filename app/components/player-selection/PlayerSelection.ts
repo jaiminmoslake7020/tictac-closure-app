@@ -2,6 +2,9 @@ import {OpponentType, PlayerType} from '@types-dir/index';
 import { useDiv, useForm } from '@components/base';
 import {History} from '@utils/index';
 import {PlayerSelectionItem, type PlayerSelectionItemType} from './PlayerSelectionItem';
+import {IconButton} from '@components/base/html/Button';
+import {NotificationSecondaryAction} from '@components/base/ux/notification/NotificationSecondaryAction';
+import {NotificationHandler} from '@components/base/ux/notification/NotificationHandler';
 
 export type PlayerSelectionType = {
   render : () => HTMLDivElement,
@@ -53,7 +56,6 @@ export const PlayerSelection = (onPlayerSelected: (v: OpponentType) => Promise<v
     });
 
     getDiv().append(getForm());
-
     pushState('#/opponent-selection');
     return getDiv();
   }

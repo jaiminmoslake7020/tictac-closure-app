@@ -2,7 +2,7 @@ import {
   listenToDocument, listenToCollection
 } from './core';
 import {
-  addUser, updateUser
+  addUser, updateUser, unliveUser, upsertUser
 } from './user';
 import {
   getRoomData, roomExists, joinRoom, createRoom
@@ -13,7 +13,7 @@ import {
 
 export {
   listenToDocument, listenToCollection,
-  addUser, updateUser,
+  addUser, updateUser, unliveUser, upsertUser,
   getRoomData, roomExists, joinRoom, createRoom,
   addNewTurnFirebase, updateGameWithCurrentMove, setWinner
 };

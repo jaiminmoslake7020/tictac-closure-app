@@ -1,4 +1,4 @@
-import {addToRoot} from '@utils/index'
+import {addToRoot, createEL} from '@utils/index'
 import { AskForAppLevelType } from '@components/game/info-tab/AskForAppLevelType';
 import {LoadTicTacApp, LoadTicTacAppType} from '@tic-tac/LoadTicTacApp';
 import {
@@ -20,10 +20,13 @@ import {UseRoomCodeIdHookType} from '@contexts/index';
 import {PlayerSelection} from '@components/player-selection/PlayerSelection';
 import {createGame, onGameCreated} from '@firebase-dir/game';
 import {getRoomData} from '@firebase-dir/room';
-import {useState} from '@components/base';
+import {Loader, useState} from '@components/base';
 import {Layout} from '@components/layouts/layout/Layout';
 import {GameActions} from './GameActions';
 import {removeGameId} from '@session/GameSessionHandler';
+import {NotificationHandler} from '@components/base/ux/notification/NotificationHandler';
+import {NotificationSecondaryAction} from '@components/base/ux/notification/NotificationSecondaryAction';
+import {IconButton} from '@components/base/html/Button';
 
 export const Game = ( contextsData: InitializeContextsFunctionType , onLogout : () => void) => {
 
@@ -51,6 +54,10 @@ export const Game = ( contextsData: InitializeContextsFunctionType , onLogout : 
     get: () => LoadTicTacAppType,
     set: (item: LoadTicTacAppType) => void
   };
+
+  const {
+    showLoader, stopLoader
+  } = Loader();
 
   const onLevelSelected = () => {
     addToRoot( Layout( LoadTicTacApp( contextsData ).render() , getGameActions()) );
@@ -80,6 +87,12 @@ export const Game = ( contextsData: InitializeContextsFunctionType , onLogout : 
       }
     } else {
       let oneTimeExecution = false;
+
+      const div = createEL('div');
+      addToRoot(Layout( div as HTMLElement, getGameActions()));
+      showLoader();
+
+
       // console.log("onGameCreated");
       onGameCreated(roomCodeId, async (d: FirebaseGameType, gameId: string) => {
         // console.log('onGameCreated Inside Fane ', d, gameId);
@@ -91,11 +104,24 @@ export const Game = ( contextsData: InitializeContextsFunctionType , onLogout : 
           oneTimeExecution = true;
           setGameId(gameId);
           setCurrentMove(d.currentMove);
+          stopLoader();
           onLevelSelected();
         } else {
           console.log('GAME ALREADY STARTED onGameCreated', getGameId(), hasGameId(), oneTimeExecution);
         }
+      }, () => {
+
+        const ib = IconButton('Logout', ' logout-btn ', 'fa-solid fa-power-off', getGameActions().logout);
+        const n = NotificationSecondaryAction( ib as HTMLElement );
+        const {
+          addError
+        } = NotificationHandler();
+        addError('Game not started, Please try again', null, n);
+
+        stopLoader();
+        console.log('Game started Game 2');
       });
+
     }
   }
 
