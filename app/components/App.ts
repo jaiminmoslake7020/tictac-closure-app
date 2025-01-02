@@ -2,7 +2,7 @@ import {addToRoot} from '@utils/index';
 import {Game} from './game/Game';
 import {User} from './user/User';
 import {initializeContexts, useContextUserSession} from '@contexts/index';
-import {unliveUser} from '@firebase-dir/user';
+import {unliveUser, upsertUser} from '@firebase-dir/user';
 
 export const App = () => {
 
@@ -11,9 +11,9 @@ export const App = () => {
 
   const beforeUnloadEvent = (event: BeforeUnloadEvent) => {
     console.log('event', event);
-    // event.preventDefault();
-    // event.returnValue = ''; // This is required for older browsers to show a confirmation dialog
-    // isTabClosed = false;
+    event.preventDefault();
+    event.returnValue = ''; // This is required for older browsers to show a confirmation dialog
+    isTabClosed = false;
 
     // Optional: Perform any cleanup or save data here
     console.log('Window is about to close!');
@@ -42,20 +42,20 @@ export const App = () => {
 
   const initGame = () => {
     const t = Game(contextsData, async () => {
-      removeCloseWindow();
+      // removeCloseWindow();
       await init();
     });
     t.init();
   }
 
-  const init = async () => {
+  const init = () => {
     const t = User(contextsData, initGame);
     const f = t.render();
     if (f) {
       addToRoot(f);
     } else {
       // keepSessionAliveInterval(contextsData);
-      addCloseWindow();
+      // addCloseWindow();
       initGame();
     }
   }

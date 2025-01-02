@@ -2,6 +2,7 @@ import {InitializeContextsFunctionType, useContextUserSession} from '@contexts/i
 import {RoomReadyResponseType, UserType} from '@types-dir/index';
 import { useDiv, useState, Label, useTextInput, useButton, Loader, H2, Span } from '@components/base';
 import {joinRoom, getRoomData} from '@firebase-dir/index';
+import {getCurrentTime} from '@utils/index';
 
 
 export type JoinRoomInputType = {
@@ -50,28 +51,26 @@ export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRo
     if (roomCode.length > 0) {
 
       showLoader();
-      const docSnap = await getRoomData(roomCode);
-      if (docSnap?.exists()) {
-        const data  = docSnap.data() as {
-          'creator': UserType,
-          'joiner'?: UserType
-        };
+      const roomData = await getRoomData(roomCode);
+      if (roomData) {
+        const data  = roomData;
         if (data['creator'] && !data['joiner']) {
           // console.log("Document data:", data); // Retrieve the document data
-
           const {
             getUser
           } = useContextUserSession(contextsData);
           const userItem = getUser() as UserType;
-          const updatedDocData = {joiner: userItem};
+          const updatedDocData = {joiner: userItem, joiner_last_visit: getCurrentTime()};
           await joinRoom(roomCode, updatedDocData);
           remove();
           stopLoader();
+
           await onRoomReady({
             roomCode: roomCode,
             anotherPlayer: data['creator'] as UserType,
             playerType: 'joiner'
           });
+
         } else {
           get3().innerText = 'Please input correct code.';
           getDivOne().classList.add('input-error');

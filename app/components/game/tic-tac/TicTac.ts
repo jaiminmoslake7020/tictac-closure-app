@@ -109,7 +109,7 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType) :TicTacTyp
 
   const reStartGame = async () => {
     const {
-      setGameId, getGameId, removeGameId, hasGameId
+      setGameId
     } = useContextGameId(contextsData);
     const {
       setCurrentMove

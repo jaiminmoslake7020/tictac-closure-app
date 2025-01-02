@@ -3,23 +3,43 @@ import {
   useContextGameId,
   useContextRoomCodeId, useContextUserSession,
   UseRoomCodeIdHookType, UserSessionHookType,
-  UseGameIdHookType
+  UseGameIdHookType, useContextOpponentType
 } from '@contexts/index';
 import {
   exitRoom as exitRoomFirebase
 } from '@firebase-dir/room';
 import {unliveUser} from '@firebase-dir/user';
 
-export const GameActions = ( contextsData: InitializeContextsFunctionType , onExitGame : () => void, onExitRoom : () => void, onLogout : () => void) => {
+export type GameActionCallbacksType = {
+  // onExitGame: () => void;
+  onExitRoom: () => void;
+  onLogout: () => void;
+}
+
+export type GameActionsType = {
+  // exitGame?: () => void;
+  exitRoom: () => void;
+  logout: () => void;
+}
+
+export const GameActions = ( contextsData: InitializeContextsFunctionType , gameActionCallbacks: GameActionCallbacksType) :GameActionsType => {
 
   const { removeRoomCodeId, getRoomCodeId } = useContextRoomCodeId( contextsData ) as UseRoomCodeIdHookType;
   const { removeGameId, } = useContextGameId( contextsData ) as UseGameIdHookType;
   const { logoutUser, getUser } = useContextUserSession( contextsData ) as UserSessionHookType;
+  const {
+    removeOpponentType
+  } = useContextOpponentType( contextsData );
+
+  const {
+    onExitRoom, onLogout
+  } = gameActionCallbacks;
 
   const exitGame = () => {
-    document.querySelector('.main')?.remove();
-    removeGameId();
-    onExitGame();
+    // not in use
+    // document.querySelector('.main')?.remove();
+    // removeGameId();
+    // onExitGame();
   }
 
   const exitRoom = async () => {
@@ -27,6 +47,8 @@ export const GameActions = ( contextsData: InitializeContextsFunctionType , onEx
     const room = getRoomCodeId();
     const u = getUser();
     await exitRoomFirebase(room, u.id);
+    removeGameId();
+    removeOpponentType(); // it makes sense to ask the user to select a new opponent
     removeRoomCodeId();
     onExitRoom();
   }
@@ -39,7 +61,6 @@ export const GameActions = ( contextsData: InitializeContextsFunctionType , onEx
   }
 
   return {
-    exitGame,
     exitRoom,
     logout
   };

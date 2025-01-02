@@ -1,17 +1,14 @@
 import {OpponentType, PlayerType} from '@types-dir/index';
 import { useDiv, useForm } from '@components/base';
 import {History} from '@utils/index';
-import {PlayerSelectionItem, type PlayerSelectionItemType} from './PlayerSelectionItem';
-import {IconButton} from '@components/base/html/Button';
-import {NotificationSecondaryAction} from '@components/base/ux/notification/NotificationSecondaryAction';
-import {NotificationHandler} from '@components/base/ux/notification/NotificationHandler';
+import {OpponentSelectionItem, type OpponentSelectionItemType} from './OpponentSelectionItem';
 
-export type PlayerSelectionType = {
+export type OpponentSelectionFormType = {
   render : () => HTMLDivElement,
   remove : () => void
 };
 
-export const PlayerSelection = (onPlayerSelected: (v: OpponentType) => Promise<void> | void) :PlayerSelectionType => {
+export const OpponentSelectionForm = (onPlayerSelected: (v: OpponentType) => Promise<void> | void) :OpponentSelectionFormType => {
   const {
     getDiv, setDiv
   } = useDiv();
@@ -20,7 +17,7 @@ export const PlayerSelection = (onPlayerSelected: (v: OpponentType) => Promise<v
   } = useForm();
 
   const { pushState } = History();
-  let playerItems = [] as PlayerSelectionItemType[];
+  let playerItems = [] as OpponentSelectionItemType[];
 
   const onFormSubmit = (e:any) => {
     e.preventDefault();
@@ -43,11 +40,12 @@ export const PlayerSelection = (onPlayerSelected: (v: OpponentType) => Promise<v
   }] as PlayerType[];
 
   const render = () => {
+    console.log('Showing Opponent Selection Form');
     setDiv('player-selection');
     setForm('player-selection-form', onFormSubmit, 'player-selection-form');
 
     players.forEach(({label,value}) => {
-      const item1 = PlayerSelectionItem(label, async () => {
+      const item1 = OpponentSelectionItem(label, async () => {
         remove();
         await onPlayerSelected(value as OpponentType);
       });

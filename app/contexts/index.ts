@@ -11,6 +11,7 @@ import {UseRoomCodeIdHookType, useRoomCodeIdHook} from './useRoomCodeId';
 import {UseGameIdHookType, useGameIdHook} from '@contexts/useGameId';
 import {UserType} from '@types-dir/index';
 import {getRandomInt} from '@utils/index';
+import {useGamePlayerTypeHook, UseGamePlayerTypeHookType} from '@contexts/useGamePlayerType';
 
 export type {
   UseAppLevelHookType,
@@ -54,7 +55,7 @@ export const initializeContexts = () : InitializeContextsFunctionType => {
   }
 }
 
-export type contextType = 'AppLevelType' | 'OpponentType' | 'AnotherPlayer' | 'CurrentMove' | 'User' | 'TurnStorage' | 'WinnerSeq' | 'Winner' | 'TurnType' | 'RoomCodeId' | 'GameId';
+export type contextType = 'AppLevelType' | 'OpponentType' | 'AnotherPlayer' | 'CurrentMove' | 'User' | 'TurnStorage' | 'WinnerSeq' | 'Winner' | 'TurnType' | 'RoomCodeId' | 'GameId' | 'GamePlayerType';
 
 export const contextsMap = {
   AppLevelType: 'AppLevelType',
@@ -67,7 +68,8 @@ export const contextsMap = {
   Winner: 'Winner',
   TurnType: 'TurnType',
   RoomCodeId: 'RoomCodeId',
-  GameId: 'GameId'
+  GameId: 'GameId',
+  GamePlayerType: 'GamePlayerType'
 } as Record<contextType, contextType>;
 
 // contexts should be global and share state between app or atlest nodeTree where it starts
@@ -155,6 +157,15 @@ export const useContexts = (contextName: string, contextsMapList : InitializeCon
     const firstInstance = useGameIdHook();
     addContext(contextName, firstInstance);
     return firstInstance as UseGameIdHookType;
+  } else if (contextName === contextsMap.GamePlayerType) {
+    if ( hasContext(contextName) ) {
+      return getContext(contextName);
+    }
+    const firstInstance = useGamePlayerTypeHook();
+    addContext(contextName, firstInstance);
+    return firstInstance as UseGamePlayerTypeHookType
+  } else {
+    throw new Error('Unknown context name');
   }
 
 }
@@ -201,6 +212,10 @@ export const useContextRoomCodeId = (contextsData : InitializeContextsFunctionTy
 
 export const useContextGameId = (contextsData : InitializeContextsFunctionType) : UseGameIdHookType => {
   return  useContexts( contextsMap.GameId , contextsData ) as UseGameIdHookType;
+}
+
+export const useContextGamePlayerType = (contextsData : InitializeContextsFunctionType) : UseGamePlayerTypeHookType => {
+  return  useContexts( contextsMap.GamePlayerType , contextsData ) as UseGamePlayerTypeHookType;
 }
 
 export const isItRemoteGame = (contextsData:InitializeContextsFunctionType) : boolean => {

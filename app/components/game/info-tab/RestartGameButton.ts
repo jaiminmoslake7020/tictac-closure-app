@@ -1,4 +1,5 @@
 import {useButton} from '@components/base';
+import {GamePlayerType} from '@types-dir/index';
 
 const reloadTime = 20;
 
@@ -28,10 +29,13 @@ export type RestartGameButtonType = RestartGameButtonControllerType & {
   changeRestartButtonText: (reload: Function, time: number) => void
 };
 
-export const RestartGameButton = ( reload: Function ) : RestartGameButtonType  => {
+export const RestartGameButton = ( reload: Function , playerType : GamePlayerType) : RestartGameButtonType  => {
   const { getButton, setButton } = useButton();
 
+
   const { setButtonEnabled, getButtonEnabled } = RestartGameButtonController();
+  // we are adding 2 seconds delay for joiner to join the game before ite becomes creator
+  const timeOut = playerType === 'creator' ? 1000 : 1100;
 
   const changeRestartButtonText = (reload : Function, time: number) => {
     if (getButtonEnabled()) {
@@ -40,7 +44,7 @@ export const RestartGameButton = ( reload: Function ) : RestartGameButtonType  =
         reload();
       } else {
         getButton().innerHTML = 'Reload - '+time+'s';
-        setTimeout(changeRestartButtonText, 1000, reload, time - 1);
+        setTimeout(changeRestartButtonText, timeOut, reload, time - 1);
       }
     }
   }

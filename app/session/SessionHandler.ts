@@ -39,6 +39,8 @@ const SessionHandler = () : SessionHandlerType => {
 
   const removeSession = () => {
     localStorage.removeItem('tic-tac-app-session');
+    // clearing all other session data
+    localStorage.clear();
     session = null ;
   }
 

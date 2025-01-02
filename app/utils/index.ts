@@ -90,3 +90,7 @@ export const copyTextToClipboard = (text: string) => {
       console.error('Failed to copy text: ', err);
     });
 }
+
+export const getCurrentTime = () : number => {
+  return (new Date()).getTime();
+}

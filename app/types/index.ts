@@ -118,7 +118,9 @@ export type FirebasePlayerType = {
 export type FirebaseRoomType = {
   creator: FirebasePlayerType,
   joiner?: FirebasePlayerType,
-  games: Record<string, FirebaseGameType>
+  creator_last_visit?: number,
+  joiner_last_visit?: number,
+  games?: Record<string, FirebaseGameType>
 }
 
 export type FirebaseAppModelType = {
@@ -126,9 +128,3 @@ export type FirebaseAppModelType = {
   users: Record<string, FirebaseUserType>
 };
 
-
-export type GameActionsType = {
-  exitGame: () => void,
-  exitRoom: () => void,
-  logout: () => void
-};

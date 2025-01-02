@@ -1,6 +1,4 @@
-import {
-  getUser,
-} from './UserSessionHandler';
+import {getUser,} from './UserSessionHandler';
 import {getSession, setSession} from './SessionHandler';
 
 const RoomCodeIdSessionHandler = () => {
@@ -24,7 +22,9 @@ const RoomCodeIdSessionHandler = () => {
     if (getUser()) {
       setSession({
         ...getSession(),
-        roomCodeId: undefined
+        roomCodeId: undefined,
+        gameId: undefined,
+        opponentType: undefined
       });
     }
   }

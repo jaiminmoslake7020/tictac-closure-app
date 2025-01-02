@@ -1,5 +1,5 @@
 import {
-  InitializeContextsFunctionType,
+  InitializeContextsFunctionType, useContextGamePlayerType,
   useContextOpponentType,
   useContextWinner
 } from '@contexts/index';
@@ -21,6 +21,9 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
   const {
     getOpponentType
   } = useContextOpponentType( contextsData );
+  const {
+    getPlayerType
+  } = useContextGamePlayerType( contextsData );
 
   const {
     getDiv,
@@ -126,17 +129,19 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
     }
   }
 
+  const onGameRestart = (reload: Function) => {
+    removeTurn();
+    removeWinner();
+    const w = getRestartGameButton();
+    if (w) {
+      (w as RestartGameButtonType).remove();
+      setRestartGameButton(undefined);
+    }
+    reload();
+  }
+
   const addRestartGameButton = (reload: Function) => {
-    setRestartGameButton(RestartGameButton( () => {
-      removeTurn();
-      removeWinner();
-      const w = getRestartGameButton();
-      if (w) {
-        (w as RestartGameButtonType).remove();
-        setRestartGameButton(undefined);
-      }
-      reload();
-    } ));
+    setRestartGameButton(RestartGameButton( onGameRestart.bind(null , reload ) , getPlayerType() ));
     getDiv().append((getRestartGameButton() as RestartGameButtonType).render());
   }
 

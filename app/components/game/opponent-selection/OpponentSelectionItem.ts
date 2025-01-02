@@ -1,11 +1,11 @@
 import {useDiv, RadioButton} from '@components/base';
 
-export type PlayerSelectionItemType = {
+export type OpponentSelectionItemType = {
   render: () => HTMLDivElement,
   remove: () => void
 };
 
-export const PlayerSelectionItem = (label:string, onChange: (e:any) => void) : PlayerSelectionItemType => {
+export const OpponentSelectionItem = (label:string, onChange: (e:any) => void) : OpponentSelectionItemType => {
   const {
     getDiv, setDiv, removeDiv
   } = useDiv();

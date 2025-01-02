@@ -3,7 +3,8 @@ import {User} from '@firebase/auth';
 
 export const addUser = async (user: User) => {
   try {
-    return await insertNewDocumentWithId('users', user.uid,{ uid: user.uid, live: (new Date()).getTime(), username: user.displayName, activeSession: true });
+    await insertNewDocumentWithId('users', user.uid,{ uid: user.uid, live: (new Date()).getTime(), username: user.displayName, activeSession: true });
+    return user;
   } catch (e) {
     console.error('Error adding user:', e);
   }
@@ -12,6 +13,7 @@ export const addUser = async (user: User) => {
 export const updateUser = async (userId: string, time: number) => {
   try {
     await updateDocument(`users/${userId}`, {live: time, activeSession: true});
+    return {uid: userId, live: time};
   } catch (e) {
     console.error('Error updating user:', e);
   }
