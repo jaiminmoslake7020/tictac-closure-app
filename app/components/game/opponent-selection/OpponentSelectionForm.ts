@@ -28,16 +28,19 @@ export const OpponentSelectionForm = (onPlayerSelected: (v: OpponentType) => Pro
   //     value: 'remote-random-player'
   // }
 
-  const players = [ {
+  const players = [
+    {
     label: 'Remote Friend Player',
     value: 'remote-friend-player'
-  }, {
-    label: 'Computer Program',
-    value: 'computer-program'
-  },  {
-    label: 'Same Device Play',
-    value: 'same-device-play'
-  }] as PlayerType[];
+  },
+  //   {
+  //   label: 'Computer Program',
+  //   value: 'computer-program'
+  // },  {
+  //   label: 'Same Device Play',
+  //   value: 'same-device-play'
+  // }
+  ] as PlayerType[];
 
   const render = () => {
     console.log('Showing Opponent Selection Form');
