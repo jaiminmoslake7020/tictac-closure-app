@@ -1,8 +1,8 @@
 import {useDiv} from '@components/base';
 import {Header} from '@components/layouts/header/Header';
 import {Sidebar} from '@components/layouts/sidebar/Sidebar';
-import {GameActionsType} from '@types-dir/index';
 import {NotificationWrapper} from '@components/base/ux/notification/NotificationWrapper';
+import {GameActionsType} from '@components/game/GameActions';
 
 export const Layout = (d:HTMLElement, gameActions: GameActionsType) => {
   const {

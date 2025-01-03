@@ -1,7 +1,8 @@
 import {useDiv} from '@components/base';
 import {NavLink} from '@components/base/ux/NavLink';
 import {getGameId, getRoomCodeId, getUser} from '@session/index';
-import {GameActionsType} from '@types-dir/index';
+import {GameActionsType} from '@components/game/GameActions';
+
 
 export const NavBar = (gameActions: GameActionsType) => {
   const {
@@ -11,7 +12,7 @@ export const NavBar = (gameActions: GameActionsType) => {
     getDiv: getDivOne, setDiv: setDivOne
   } = useDiv();
 
-  console.log('gameActions', gameActions);
+  // console.log('gameActions', gameActions);
 
   const render = () => {
     setDiv('navbar-wrapper');

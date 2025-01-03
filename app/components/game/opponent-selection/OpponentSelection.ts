@@ -5,15 +5,15 @@ import {addToRoot} from '@utils/index';
 import {Layout} from '@components/layouts/layout/Layout';
 import {CheckRoomSelected} from '@components/game/opponent-selection/remote-friend-player/CheckRoomSelected';
 import {
-  InitializeContextsFunctionType,
-  useContextOpponentType,
+  InitializeContextsFunctionType, useContextGameId,
+  useContextOpponentType, useContextRoomCodeId,
   UseOpponentTypeHookType,
 } from '@contexts/index';
 import {useState} from '@components/base';
 import {GameActionCallbacksType, GameActions} from '@components/game/GameActions';
 
 export type OpponentSelectionType = {
-  render : () => Promise<HTMLDivElement | undefined>,
+  render : () => void | Promise<void>,
   remove : () => void
 };
 
@@ -24,7 +24,8 @@ export const OpponentSelection = (contextsData: InitializeContextsFunctionType, 
   } = useState();
 
   const { setOpponentType, hasOpponentType, getOpponentType  } = useContextOpponentType( contextsData ) as UseOpponentTypeHookType;
-
+  const { removeGameId  } = useContextGameId( contextsData );
+  const { removeRoomCodeId  } = useContextRoomCodeId( contextsData );
 
   const askAppLevelType = () => {
     const t = AskForAppLevelType( onLevelSelected , false, contextsData);
@@ -35,29 +36,38 @@ export const OpponentSelection = (contextsData: InitializeContextsFunctionType, 
     }
   }
 
+  const remoteFriendPlayerSelected  = () => {
+    const {
+      startCheckRoomSelected
+    } = CheckRoomSelected(
+      contextsData, onLevelSelected, gameActions
+    );
+    startCheckRoomSelected();
+  }
+
   const onPlayerSelected = async (value: OpponentType) => {
     setOpponentType(value);
     if (value === 'computer-program') {
       askAppLevelType();
     } else if (value === 'remote-friend-player') {
-      await (CheckRoomSelected(
-        contextsData, onLevelSelected, gameActions
-      )).startCheckRoomSelected();
+      remoteFriendPlayerSelected();
     }
   }
 
-  const showForm = () :HTMLDivElement  => {
+  const showForm = ()   => {
+    removeGameId();
+    removeRoomCodeId();
     setVarOne((OpponentSelectionForm(onPlayerSelected)));
-    return getVarOne().render();
+    const gA = GameActions(contextsData, gameActions);
+    addToRoot( Layout(getVarOne().render(),  gA) );
   }
 
   const render = async () => {
     if ( hasOpponentType() ) {
       console.log('OpponentType Exists', getOpponentType());
       await onPlayerSelected(getOpponentType());
-      return Promise.resolve(undefined);
     } else {
-      return Promise.resolve(showForm());
+      showForm();
     }
   }
 

@@ -23,10 +23,14 @@ export const setWinnerAtFirebase = (contextsData: InitializeContextsFunctionType
   const { getAnotherPlayer } = useContextAnotherPlayer( contextsData );
   const gameDocumentPath = getGameDocumentPath( contextsData );
   const { removeGameId } = useContextGameId(contextsData);
-  if ( foundWinner === turnData.turn ) {
-    setWinnerFirebase( gameDocumentPath, getUser().username ).then(r => console.log('set-winner-at-firebase'));
+  if (gameDocumentPath) {
+    if ( foundWinner === turnData.turn ) {
+      setWinnerFirebase( gameDocumentPath, getUser().username ).then(r => console.log('set-winner-at-firebase'));
+    } else {
+      setWinnerFirebase( gameDocumentPath, getAnotherPlayer().username ).then(r => console.log('set-winner-at-firebase'));
+    }
   } else {
-    setWinnerFirebase( gameDocumentPath, getAnotherPlayer().username ).then(r => console.log('set-winner-at-firebase'));
+    console.error('gameDocumentPath is not available');
   }
   setTimeout(() => {
     removeGameId();
@@ -69,7 +73,11 @@ export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anoth
       const gameDocumentPath = getGameDocumentPath(contextsData);
       const turnStorageCollectionPath = `${gameDocumentPath}/turnStorage`;
       await addNewTurnFirebase(turnStorageCollectionPath, getUser().id as string, v);
-      await updateGameWithCurrentMove(gameDocumentPath , getAnotherPlayer().id );
+      if (gameDocumentPath) {
+        await updateGameWithCurrentMove(gameDocumentPath , getAnotherPlayer().id );
+      } else {
+        console.error('gameDocumentPath is not available');
+      }
       addNewTurn(v, getTurn() as TurnType);
       setCurrentMove( getAnotherPlayer().id );
     } else {

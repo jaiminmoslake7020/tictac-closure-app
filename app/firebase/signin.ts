@@ -24,8 +24,8 @@ export const showGoogleSignInPopup = async () : Promise<User> => {
 
 onAuthStateChanged(getFirestoreAuth(), (user) => {
   if (user) {
-    console.log("onAuthStateChanged User is signed in:", user);
+    // console.log("onAuthStateChanged User is signed in:", user);
   } else {
-    console.log("onAuthStateChanged No user is signed in.");
+    // console.log("onAuthStateChanged No user is signed in.");
   }
 });

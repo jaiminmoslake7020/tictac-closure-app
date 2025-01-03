@@ -1,12 +1,13 @@
 import {TicTac, TicTacType} from './TicTac';
 import {InitializeContextsFunctionType} from '@contexts/index';
 import {useDiv, useState} from '@components/base';
+import {GameActionCallbacksType} from '@components/game/GameActions';
 
 export type LoadTicTacAppType = {
   render: () => HTMLDivElement;
 }
 
-export const LoadTicTacApp = (contextsData: InitializeContextsFunctionType) : LoadTicTacAppType => {
+export const LoadTicTacApp = (contextsData: InitializeContextsFunctionType, gameActionsObject: GameActionCallbacksType) : LoadTicTacAppType => {
   const {
     getDiv, setDiv
   } = useDiv();
@@ -22,7 +23,7 @@ export const LoadTicTacApp = (contextsData: InitializeContextsFunctionType) : Lo
   };
 
   const render = () => {
-    set( TicTac( contextsData )  );
+    set( TicTac( contextsData , gameActionsObject )  );
 
     setDiv('main');
     setDivOne('content-wrapper');

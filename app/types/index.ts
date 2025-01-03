@@ -100,6 +100,8 @@ export type FirebaseTurnStorageType = {
 export type FirebaseGameType = {
   currentMove: string,
   time: number,
+  creator_last_active_time: number,
+  joiner_last_active_time: number,
   winner?: string,
   creator?: string,
   turnStorage?: Record<MovePositionType, FirebaseTurnStorageType>,

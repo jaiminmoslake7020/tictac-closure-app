@@ -25,7 +25,7 @@ export const User = (contextsData: InitializeContextsFunctionType, initGame: () 
     if (userDoc && userDoc.uid) {
       const t = {
         id: userDoc?.uid,
-        username: userDoc?.displayName || userDoc?.email || 'Anonymous',
+        username: userDoc?.email?.split('@')[0] || userDoc?.displayName || 'Anonymous',
       }
       setUser(t);
       remove();

@@ -33,6 +33,10 @@
   .header {
     @apply flex justify-end w-full;
 
+    .header-content{
+      @apply flex justify-between items-center w-fit mr-6 font-semibold uppercase;
+    }
+
     .navbar-wrapper{
       .navbar{
         @apply flex gap-4 p-4 ;

@@ -6,7 +6,7 @@ export const isRoomReady = (room: FirebaseRoomType) : boolean => {
   if (creator && joiner && creator_last_visit && joiner_last_visit) {
     const diffCreator = getCurrentTime() - creator_last_visit;
     const diffJoiner = getCurrentTime() - joiner_last_visit;
-    console.log('isRoomReady', diffCreator, diffJoiner);
+    // console.log('isRoomReady', diffCreator, diffJoiner);
     return diffCreator < 15000 && diffJoiner < 15000;
   }
   return false;

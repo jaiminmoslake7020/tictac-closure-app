@@ -1,7 +1,7 @@
 import {useDiv} from '@components/base';
 import {NavBar} from '@components/layouts/navbar/NavBar';
 import {IconButton} from '@components/base/html/Button';
-import {GameActionsType} from '@types-dir/index';
+import {GameActionsType} from '@components/game/GameActions';
 
 export const Sidebar = (gameActions: GameActionsType) => {
   const {

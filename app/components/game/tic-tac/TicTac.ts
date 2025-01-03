@@ -2,7 +2,7 @@ import {InfoTab, InfoTabType} from '@components/game/info-tab/InfoTab';
 import { TurnHandler } from '@business-logic/TurnHandler'
 import {
   FirebaseGameType, GamePlayerType,
-  MovePositionType, PlayerType,
+  MovePositionType,
   TicTacTableType,
   TurnHandlerType, UserType,
 } from '@types-dir/index';
@@ -23,12 +23,19 @@ import {
 } from '@contexts/index';
 import {useDiv} from '@components/base';
 import {createGame, onGameCreated} from '@firebase-dir/game';
+import {
+  IsGameAvailableSubscriber
+} from '@components/game/opponent-selection/remote-friend-player/IsGameAvailableSubscriber';
+import {
+  UpdateLastActiveTimeSubscriber
+} from '@components/game/opponent-selection/remote-friend-player/UpdateLastActiveTimeSubscriber';
+import {GameActionCallbacksType} from '@components/game/GameActions';
 
 export type TicTacType = {
   render: () => HTMLDivElement;
 }
 
-export const TicTac = ( contextsData: InitializeContextsFunctionType) :TicTacType => {
+export const TicTac = ( contextsData: InitializeContextsFunctionType, gameActionsObject: GameActionCallbacksType) :TicTacType => {
   let infoTabDiv: InfoTabType | undefined;
   let turnHandler: TurnHandlerType | undefined;
   let ticTacTableType: TicTacTableType | undefined;
@@ -129,6 +136,8 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType) :TicTacTyp
       console.log('Game started', g.id);
       setGameId(g.id);
       setCurrentMove(currentMove);
+      await addGameAvailableSubscriber();
+      await updateGameSubscriber();
       resetGame('creator');
     } else {
       // TODO: Show error message
@@ -143,6 +152,18 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType) :TicTacTyp
       console.log("resetGame");
       resetGame('creator');
     }
+  }
+
+  const addGameAvailableSubscriber = async () => {
+    // console.log('addGameAvailableSubscriber');
+    const { isGameAvailableSubscriber } = IsGameAvailableSubscriber(contextsData, gameActionsObject);
+    await isGameAvailableSubscriber();
+  }
+
+  const updateGameSubscriber = async () => {
+    // console.log('updateGameSubscriber');
+    const { updateGameIsActiveSubscriber } = UpdateLastActiveTimeSubscriber(contextsData, gameActionsObject);
+    await updateGameIsActiveSubscriber();
   }
 
   const getInfoTabDiv = () : InfoTabType => {
@@ -172,6 +193,8 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType) :TicTacTyp
         console.log('TICTAC 2 NEW GAME', gameId);
         setGameId(gameId);
         setCurrentMove(d.currentMove);
+        await addGameAvailableSubscriber();
+        await updateGameSubscriber();
         resetGame('joiner');
       } else {
         if (getUser().id === d.creator) {

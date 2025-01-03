@@ -1,46 +1,73 @@
 import {FirebaseGameType, RoomReadyResponseType, UserType} from '@types-dir/index';
 import {
+  getGameDocumentPath,
   getRandomMove,
   InitializeContextsFunctionType,
-  useContextCurrentMove, useContextGameId, useContextGamePlayerType,
+  useContextCurrentMove, useContextGameId, useContextGamePlayerType, useContextRoomCodeId,
   useContextUserSession,
   UseCurrentMoveHookType,
 } from '@contexts/index';
-import {createGame, onGameCreated} from '@firebase-dir/game';
+import {createGame, getGame, onGameCreated} from '@firebase-dir/game';
 import {addToRoot, createEL} from '@utils/index';
 import {Layout} from '@components/layouts/layout/Layout';
 import {Loader} from '@components/base';
 import {GameActionCallbacksType, GameActions, GameActionsType} from '@components/game/GameActions';
+import {
+  IsGameAvailableSubscriber
+} from '@components/game/opponent-selection/remote-friend-player/IsGameAvailableSubscriber';
+import {
+  UpdateLastActiveTimeSubscriber
+} from '@components/game/opponent-selection/remote-friend-player/UpdateLastActiveTimeSubscriber';
+import {AddErrorWithAction} from '@components/base/ux/notification/AddErrorWithAction';
 
 export const StartGame = (contextsData:InitializeContextsFunctionType, gameActions:GameActionCallbacksType, onLevelSelected: () => void) => {
 
   const { setCurrentMove } = useContextCurrentMove(contextsData) as UseCurrentMoveHookType;
+
   const {
     getUser
   } = useContextUserSession(contextsData);
+
   const {
-    setGameId, getGameId, hasGameId, removeGameId
+    setGameId, getGameId, hasGameId
   } = useContextGameId(contextsData);
 
   const {
-    setPlayerType
+    getRoomCodeId
+  } = useContextRoomCodeId(contextsData);
+
+  const {
+    getPlayerType
   } = useContextGamePlayerType( contextsData );
 
   const {
     showLoader, stopLoader
   } = Loader();
 
-  const startProcessJoiner = async (v:RoomReadyResponseType) => {
-    const {
-      roomCode
-    } = v;
+  const addGameAvailableSubscriber = async () => {
+    // console.log('addGameAvailableSubscriber');
+    const { isGameAvailableSubscriber } = IsGameAvailableSubscriber(contextsData, gameActions);
+    await isGameAvailableSubscriber();
+  }
+
+  const updateGameSubscriber = async () => {
+    // console.log('updateGameSubscriber');
+    const { updateGameIsActiveSubscriber } = UpdateLastActiveTimeSubscriber(contextsData, gameActions);
+    await updateGameIsActiveSubscriber();
+  }
+
+  const createGameForRoomJoiner = async () => {
+    // console.log('createGameForRoomJoiner');
+    const roomCode = getRoomCodeId();
     const userItem = getUser() as UserType;
     const currentMove = getRandomMove(contextsData);
     const g = await createGame(roomCode, currentMove, userItem.id);
     if (g) {
-      console.log('GAME CREATED BY ME', g.id);
+      // console.log('GAME CREATED BY ME', g.id);
       setGameId(g.id);
       setCurrentMove(currentMove);
+      await updateGameSubscriber();
+      await addGameAvailableSubscriber();
       onLevelSelected();
     } else {
       // TODO: Show error message
@@ -48,10 +75,9 @@ export const StartGame = (contextsData:InitializeContextsFunctionType, gameActio
     }
   }
 
-  const startProcessCreator = (v:RoomReadyResponseType) => {
-    const {
-      roomCode
-    } = v;
+  const joinGameForRoomCreator = () => {
+    // console.log('joinGameForRoomCreator');
+    const roomCode = getRoomCodeId();
     let oneTimeExecution = false;
 
     const gA = GameActions(contextsData, gameActions) as GameActionsType;
@@ -66,12 +92,16 @@ export const StartGame = (contextsData:InitializeContextsFunctionType, gameActio
         !hasGameId() &&
         oneTimeExecution === false
       ) {
+
         console.log('Game started Game 1', gameId);
         oneTimeExecution = true;
         setGameId(gameId);
         setCurrentMove(d.currentMove);
         stopLoader();
+        await updateGameSubscriber();
+        await addGameAvailableSubscriber();
         onLevelSelected();
+
       } else {
         console.log('GAME ALREADY STARTED onGameCreated', getGameId(), hasGameId(), oneTimeExecution);
       }
@@ -81,12 +111,52 @@ export const StartGame = (contextsData:InitializeContextsFunctionType, gameActio
 
   }
 
-  const startProcess = async (v:RoomReadyResponseType) => {
-    if (v.playerType === 'joiner') {
-      await startProcessJoiner(v);
+  const startProcess = async () => {
+    console.log('startProcess', getPlayerType());
+    if (getPlayerType() === 'joiner') {
+      await createGameForRoomJoiner();
     } else {
-      startProcessCreator(v);
+      joinGameForRoomCreator();
     }
   }
 
+  const joinGame = async () => {
+    // console.log('joinGame');
+    const { isGameAvailable } = IsGameAvailableSubscriber(contextsData, gameActions);
+    const isItAvailable = await isGameAvailable();
+    // console.log('isItAvailable', isItAvailable);
+    if ( isItAvailable ) {
+      await updateGameSubscriber();
+      await addGameAvailableSubscriber();
+
+      const gameDocumentPath = getGameDocumentPath(contextsData);
+      if (gameDocumentPath) {
+        const gameData = await getGame(gameDocumentPath);
+        if (gameData) {
+          const {
+            currentMove
+          } = gameData;
+          const { setCurrentMove } = useContextCurrentMove(contextsData);
+          setCurrentMove(currentMove);
+          onLevelSelected();
+        } else {
+          AddErrorWithAction('Game is not available at Firebase.', () => {
+            const gA = GameActions(contextsData, gameActions) as GameActionsType;
+            gA.exitRoom();
+          });
+        }
+      } else {
+        AddErrorWithAction('Game path is incorrect.', () => {
+          const gA = GameActions(contextsData, gameActions) as GameActionsType;
+          gA.exitRoom();
+        });
+      }
+
+    }
+  }
+
+  return {
+    startProcess,
+    joinGame
+  };
 }

@@ -222,32 +222,38 @@ export const isItRemoteGame = (contextsData:InitializeContextsFunctionType) : bo
   const {
     getOpponentType
   } = useContextOpponentType( contextsData );
-
   return getOpponentType() === 'remote-friend-player' || getOpponentType() === 'remote-random-player';
 }
 
 export const getGameIdWithRoomCode = (contextsData:InitializeContextsFunctionType) : {
   roomCodeId: string,
   gameId: string
-} => {
+} | null => {
   const {
-    getRoomCodeId
+    getRoomCodeId, hasRoomCodeId
   } = useContextRoomCodeId( contextsData );
   const {
-    getGameId
+    getGameId, hasGameId
   } = useContextGameId( contextsData );
-
-  return {
-    roomCodeId: getRoomCodeId(),
-    gameId: getGameId()
-  };
+  if (hasRoomCodeId() && hasGameId()) {
+    return {
+      roomCodeId: getRoomCodeId(),
+      gameId: getGameId()
+    };
+  }
+  return null;
 }
 
-export const getGameDocumentPath = (contextsData:InitializeContextsFunctionType) : string => {
+export const getGameDocumentPath = (contextsData:InitializeContextsFunctionType) : string | undefined => {
   const {
     roomCodeId, gameId
-  } = getGameIdWithRoomCode( contextsData );
-
+  } = getGameIdWithRoomCode( contextsData ) || {};
+  if (!roomCodeId) {
+    return undefined;
+  }
+  if (!gameId) {
+    return undefined;
+  }
   return `rooms/${roomCodeId}/games/${gameId}`;
 }
 
