@@ -161,7 +161,7 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
     if (getWinner() === null) {
       const result = getGameIdWithRoomCode(contextsData);
       if (result && result.roomCodeId && result.gameId) {
-        getDivOne().innerHTML = `Room Code: ${result.roomCodeId} Game Id: ${result.gameId}`;
+        // getDivOne().innerHTML = `Room Code: ${result.roomCodeId} Game Id: ${result.gameId}`;
       } else{
         // console.log('result', result);
         getDivOne().innerHTML = '';
