@@ -1,4 +1,5 @@
 import {
+  getGameIdWithRoomCode,
   InitializeContextsFunctionType, useContextGamePlayerType,
   useContextOpponentType,
   useContextWinner
@@ -13,7 +14,8 @@ export type InfoTabType = {
   render : () => HTMLDivElement,
   addTurn:  () => void,
   updateInfo: (reload: () => void) => void,
-  resetApp: () => void
+  resetApp: () => void,
+  updateRoomInfo: () => void
 };
 
 export const InfoTab = (onLevelChange: () => void, contextsData: InitializeContextsFunctionType) :InfoTabType => {
@@ -28,6 +30,11 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
   const {
     getDiv,
     setDiv
+  } = useDiv();
+
+  const {
+    getDiv: getDivOne,
+    setDiv: setDivOne
   } = useDiv();
 
   const {
@@ -87,6 +94,9 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
     if ( getOpponentType() === 'computer-program' ) {
       addChangeLevelBtn();
     }
+    setDivOne('room-info');
+    getDiv().append(getDivOne());
+    updateRoomInfo();
     return getDiv();
   }
 
@@ -132,6 +142,7 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
   const onGameRestart = (reload: Function) => {
     removeTurn();
     removeWinner();
+    updateRoomInfo();
     const w = getRestartGameButton();
     if (w) {
       (w as RestartGameButtonType).remove();
@@ -145,9 +156,26 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
     getDiv().append((getRestartGameButton() as RestartGameButtonType).render());
   }
 
+  const updateRoomInfo = () => {
+    const { getWinner } = useContextWinner(contextsData);
+    if (getWinner() === null) {
+      const result = getGameIdWithRoomCode(contextsData);
+      if (result && result.roomCodeId && result.gameId) {
+        getDivOne().innerHTML = `Room Code: ${result.roomCodeId} Game Id: ${result.gameId}`;
+      } else{
+        // console.log('result', result);
+        getDivOne().innerHTML = '';
+      }
+    } else {
+      // console.log('winner is found');
+      getDivOne().innerHTML = '';
+    }
+  }
+
   const updateInfo = (reload: () => void) => {
     // console.log('updateInfo');
     const { getWinner } = useContextWinner(contextsData);
+    updateRoomInfo();
     if ( getWinner() !== null) {
       // console.log('getWinner');
       addWinner();
@@ -158,6 +186,7 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
   }
 
   const resetApp = () => {
+    updateRoomInfo();
     removeWinner();
     removeRestartButton();
   }
@@ -166,7 +195,8 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
     render,
     addTurn,
     updateInfo,
-    resetApp
+    resetApp,
+    updateRoomInfo
   }
 }
 

@@ -1,7 +1,7 @@
 import { TurnType, WiningSequenceType, WinnerType } from '@types-dir/index';
-import { winnerData } from '@data/index';
+import {turnData, winnerData} from '@data/index';
 import {
-  InitializeContextsFunctionType, useContextGameId,
+  InitializeContextsFunctionType,
   useContextTurnStorage,
   useContextWinner,
   useContextWinnerSeq
@@ -47,7 +47,7 @@ export const CheckWinner = async (
         setAtFirebase(contextsData, foundWinner);
       }
     }
-    if ([turnStorage["O"],turnStorage["X"]].length === 9) {
+    if ( (turnStorage[turnData.turn] || []).length + (turnStorage[turnData.anotherTurn] || []).length === 9) {
       setWinner( 'NONE' );
     }
   }

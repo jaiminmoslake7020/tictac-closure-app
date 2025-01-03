@@ -16,6 +16,7 @@ import {isRoomReady} from '@utils/room';
 import {GameActionCallbacksType, GameActions} from '@components/game/GameActions';
 import {StartGame} from '@components/game/opponent-selection/remote-friend-player/StartGame';
 import {RoomActiveSubscriber} from '@components/game/opponent-selection/remote-friend-player/RoomActiveSubscriber';
+import {Loader} from '@components/base';
 
 export type CheckRoomSelectedType = {
   startCheckRoomSelected: () => void
@@ -39,6 +40,10 @@ export const CheckRoomSelected = (
     setPlayerType
   } = useContextGamePlayerType( contextsData );
 
+  const {
+    stopLoader, showLoader
+  } = Loader();
+
   const startGameProcess = async () => {
     const {
       startProcess
@@ -49,7 +54,10 @@ export const CheckRoomSelected = (
   const joinGameProcess = async () => {
     const {
       joinGame
-    } = StartGame(contextsData, gameActions, onLevelSelected);
+    } = StartGame(contextsData, gameActions, () => {
+      stopLoader();
+      onLevelSelected();
+    });
     await joinGame();
   }
 
@@ -61,7 +69,7 @@ export const CheckRoomSelected = (
   }
 
   const onRoomSelected = async (v:RoomReadyResponseType) => {
-    console.log('ROOM', v.roomCode);
+    // console.log('ROOM', v.roomCode);
     setRoomCodeId(v.roomCode);
     setAnotherPlayer(v.anotherPlayer);
     setPlayerType(v.playerType);
@@ -82,7 +90,7 @@ export const CheckRoomSelected = (
     if (
       isRoomReady(roomData)
     ) {
-      console.log("Room with data in session is at Firebase");
+      // console.log("Room with data in session is at Firebase");
       const userId = getUser().id;
       const playerType :GamePlayerType = userId === roomData['creator'].id ? 'creator' : 'joiner';
       const anotherPlayer = playerType === 'creator' ? roomData['joiner'] as UserType : roomData['creator'] as UserType;
@@ -94,17 +102,18 @@ export const CheckRoomSelected = (
       setPlayerType(playerType);
       setAnotherPlayer(anotherPlayer);
       if (hasGameId() && getGameId()) {
-        console.log("Room with data in session has GameId ", roomCode, getGameId(), playerType);
+        // console.log("Room with data in session has GameId ", roomCode, getGameId(), playerType);
+        showLoader();
         await addRoomSubscriber(roomReadyResponse);
         await joinGameProcess();
       } else {
-        console.log("Room with data in session does not have GameId", roomCode, playerType);
+        // console.log("Room with data in session does not have GameId", roomCode, playerType);
         await startGameProcess();
       }
     } else {
       removeGameId();
       removeRoomCodeId();
-      console.log("Room with data in session is not at Firebase");
+      // console.log("Room with data in session is not at Firebase");
       askRoomSelection();
     }
   }
@@ -120,13 +129,13 @@ export const CheckRoomSelected = (
         // check if room is having player and joiner online
         await roomDataPresentProcess(getRoomCodeId() , roomData);
       } else {
-        console.log("Room does not exist");
+        // console.log("Room does not exist");
         removeGameId();
         removeRoomCodeId();
         askRoomSelection();
       }
     } else {
-      console.log('ROOM is not present', getRoomCodeId());
+      // console.log('ROOM is not present', getRoomCodeId());
       askRoomSelection();
     }
   }

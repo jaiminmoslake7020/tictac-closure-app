@@ -14,6 +14,7 @@ import {
 } from '@types-dir/index';
 import {TicTacCellValue} from '@tic-tac/tic-tac-cell/TicTacCellValue';
 import {InitializeContextsFunctionType, useContextTurnStorage, useContextWinnerSeq} from '@contexts/index';
+import {turnData} from '@data/index';
 
 // console.log("common/index");
 
@@ -73,6 +74,25 @@ export const tdClassList = {
 } as Record<TDClassIdType, string>
 
 
+export const userMove = (columnId: ColumnIdType) => {
+  const newElement = getTd(columnId) as HTMLDivElement;
+  if (!newElement) {
+    console.error("newElement should not be undefined", newElement);
+  }
+
+  newElement.classList.add(tdClassList.typeO);
+  if ( hasTdCell(columnId) ) {
+    getTdCell(columnId).addText(turnData.turn);
+  } else {
+    const cv = TicTacCellValue();
+    newElement.append(cv.render());
+    cv.addText(turnData.turn);
+    addTdCell(columnId, cv);
+  }
+
+  setClicked(columnId);
+}
+
 export const anotherPersonMove = (columnId: ColumnIdType) => {
   const newElement = getTd(columnId) as HTMLDivElement;
   if (!newElement) {
@@ -85,11 +105,11 @@ export const anotherPersonMove = (columnId: ColumnIdType) => {
   }, StopAnimateMoveX);
 
   if ( hasTdCell(columnId) ) {
-    getTdCell(columnId).addText('X');
+    getTdCell(columnId).addText(turnData.anotherTurn);
   } else {
     const cv = TicTacCellValue();
     newElement.append(cv.render());
-    cv.addText('X');
+    cv.addText(turnData.anotherTurn);
     addTdCell(columnId, cv);
   }
 

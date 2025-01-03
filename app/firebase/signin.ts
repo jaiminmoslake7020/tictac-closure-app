@@ -17,7 +17,7 @@ export const showGoogleSignInPopup = async () : Promise<User> => {
   await setPersistence(getFirestoreAuth(), browserLocalPersistence);
   const r = await signInWithPopup(getFirestoreAuth(), getGoogleProvider());
   const user = r.user;
-  console.log('Google Sign In', user);
+  // console.log('Google Sign In', user);
   return user;
 }
 

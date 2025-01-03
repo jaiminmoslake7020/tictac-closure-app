@@ -6,7 +6,7 @@ import {Layout} from '@components/layouts/layout/Layout';
 import {CheckRoomSelected} from '@components/game/opponent-selection/remote-friend-player/CheckRoomSelected';
 import {
   InitializeContextsFunctionType, useContextGameId,
-  useContextOpponentType, useContextRoomCodeId,
+  useContextOpponentType, useContextRoomCodeId, useContextTurnStorage,
   UseOpponentTypeHookType,
 } from '@contexts/index';
 import {useState} from '@components/base';
@@ -46,6 +46,11 @@ export const OpponentSelection = (contextsData: InitializeContextsFunctionType, 
   }
 
   const onPlayerSelected = async (value: OpponentType) => {
+    const {
+      resetTurnStorage
+    } = useContextTurnStorage(contextsData);
+    resetTurnStorage();
+
     setOpponentType(value);
     if (value === 'computer-program') {
       askAppLevelType();
@@ -64,7 +69,7 @@ export const OpponentSelection = (contextsData: InitializeContextsFunctionType, 
 
   const render = async () => {
     if ( hasOpponentType() ) {
-      console.log('OpponentType Exists', getOpponentType());
+      // console.log('OpponentType Exists', getOpponentType());
       await onPlayerSelected(getOpponentType());
     } else {
       showForm();

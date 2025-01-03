@@ -66,7 +66,7 @@ export const NotificationHandler = () : NotificationHandlerType => {
   }
 
   const removeNotification = (id:string) => {
-    console.log('REMOVE NOTIFICATION', id);
+    // console.log('REMOVE NOTIFICATION', id);
   }
 
   return {  addError, addInfo, addSuccess, addWarning, removeNotification };

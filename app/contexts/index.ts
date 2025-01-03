@@ -9,9 +9,11 @@ import {UseWinnerHookType, useWinnerHook} from './useWinnerHook';
 import {UseTurnHookType, useTurnHook} from './useTurnType';
 import {UseRoomCodeIdHookType, useRoomCodeIdHook} from './useRoomCodeId';
 import {UseGameIdHookType, useGameIdHook} from '@contexts/useGameId';
-import {UserType} from '@types-dir/index';
+import {MovePositionType, UserType} from '@types-dir/index';
 import {getRandomInt} from '@utils/index';
 import {useGamePlayerTypeHook, UseGamePlayerTypeHookType} from '@contexts/useGamePlayerType';
+import {setGameCompletedAtFirebase} from '@business-logic/TurnHandler';
+import {turnData} from '@data/index';
 
 export type {
   UseAppLevelHookType,
@@ -288,4 +290,14 @@ export const getRandomMove = (contextsData:InitializeContextsFunctionType) : str
   const idArray = [userItem.id, getAnotherPlayer().id] as string[];
   const number = getRandomInt(0, 1);
   return idArray[number];
+}
+
+export const getAllCurrentTurns = (contextsData: InitializeContextsFunctionType) : MovePositionType[] => {
+  const { getTurnStorage } = useContextTurnStorage(contextsData);
+  const turnStorage = getTurnStorage();
+  return [ ...(turnStorage[turnData.turn] || []), ...(turnStorage[turnData.anotherTurn] || [])];
+}
+
+export const checkGameCompleted = (contextsData: InitializeContextsFunctionType) => {
+  return getAllCurrentTurns(contextsData).length === 9;
 }

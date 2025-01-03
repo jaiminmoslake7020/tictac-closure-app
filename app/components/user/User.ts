@@ -35,14 +35,14 @@ export const User = (contextsData: InitializeContextsFunctionType, initGame: () 
       remove();
       stopLoader();
       // TODO: call addError function here to show error message
-      console.log("Error upserting user");
+      // console.log("Error upserting user");
     }
   }
 
   const render = () => {
     const userJson = checkUserExists();
     if (userJson) {
-      console.log("USER EXISTS");
+      // console.log("USER EXISTS");
       // console.log("userJson", userJson);
       return undefined;
     } else {

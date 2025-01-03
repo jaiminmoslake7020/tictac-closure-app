@@ -3,9 +3,13 @@ import {
 } from '@types-dir/index';
 import { CheckWinner } from './CheckWinner';
 import {
+  checkGameCompleted, getAllCurrentTurns,
   getGameDocumentPath,
-  InitializeContextsFunctionType, useContextAnotherPlayer, useContextCurrentMove, useContextGameId,
-  useContextOpponentType, useContextRoomCodeId,
+  InitializeContextsFunctionType,
+  useContextAnotherPlayer,
+  useContextCurrentMove,
+  useContextGameId,
+  useContextOpponentType,
   useContextTurnHookType,
   useContextTurnStorage, useContextUserSession
 } from '@contexts/index';
@@ -17,6 +21,7 @@ import {
 } from '@firebase-dir/index';
 import {UseCurrentMoveHookType} from '@contexts/index';
 import {turnData} from '@data/index';
+import {setGameCompletedWithoutWinner} from '@firebase-dir/game';
 
 export const setWinnerAtFirebase = (contextsData: InitializeContextsFunctionType, foundWinner: WinnerType) => {
   const { getUser } = useContextUserSession( contextsData );
@@ -37,17 +42,35 @@ export const setWinnerAtFirebase = (contextsData: InitializeContextsFunctionType
   }, 3000);
 }
 
-export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anotherPersonMadeMove: ( v: MovePositionType ) => Promise<void> ) : TurnHandlerType => {
+export const setGameCompletedAtFirebase = (contextsData: InitializeContextsFunctionType) => {
+  const gameDocumentPath = getGameDocumentPath( contextsData );
+  const { removeGameId } = useContextGameId(contextsData);
+  if (gameDocumentPath) {
+    setGameCompletedWithoutWinner( gameDocumentPath ).then(r => console.log('set-game-completed-at-firebase'));
+  } else {
+    console.error('gameDocumentPath is not available');
+  }
+  setTimeout(() => {
+    removeGameId();
+  }, 3000);
+}
+
+export const checkGameCompletedInner = (contextsData: InitializeContextsFunctionType) => {
+  const isCompleted = checkGameCompleted(contextsData);
+  if (isCompleted) {
+    setGameCompletedAtFirebase(contextsData);
+    return true;
+  }
+  return false;
+}
+
+export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anotherPersonMadeMove: ( v: MovePositionType ) => Promise<void>) : TurnHandlerType => {
 
   const { setCurrentMove } = useContextCurrentMove(contextsData) as UseCurrentMoveHookType;
 
   const {
     getOpponentType
   } = useContextOpponentType(contextsData);
-
-  const {
-    getRoomCodeId
-  } = useContextRoomCodeId(contextsData);
 
   const {
     getUser
@@ -89,6 +112,7 @@ export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anoth
   const afterChangeTurn = () => {
     if (opponentType === 'remote-friend-player') {
       CheckWinner(contextsData, setWinnerAtFirebase);
+      checkGameCompletedInner(contextsData);
     } else {
       CheckWinner(contextsData);
     }
@@ -117,19 +141,26 @@ export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anoth
         userId, position
       } = doc;
       if (
-        userId !== getUser().id
+        !getAllCurrentTurns(contextsData).includes(position)
       ) {
-        //other person made move
-        if (getTurn() === turnData.turn) {
-          changeTurn();
-        }
-        addNewTurn(position, getTurn() as TurnType);
-        CheckWinner(contextsData, setWinnerAtFirebase);
+        if (
+          userId !== getUser().id
+        ) {
+          //other person made move
+          if (getTurn() === turnData.turn) {
+            changeTurn();
+          }
+          addNewTurn(position, getTurn() as TurnType);
+          CheckWinner(contextsData, setWinnerAtFirebase);
+          checkGameCompletedInner(contextsData);
 
-        // now make it change who will have move
-        setCurrentMove( getUser().id );
-        changeTurn();
-        await anotherPersonMadeMove( position );
+          // now make it change who will have move
+          setCurrentMove( getUser().id );
+          changeTurn();
+          await anotherPersonMadeMove( position );
+        }
+      } else {
+        // console.log('position is already taken', position, userId);
       }
     });
   }

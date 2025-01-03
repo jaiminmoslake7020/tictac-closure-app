@@ -72,7 +72,7 @@ export const createRoom = async (user: UserType): Promise<string | undefined> =>
 
 export const onRoomGotReady = (roomCodeId: string, onRoomReady: (v: Partial<RoomReadyResponseType>) => Promise<void> ) => {
   const unsubscribe = listenToDocument('rooms', roomCodeId, async (d: any) => {
-    console.log("onRoomGotReady call");
+    // console.log("onRoomGotReady call");
     isRoomReady(d);
     if (d['creator'] && d['joiner']) {
       unsubscribe();

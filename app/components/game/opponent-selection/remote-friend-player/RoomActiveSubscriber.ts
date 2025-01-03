@@ -62,7 +62,7 @@ export const RoomActiveSubscriber = (
         await checkRoomActive();
       }, 10000);
     } else {
-      console.log('roomCode empty');
+      // console.log('roomCode empty');
     }
   }
 

@@ -43,7 +43,7 @@ export const OpponentSelectionForm = (onPlayerSelected: (v: OpponentType) => Pro
   ] as PlayerType[];
 
   const render = () => {
-    console.log('Showing Opponent Selection Form');
+    // console.log('Showing Opponent Selection Form');
     setDiv('player-selection');
     setForm('player-selection-form', onFormSubmit, 'player-selection-form');
 

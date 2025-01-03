@@ -3,11 +3,11 @@ import {
   getGameDocumentPath,
   getRandomMove,
   InitializeContextsFunctionType,
-  useContextCurrentMove, useContextGameId, useContextGamePlayerType, useContextRoomCodeId,
+  useContextCurrentMove, useContextGameId, useContextGamePlayerType, useContextRoomCodeId, useContextTurnStorage,
   useContextUserSession,
   UseCurrentMoveHookType,
 } from '@contexts/index';
-import {createGame, getGame, onGameCreated} from '@firebase-dir/game';
+import {createGame, getAllGameMoves, getGame, onGameCreated} from '@firebase-dir/game';
 import {addToRoot, createEL} from '@utils/index';
 import {Layout} from '@components/layouts/layout/Layout';
 import {Loader} from '@components/base';
@@ -19,6 +19,7 @@ import {
   UpdateLastActiveTimeSubscriber
 } from '@components/game/opponent-selection/remote-friend-player/UpdateLastActiveTimeSubscriber';
 import {AddErrorWithAction} from '@components/base/ux/notification/AddErrorWithAction';
+import {turnData} from '@data/index';
 
 export const StartGame = (contextsData:InitializeContextsFunctionType, gameActions:GameActionCallbacksType, onLevelSelected: () => void) => {
 
@@ -27,6 +28,10 @@ export const StartGame = (contextsData:InitializeContextsFunctionType, gameActio
   const {
     getUser
   } = useContextUserSession(contextsData);
+
+  const {
+    addNewTurn
+  } = useContextTurnStorage(contextsData);
 
   const {
     setGameId, getGameId, hasGameId
@@ -71,7 +76,7 @@ export const StartGame = (contextsData:InitializeContextsFunctionType, gameActio
       onLevelSelected();
     } else {
       // TODO: Show error message
-      console.log('Error creating game by me');
+      // console.log('Error creating game by me');
     }
   }
 
@@ -93,7 +98,7 @@ export const StartGame = (contextsData:InitializeContextsFunctionType, gameActio
         oneTimeExecution === false
       ) {
 
-        console.log('Game started Game 1', gameId);
+        // console.log('Game started Game 1', gameId);
         oneTimeExecution = true;
         setGameId(gameId);
         setCurrentMove(d.currentMove);
@@ -103,16 +108,16 @@ export const StartGame = (contextsData:InitializeContextsFunctionType, gameActio
         onLevelSelected();
 
       } else {
-        console.log('GAME ALREADY STARTED onGameCreated', getGameId(), hasGameId(), oneTimeExecution);
+        // console.log('GAME ALREADY STARTED onGameCreated', getGameId(), hasGameId(), oneTimeExecution);
       }
     }, () => {
-      console.log('onGameCreated Finished');
+      // console.log('onGameCreated Finished');
     });
 
   }
 
   const startProcess = async () => {
-    console.log('startProcess', getPlayerType());
+    // console.log('startProcess', getPlayerType());
     if (getPlayerType() === 'joiner') {
       await createGameForRoomJoiner();
     } else {
@@ -138,6 +143,19 @@ export const StartGame = (contextsData:InitializeContextsFunctionType, gameActio
           } = gameData;
           const { setCurrentMove } = useContextCurrentMove(contextsData);
           setCurrentMove(currentMove);
+          const moves = await getAllGameMoves(gameDocumentPath);
+          if (moves) {
+            moves.forEach((v) => {
+              const {
+                position, userId
+              } = v;
+              if (userId === getUser().id) {
+                addNewTurn(position, turnData.turn);
+              } else {
+                addNewTurn(position, turnData.anotherTurn);
+              }
+            });
+          }
           onLevelSelected();
         } else {
           AddErrorWithAction('Game is not available at Firebase.', () => {

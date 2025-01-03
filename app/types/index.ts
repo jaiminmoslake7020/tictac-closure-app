@@ -94,7 +94,9 @@ export type FirebaseUserType = {
 }
 
 export type FirebaseTurnStorageType = {
-  move: string,
+  position: MovePositionType,
+  userId: string,
+  id?: MovePositionType
 }
 
 export type FirebaseGameType = {

@@ -10,18 +10,18 @@ export const App = () => {
   let isTabClosed = true;
 
   const beforeUnloadEvent = (event: BeforeUnloadEvent) => {
-    console.log('event', event);
+    // console.log('event', event);
     event.preventDefault();
     event.returnValue = ''; // This is required for older browsers to show a confirmation dialog
     isTabClosed = false;
 
     // Optional: Perform any cleanup or save data here
-    console.log('Window is about to close!');
+    // console.log('Window is about to close!');
   }
 
   const unloadEvent = async (event: BeforeUnloadEvent) => {
     if (isTabClosed) {
-      console.log('Tab is being closed!');
+      // console.log('Tab is being closed!');
       // Perform tab-specific cleanup actions here
       const { getUser } = useContextUserSession(contextsData);
       await unliveUser(getUser().id);
@@ -29,13 +29,13 @@ export const App = () => {
   }
 
   const addCloseWindow = () => {
-    console.log('addCloseWindow');
+    // console.log('addCloseWindow');
     window.addEventListener('beforeunload', beforeUnloadEvent);
     window.addEventListener('unload', unloadEvent);
   }
 
   const removeCloseWindow = () => {
-    console.log('removeCloseWindow');
+    // console.log('removeCloseWindow');
     window.removeEventListener('beforeunload', beforeUnloadEvent);
     window.removeEventListener('unload', unloadEvent);
   }

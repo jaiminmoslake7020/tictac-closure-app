@@ -1,17 +1,23 @@
 import {
-  addDocument, getDocument,
+  addDocument, fetchAllDocuments, getDocument,
   insertNewDocumentWithId,
   listenToCollectionV2,
   updateDocument
 } from '@firebase-dir/core';
-import {FirebaseGameType, FirebaseGameTypeDocumentReference, GamePlayerType, MovePositionType} from '@types-dir/index';
+import {
+  FirebaseGameType,
+  FirebaseGameTypeDocumentReference,
+  FirebaseTurnStorageType,
+  GamePlayerType,
+  MovePositionType
+} from '@types-dir/index';
 import {QueryDocumentSnapshot} from '@firebase/firestore';
 
 export const updateGameWithCurrentMove = async (gamePath: string, currentMove: string) => {
   try {
     await updateDocument(gamePath, {currentMove});
   } catch (e) {
-    console.log('Error updateGameWithCurrentMove', e);
+    console.error('Error updateGameWithCurrentMove', e);
   }
 };
 
@@ -19,7 +25,7 @@ export const addNewTurnFirebase = async (turnStorageCollectionPath: string, user
   try {
     return await insertNewDocumentWithId(turnStorageCollectionPath, String(position), {userId, position});
   } catch (e) {
-    console.log('Error addNewTurnFirebase: ', e);
+    console.error('Error addNewTurnFirebase: ', e);
   }
 };
 
@@ -27,7 +33,7 @@ export const createGame = async (roomCode: string, currentMove: string, userId: 
   try {
    return await addDocument(`rooms/${roomCode}/games`, {currentMove: currentMove, time: (new Date()).getTime(), creator: userId});
   } catch (e) {
-    console.log('Error startGame', e);
+    console.error('Error startGame', e);
   }
 }
 
@@ -37,7 +43,7 @@ export const updateLastActive = async (gamePath: string, playerType: GamePlayerT
       [playerType.toLowerCase()+'_last_active_time']: (new Date()).getTime()}
     );
   } catch (e) {
-    console.log('Error startGame', e);
+    console.error('Error startGame', e);
   }
 }
 
@@ -49,15 +55,35 @@ export const getGame = async (gamePath: string) : Promise<FirebaseGameType | und
     }
     return undefined;
   } catch (e) {
-    console.log('Error startGame', e);
+    console.error('Error startGame', e);
+  }
+}
+
+export const getAllGameMoves = async (gamePath: string) : Promise<FirebaseTurnStorageType[] | undefined> => {
+  try {
+    const gameDocuments = await fetchAllDocuments(gamePath+'/turnStorage');
+    if (gameDocuments && Array.isArray(gameDocuments)) {
+      return gameDocuments as FirebaseTurnStorageType[];
+    }
+    return undefined;
+  } catch (e) {
+    console.error('Error startGame', e);
   }
 }
 
 export const setWinner = async (gamePath: string, winner: string) => {
   try {
-    await updateDocument(gamePath, {winner});
+    await updateDocument(gamePath, {game_completed: true, winner});
   } catch (e) {
-    console.log('Error startGame', e);
+    console.error('Error startGame', e);
+  }
+}
+
+export const setGameCompletedWithoutWinner = async (gamePath: string) => {
+  try {
+    await updateDocument(gamePath, {game_completed: true, no_winner: true});
+  } catch (e) {
+    console.error('Error startGame', e);
   }
 }
 
@@ -69,7 +95,7 @@ export const onGameCreated = (roomCode: string, onGameReady: (d:FirebaseGameType
     const time = d.data().time;
 
     if (time && (new Date()).getTime() - time < 10000) {
-      console.log('onGameCreated Time Diff',  (new Date()).getTime() - time );
+      // console.log('onGameCreated Time Diff',  (new Date()).getTime() - time );
       // unsubscribe();
       onGameReady(d.data(), d.id);
       didNotFound = false;
@@ -77,7 +103,7 @@ export const onGameCreated = (roomCode: string, onGameReady: (d:FirebaseGameType
     if (start === l - 1) {
       // unsubscribe();
       if (didNotFound) {
-        console.log("last row", start, l);
+        // console.log("last row", start, l);
         onFinished();
       }
     }

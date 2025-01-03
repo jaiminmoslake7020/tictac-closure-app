@@ -95,6 +95,9 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType, gameAction
     resetTurnStorage();
 
     if (isItRemoteGame(contextsData)) {
+      //sets correct room code and game id in info tab
+      getInfoTabDiv().updateRoomInfo();
+
       const {
         getCurrentMove
       } = useContextCurrentMove( contextsData );
@@ -133,7 +136,7 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType, gameAction
     const currentMove = getRandomMove(contextsData);
     const g = await createGame(roomCodeId, currentMove, userItem.id);
     if (g) {
-      console.log('Game started', g.id);
+      // console.log('Game started', g.id);
       setGameId(g.id);
       setCurrentMove(currentMove);
       await addGameAvailableSubscriber();
@@ -141,7 +144,7 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType, gameAction
       resetGame('creator');
     } else {
       // TODO: Show error message
-      console.log('Error creating game');
+      // console.log('Error creating game');
     }
   }
 
@@ -149,7 +152,7 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType, gameAction
     if (isItRemoteGame(contextsData)) {
       await reStartGame();
     } else {
-      console.log("resetGame");
+      // console.log("resetGame");
       resetGame('creator');
     }
   }
@@ -178,7 +181,7 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType, gameAction
   }
 
   const addRestartGameListener = () => {
-    console.log('addRestartGameListener');
+    // console.log('addRestartGameListener');
     const { getRoomCodeId } = useContextRoomCodeId(contextsData) as UseRoomCodeIdHookType;
     const { getGameId, setGameId } = useContextGameId(contextsData);
     const { setCurrentMove } = useContextCurrentMove(contextsData);
@@ -190,7 +193,7 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType, gameAction
         getUser().id !== d.creator &&
         gameId !== getGameId()
       ) {
-        console.log('TICTAC 2 NEW GAME', gameId);
+        // console.log('TICTAC 2 NEW GAME', gameId);
         setGameId(gameId);
         setCurrentMove(d.currentMove);
         await addGameAvailableSubscriber();
@@ -198,13 +201,13 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType, gameAction
         resetGame('joiner');
       } else {
         if (getUser().id === d.creator) {
-          console.log('TICTAC SAME USER ');
+          // console.log('TICTAC SAME USER ');
         } else if (gameId === getGameId()) {
-          console.log('TICTAC SAME GAME');
+          // console.log('TICTAC SAME GAME');
         }
       }
     }, () => {
-      console.log('Game started Game 2');
+      // console.log('Game started Game 2');
     });
   }
 

@@ -33,8 +33,9 @@ export const IsGameAvailableSubscriber = (contextsData:InitializeContextsFunctio
         const { creator_last_active_time, joiner_last_active_time } = gameData;
         const isJoinerActive = getCurrentTime() - joiner_last_active_time > 5000;
         const isCreatorActive = getCurrentTime() - creator_last_active_time > 5000;
+        // checking one of them has closed browser
         if (
-          isJoinerActive && isCreatorActive
+          isJoinerActive || isCreatorActive
         ) {
           // console.log('Game is expired.', getCurrentTime(), joiner_last_active_time, creator_last_active_time);
           showErrorMessage('Game is expired.');

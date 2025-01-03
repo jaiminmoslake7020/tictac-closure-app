@@ -1,11 +1,11 @@
 import {Firestore} from '@firebase/firestore';
 import {FirebaseApp} from '@firebase/app';
-import { Auth, GoogleAuthProvider } from '@firebase/auth';
+import { Auth } from '@firebase/auth';
 import { Analytics } from '@firebase/analytics';
 import {initializeApp} from 'firebase/app';
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import {addDoc, collection, doc, getDoc, getFirestore, onSnapshot, setDoc, updateDoc} from 'firebase/firestore';
+import {addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, setDoc, updateDoc} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_CONFIG_API_KEY as string,
@@ -109,7 +109,7 @@ export const listenToCollectionV2 = (collectionName:string, onRetrieve: (d:any, 
     console.error("Error listening to collection changes:", error);
     onFinished();
   }, () => {
-    console.log('Listening to collection, ended');
+    // console.log('Listening to collection, ended');
     onFinished();
   }); // Call this function to stop listening
 }
@@ -121,7 +121,7 @@ export const insertNewDocumentWithId = async (path: string, proposedDocId: strin
     const docRef = doc(f, path, proposedDocId);
     await setDoc(docRef, docData);
   } catch (e) {
-    console.log('Error at insertNewDocumentWithId: ', path, proposedDocId, e);
+    console.error('Error at insertNewDocumentWithId: ', path, proposedDocId, e);
   }
 };
 
@@ -131,7 +131,7 @@ export const insertNewDocumentWithoutId = async (path: string, docData: any) => 
     const docRef = doc(f, path);
     await setDoc(docRef, docData);
   } catch (e) {
-    console.log('Error insertNewDocumentWithoutId: ', path, e);
+    console.error('Error insertNewDocumentWithoutId: ', path, e);
   }
 };
 
@@ -151,7 +151,7 @@ export const updateDocument = async (path: string, updatedDocData: any) => {
     const docRef = doc(f, path);
     await updateDoc(docRef, updatedDocData);
   } catch (e) {
-    console.log('Error updating firebase document:', path, updatedDocData, e);
+    console.error('Error updating firebase document:', path, updatedDocData, e);
   }
 };
 
@@ -161,6 +161,24 @@ export const getDocument = async (path: string) => {
     const docRef = doc(f, path);
     return await getDoc(docRef);
   } catch (e) {
-    console.log('Error getDocument:', path, e);
+    console.error('Error getDocument:', path, e);
+  }
+};
+
+// Fetch all documents
+export const fetchAllDocuments = async (collectionName: string) => {
+  try {
+    const f = getFirestoreObject();
+    const collectionRef = collection(f, collectionName);
+    const querySnapshot = await getDocs(collectionRef);
+    const documents = querySnapshot.docs.map(doc => ({
+      id: doc.id, // Document ID
+      ...doc.data(), // Document data
+    }));
+
+    // console.log('Documents:', documents);
+    return documents;
+  } catch (error) {
+    console.error('Error fetching documents:', error);
   }
 };
