@@ -5,7 +5,7 @@ import { Analytics } from '@firebase/analytics';
 import {initializeApp} from 'firebase/app';
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import {addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, setDoc, updateDoc} from 'firebase/firestore';
+import {addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, setDoc, updateDoc, deleteDoc} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_CONFIG_API_KEY as string,
@@ -162,6 +162,18 @@ export const getDocument = async (path: string) => {
     return await getDoc(docRef);
   } catch (e) {
     console.error('Error getDocument:', path, e);
+  }
+};
+
+export const deleteDocument = async (path: string) => {
+  try {
+    const f = getFirestoreObject();
+    const docRef = doc(f, path);
+    await deleteDoc(docRef);
+    return true;
+  } catch (e) {
+    console.error('Error getDocument:', path, e);
+    return false;
   }
 };
 

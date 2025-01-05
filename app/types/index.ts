@@ -132,3 +132,12 @@ export type FirebaseAppModelType = {
   users: Record<string, FirebaseUserType>
 };
 
+
+export type WaitingRoomDbItemType = {
+  id: string;
+  live: number;
+  username: string;
+  gameId?: string;
+  roomId?: string;
+  playerType?: GamePlayerType;
+};

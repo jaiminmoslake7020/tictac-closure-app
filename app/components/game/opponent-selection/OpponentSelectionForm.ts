@@ -23,16 +23,15 @@ export const OpponentSelectionForm = (onPlayerSelected: (v: OpponentType) => Pro
     e.preventDefault();
   }
 
-  // {
-  //   label: 'Remote Random Player',
-  //     value: 'remote-random-player'
-  // }
-
   const players = [
     {
-    label: 'Remote Friend Player',
-    value: 'remote-friend-player'
-  },
+       label: 'Remote Random Player',
+         value: 'remote-random-player'
+    },
+    {
+      label: 'Remote Friend Player',
+      value: 'remote-friend-player'
+    },
   //   {
   //   label: 'Computer Program',
   //   value: 'computer-program'

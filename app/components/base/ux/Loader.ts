@@ -1,17 +1,23 @@
 import {appendEl} from '@utils/index';
 import {
-  useDiv, useSpan
+  H6,
+  useDiv, useSpan, useState
 } from '@components/base/html';
 
 export type LoaderType = {
   showLoader: () => void,
-  stopLoader: () => void
+  stopLoader: () => void,
+  addText: (text: string) => void
 };
 
 export const Loader = () => {
   const {getDiv, setDiv, removeDiv} = useDiv();
   const {getDiv: getDivOne, setDiv: setDivOne, removeDiv:removeDivOne } = useDiv();
   const {getSpan, setSpan, removeSpan} = useSpan();
+  const {
+    set: setVarOne,
+    get: getVarOne
+  } = useState();
 
   const render = () => {
     setDiv('loading-wrapper');
@@ -20,6 +26,15 @@ export const Loader = () => {
     getDivOne().append(getSpan());
     getDiv().append(getDivOne());
     return getDiv();
+  }
+
+  const addText = (text: string) => {
+    setVarOne(H6(text, 'loading-info-text'));
+    getDivOne().append( getVarOne() );
+  }
+
+  const updateText = (text: string) => {
+    getVarOne().innerText = text;
   }
 
   const showLoader = () => {
@@ -35,6 +50,8 @@ export const Loader = () => {
 
   return {
     showLoader,
-    stopLoader
+    stopLoader,
+    addText,
+    updateText
   }
 }

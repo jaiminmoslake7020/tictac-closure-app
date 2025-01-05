@@ -11,6 +11,9 @@ import {
 } from '@contexts/index';
 import {useState} from '@components/base';
 import {GameActionCallbacksType, GameActions} from '@components/game/GameActions';
+import {
+  RemoteRandomWaitingRoom
+} from '@components/game/opponent-selection/remote-random-player/RemoteRandomWaitingRoom';
 
 export type OpponentSelectionType = {
   render : () => void | Promise<void>,
@@ -37,12 +40,25 @@ export const OpponentSelection = (contextsData: InitializeContextsFunctionType, 
   }
 
   const remoteFriendPlayerSelected  = () => {
+    console.log('remoteFriendPlayerSelected');
     const {
       startCheckRoomSelected
     } = CheckRoomSelected(
       contextsData, onLevelSelected, gameActions
     );
     startCheckRoomSelected();
+  }
+
+  const remoteRandomPlayerSelected  = () => {
+    const {
+      render
+    } = RemoteRandomWaitingRoom(
+      contextsData, () => {
+        setOpponentType('remote-friend-player');
+        remoteFriendPlayerSelected();
+      }, gameActions
+    );
+    render();
   }
 
   const onPlayerSelected = async (value: OpponentType) => {
@@ -56,6 +72,8 @@ export const OpponentSelection = (contextsData: InitializeContextsFunctionType, 
       askAppLevelType();
     } else if (value === 'remote-friend-player') {
       remoteFriendPlayerSelected();
+    } else if (value === 'remote-random-player') {
+      remoteRandomPlayerSelected();
     }
   }
 

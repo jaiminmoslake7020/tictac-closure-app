@@ -9,6 +9,10 @@
   }
 }
 
+.loading-wrapper-child{
+  @apply tic-tac-width;
+}
+
 body {
   @apply bg-bkg text-content;
 }
