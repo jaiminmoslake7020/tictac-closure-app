@@ -1,7 +1,7 @@
 import {
   InitializeContextsFunctionType,
   isItRemoteGame,
-  isItRemotePlayerTurn,
+  isItRemotePlayerTurn, isUsedTurn,
   useContextTurnStorage
 } from '@contexts/index';
 import {ChangeFunctionType, ColumnIdType, MovePositionType} from '@types-dir/index';
@@ -41,7 +41,9 @@ export const Render = (
   addTd( columnId,  td);
   if (isItRemoteGame(contextData) && isItRemotePlayerTurn(contextData)) {
     getTd(columnId).classList.add(tdClassList.typeDisabled);
-  } else {
+  } else if (
+    !isUsedTurn(contextData, columnId)
+  ) {
     addClickListener(contextData, columnId, changeTurn);
   }
   CheckPreviouslyStoredMoves(contextData, columnId);

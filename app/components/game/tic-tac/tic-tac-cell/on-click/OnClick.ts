@@ -19,12 +19,9 @@ export const OnClick = async (
       addTdCell(columnId, cv);
     }
     setClicked( columnId );
+    getTd(columnId).classList.add(tdClassList.typeDisabled);
+    removeClickListener(columnId);
     await appliedChangeTurn(moveType);
-  } else {
-    getTd(columnId).classList.add(tdClassList.typeError);
-    setTimeout(() => {
-      getTd(columnId).classList.remove(tdClassList.typeError);
-    }, 200);
   }
 }
 

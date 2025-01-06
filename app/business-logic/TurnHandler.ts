@@ -109,12 +109,12 @@ export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anoth
     afterChangeTurn();
   }
 
-  const afterChangeTurn = () => {
+  const afterChangeTurn = async () => {
     if (opponentType === 'remote-friend-player') {
-      CheckWinner(contextsData, setWinnerAtFirebase);
+      await CheckWinner(contextsData, setWinnerAtFirebase);
       checkGameCompletedInner(contextsData);
     } else {
-      CheckWinner(contextsData);
+      await CheckWinner(contextsData);
     }
     anotherPersonChangeTurn();
   }
@@ -151,7 +151,7 @@ export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anoth
             changeTurn();
           }
           addNewTurn(position, getTurn() as TurnType);
-          CheckWinner(contextsData, setWinnerAtFirebase);
+          await CheckWinner(contextsData, setWinnerAtFirebase);
           checkGameCompletedInner(contextsData);
 
           // now make it change who will have move

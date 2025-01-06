@@ -56,6 +56,11 @@ export const GameActions = ( contextsData: InitializeContextsFunctionType , game
   const logout = async () => {
     document.querySelector('.main')?.remove();
     await unliveUser(getUser().id);
+
+    removeGameId();
+    removeOpponentType(); // it makes sense to ask the user to select a new opponent
+    removeRoomCodeId();
+
     logoutUser();
     onLogout();
   }

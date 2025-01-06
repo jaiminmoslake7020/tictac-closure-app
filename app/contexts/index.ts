@@ -9,7 +9,7 @@ import {UseWinnerHookType, useWinnerHook} from './useWinnerHook';
 import {UseTurnHookType, useTurnHook} from './useTurnType';
 import {UseRoomCodeIdHookType, useRoomCodeIdHook} from './useRoomCodeId';
 import {UseGameIdHookType, useGameIdHook} from '@contexts/useGameId';
-import {MovePositionType, UserType} from '@types-dir/index';
+import {ColumnIdType, MovePositionType, UserType} from '@types-dir/index';
 import {getRandomInt} from '@utils/index';
 import {useGamePlayerTypeHook, UseGamePlayerTypeHookType} from '@contexts/useGamePlayerType';
 import {setGameCompletedAtFirebase} from '@business-logic/TurnHandler';
@@ -296,6 +296,11 @@ export const getAllCurrentTurns = (contextsData: InitializeContextsFunctionType)
   const { getTurnStorage } = useContextTurnStorage(contextsData);
   const turnStorage = getTurnStorage();
   return [ ...(turnStorage[turnData.turn] || []), ...(turnStorage[turnData.anotherTurn] || [])];
+}
+
+export const isUsedTurn = (contextsData: InitializeContextsFunctionType, columnId: ColumnIdType) => {
+  const moveType = columnId.replace('-', '') as MovePositionType;
+  return getAllCurrentTurns(contextsData).includes(moveType);
 }
 
 export const checkGameCompleted = (contextsData: InitializeContextsFunctionType) => {

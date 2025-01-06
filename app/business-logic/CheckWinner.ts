@@ -1,6 +1,7 @@
 import { TurnType, WiningSequenceType, WinnerType } from '@types-dir/index';
 import {turnData, winnerData} from '@data/index';
 import {
+  checkGameCompleted,
   InitializeContextsFunctionType,
   useContextTurnStorage,
   useContextWinner,
@@ -46,8 +47,7 @@ export const CheckWinner = async (
       if (setAtFirebase) {
         setAtFirebase(contextsData, foundWinner);
       }
-    }
-    if ( (turnStorage[turnData.turn] || []).length + (turnStorage[turnData.anotherTurn] || []).length === 9) {
+    } else if (checkGameCompleted( contextsData )) {
       setWinner( 'NONE' );
     }
   }

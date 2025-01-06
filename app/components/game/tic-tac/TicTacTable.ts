@@ -53,8 +53,6 @@ export const TicTacTable = ( getTurnHandlerType: () => TurnHandlerType , updateI
       trArray.push(tr);
     }
     getTicTacTable().classList.add('tic-tac-table');
-    getTicTacTableBody().classList.add('tic-tac-table-body');
-    getTicTacTable().append(getTicTacTableBody());
     return getTicTacTable();
   }
 

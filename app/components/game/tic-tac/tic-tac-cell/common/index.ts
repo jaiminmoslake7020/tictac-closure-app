@@ -90,6 +90,7 @@ export const userMove = (columnId: ColumnIdType) => {
     addTdCell(columnId, cv);
   }
 
+  disableCell(columnId);
   setClicked(columnId);
 }
 
@@ -113,10 +114,21 @@ export const anotherPersonMove = (columnId: ColumnIdType) => {
     addTdCell(columnId, cv);
   }
 
+  disableCell(columnId);
   setClicked(columnId);
 }
 
-export const winnerIsAvailable = (
+export const performSuccessAnimation = (columnId: ColumnIdType) => {
+  setTimeout(() => {
+    getTd(columnId).classList.add(tdClassList.typeSuccess);
+    setTimeout(() => {
+      getTd(columnId).classList.add(tdClassList.stopAnimateMoveSuccess);
+    }, 200);
+  }, getStopAnimateMoveSuccess());
+  incrementStopAnimateMoveSuccess();
+}
+
+export const changeRelevantCellToSuccessStatus = (
   contextData: InitializeContextsFunctionType ,
   columnId: ColumnIdType,
   winnerSequence: WiningSequenceType
@@ -125,13 +137,7 @@ export const winnerIsAvailable = (
   const anotherPersonMoves = getAnotherPlayerTurns();
   const moveType = columnId.replace('-', '') as MovePositionType;
   if (winnerSequence.includes( moveType )) {
-    setTimeout(() => {
-      getTd(columnId).classList.add(tdClassList.typeSuccess);
-      setTimeout(() => {
-        getTd(columnId).classList.add(tdClassList.stopAnimateMoveSuccess);
-      }, 200);
-    }, getStopAnimateMoveSuccess());
-    incrementStopAnimateMoveSuccess();
+    performSuccessAnimation(columnId);
     if (
       Array.isArray(anotherPersonMoves)
       && anotherPersonMoves.includes(moveType)
@@ -144,6 +150,12 @@ export const winnerIsAvailable = (
   }
 }
 
+export const disableCell = (columnId: ColumnIdType) => {
+  if (!getTd(columnId).classList.contains(tdClassList.typeDisabled)) {
+    getTd(columnId).classList.add( tdClassList.typeDisabled );
+  }
+}
+
 export const checkWinnerIsAvailable = (
   contextData: InitializeContextsFunctionType ,
   columnId: ColumnIdType
@@ -151,6 +163,6 @@ export const checkWinnerIsAvailable = (
   const {getWinnerSequence} = useContextWinnerSeq(contextData);
   const winnerSequence = getWinnerSequence();
   if (Array.isArray(winnerSequence)) {
-    winnerIsAvailable( contextData, columnId , winnerSequence);
+    changeRelevantCellToSuccessStatus( contextData, columnId , winnerSequence);
   }
 }
