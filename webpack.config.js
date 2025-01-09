@@ -5,9 +5,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 
-
-console.log('FIREBASE_CONFIG_API_KEY', process.env.FIREBASE_CONFIG_API_KEY);
-
 // Load environment variables
 const env = dotenv.config().parsed;
 
@@ -24,8 +21,6 @@ const envKeys = !process.env.FIREBASE_CONFIG_API_KEY ? Object.keys(env).reduce((
   'process.env.FIREBASE_CONFIG_APP_ID': JSON.stringify(process.env.FIREBASE_CONFIG_APP_ID),
   'process.env.FIREBASE_CONFIG_MEASUREMENT_ID': JSON.stringify(process.env.FIREBASE_CONFIG_MEASUREMENT_ID),
 };
-
-console.log('envKeys', envKeys);
 
 module.exports = env  => ({
   entry: env.production ? './app/index.ts' : [
