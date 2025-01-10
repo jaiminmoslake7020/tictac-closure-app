@@ -82,7 +82,7 @@ body {
   @apply w-full flex flex-col items-center gap-8;
 
   .info-tab{
-    @apply absolute top-12 left-0 w-full ;
+    @apply absolute top-14 left-0 w-full ;
     @apply md:static md:tic-tac-width;
     @apply flex-wrap justify-center md:flex-nowrap flex items-center min-h-[2.5rem];
     @apply gap-4 md:justify-between;
