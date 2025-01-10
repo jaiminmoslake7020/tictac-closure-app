@@ -6,9 +6,10 @@ import {
   GoogleAuthProvider,
   setPersistence,
   signInWithPopup,
-  User
+  User,
+  onAuthStateChanged
 } from "@firebase/auth";
-import {getFirestoreAuth} from '@firebase-dir/core';
+import {getFirestoreAuth} from './core';
 
 // Docs: https://source.corp.google.com/piper///depot/google3/third_party/devsite/firebase/en/docs/auth/web/google-signin.md
 
@@ -24,3 +25,12 @@ export const showGoogleSignInPopup = async () : Promise<User> => {
   const r = await signInWithPopup(getFirestoreAuth(), getGoogleProvider());
   return r.user;
 }
+
+onAuthStateChanged(getFirestoreAuth(), (user) => {
+  if (user) {
+    // console.log("onAuthStateChanged User is signed in:", user);
+  } else {
+    localStorage.clear();
+    window.location.reload();
+  }
+});
