@@ -1,8 +1,9 @@
 import './css/style.scss';
-import './assets/icon.png';
-import { App } from './components';
+import {App} from '@components/index';
+import {initSession} from '@session/index';
 
-window.addEventListener('load', () => {
+window.addEventListener('load',  () => {
+  initSession();
   const app = App();
   app.init();
 });

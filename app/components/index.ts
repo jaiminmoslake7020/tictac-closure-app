@@ -1,17 +1,1 @@
 export { App } from './App';
-export { AddStyle } from './AddStyle';
-export { TicTac } from './TicTac';
-export { TicTacTable } from './TicTacTable';
-export { TicTacCell } from './TicTacCell';
-export { TicTacCellRow } from './TicTacCellRow';
-export { TicTacCellIdentifier } from './TicTacCellIdentifier';
-export { TicTacCellValue } from './TicTacCellValue';
-export { InfoTab } from './InfoTab';
-export { TurnHandler } from './TurnHandler';
-export { AskForAppLevelType } from './AskForAppLevelType';
-export { LoadTicTacApp } from './LoadTicTacApp';
-export { WhosTurn } from './WhosTurn';
-export { Winner } from './Winner';
-export { RestartGameButton } from './RestartGameButton';
-export { AppLevelTypeDropdown } from './AppLevelTypeDropdown';
-export { ChangeAppLevelInfoTabButton } from './ChangeAppLevelInfoTabButton';

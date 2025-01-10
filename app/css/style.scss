@@ -1,11 +1,16 @@
-@use "base/index";
-
-
+@use "base";
+@use "components";
+@use "pages/user";
+@use "pages/opponent-selection";
 
 @layer base{
   .tic-tac-width {
-    @apply w-[90%] md:w-[60%] lg:max-w-[40rem];
+    @apply w-[90%] md:w-[70%] lg:max-w-[48rem];
   }
+}
+
+.loading-wrapper-child{
+  @apply tic-tac-width;
 }
 
 body {
@@ -15,6 +20,24 @@ body {
 
 #root {
   @apply w-screen h-screen flex justify-center items-center;
+
+  .main-wrapper{
+    @apply w-screen flex justify-center;
+  }
+
+  .main-content-wrapper{
+     @apply w-full flex justify-center;
+
+     .player-selection{
+       @apply tic-tac-width;
+     }
+
+     .main{
+       @apply tic-tac-width;
+     }
+
+  }
+
 }
 
 @keyframes btn-animation {
@@ -45,21 +68,42 @@ body {
     @apply w-[9rem] text-center;
   }
 
+  &.inverse-btn{
+    @apply text-content bg-bkg;
+
+    &:hover{
+      @apply bg-opacity-70;
+    }
+  }
+
 }
 
 .wrapper-div{
   @apply w-full flex flex-col items-center gap-8;
 
   .info-tab{
-    @apply flex-wrap justify-center md:flex-nowrap tic-tac-width flex items-center min-h-[2.5rem];
+    @apply absolute top-12 left-0 w-full ;
+    @apply md:static md:tic-tac-width;
+    @apply flex-wrap justify-center md:flex-nowrap flex items-center min-h-[2.5rem];
     @apply gap-4 md:justify-between;
 
     .info-p{
       @apply font-semibold;
       @apply w-full md:w-fit text-center md:text-left;
+
+      &.player-text{
+        @apply px-4 py-2 ;
+        &.user-is-player{
+          @apply text-blue-700 bg-content rounded-lg;
+        }
+        &.user-is-not-a-player{}
+      }
     }
 
     .winner-found{
+      @apply font-semibold;
+      @apply px-4 py-2 ;
+
       @apply text-blue-300;
       @apply w-full md:w-fit text-center md:text-left;
 
