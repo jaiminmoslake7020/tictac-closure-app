@@ -4,7 +4,7 @@ name: Deploy TicTac Game
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["firebase-multi-player"]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -29,16 +29,16 @@ jobs:
       matrix:
         node-version: [ 18 ] # Test on multiple Node.js versions
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Set up Node.js
+      - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Install dependencies
         run: npm install
-      - name: Run build
+      - name: Run build script with environment variables from GitHub Secrets
         env:
           FIREBASE_CONFIG_API_KEY: ${{ secrets.FIREBASE_CONFIG_API_KEY }}
           FIREBASE_CONFIG_AUTH_DOMAIN: ${{ secrets.FIREBASE_CONFIG_AUTH_DOMAIN }}
@@ -48,9 +48,9 @@ jobs:
           FIREBASE_CONFIG_APP_ID: ${{ secrets.FIREBASE_CONFIG_APP_ID }}
           FIREBASE_CONFIG_MEASUREMENT_ID: ${{ secrets.FIREBASE_CONFIG_MEASUREMENT_ID }}
         run: npm run build
-      - name: Setup Pages
+      - name: Setup Pages environment
         uses: actions/configure-pages@v5
-      - name: Upload artifact
+      - name: Upload artifact for deployment job
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./build/
