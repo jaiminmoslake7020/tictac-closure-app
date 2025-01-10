@@ -126,10 +126,10 @@ export const StartGame = (contextsData:InitializeContextsFunctionType, gameActio
   }
 
   const joinGame = async () => {
-    console.log('joinGame');
+    // console.log('joinGame');
     const { isGameAvailable } = IsGameAvailableSubscriber(contextsData, gameActions);
     const isItAvailable = await isGameAvailable();
-    console.log('isItAvailable', isItAvailable);
+    // console.log('isItAvailable', isItAvailable);
     if ( isItAvailable ) {
       await updateGameSubscriber();
       await addGameAvailableSubscriber();

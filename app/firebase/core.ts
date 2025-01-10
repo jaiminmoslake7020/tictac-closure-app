@@ -1,11 +1,22 @@
 import {Firestore} from '@firebase/firestore';
 import {FirebaseApp} from '@firebase/app';
-import { Auth } from '@firebase/auth';
-import { Analytics } from '@firebase/analytics';
+import {Auth} from '@firebase/auth';
+import {Analytics} from '@firebase/analytics';
 import {initializeApp} from 'firebase/app';
-import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
-import {addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, setDoc, updateDoc, deleteDoc} from 'firebase/firestore';
+import {getAnalytics} from "firebase/analytics";
+import {getAuth} from "firebase/auth";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  onSnapshot,
+  setDoc,
+  updateDoc
+} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_CONFIG_API_KEY as string,
@@ -60,10 +71,9 @@ export const listenToDocument = (collectionName:string, documentId: string, onRe
 
   const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
     if (docSnapshot.exists()) {
-      // console.log("Document data:", docSnapshot.data()); // Current document data
       onRetrieve( docSnapshot.data() );
     } else {
-      // console.log("No such document!");
+      console.log('Document does not exist');
     }
   }, (error) => {
     console.error("Error listening to document changes:", error);
@@ -79,10 +89,8 @@ export const listenToCollection = (collectionName:string, onRetrieve: (d:any, le
 
   return onSnapshot(collectionRef, (snapshot) => {
     const length = snapshot.docChanges().length;
-    // console.log('snapshot.docChanges()', );
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
-        // console.log("New document added: ", change.doc.data());
         onRetrieve(change.doc.data(), length);
       }
     });
@@ -98,10 +106,8 @@ export const listenToCollectionV2 = (collectionName:string, onRetrieve: (d:any, 
 
   return onSnapshot(collectionRef, (snapshot) => {
     const length = snapshot.docChanges().length;
-    // console.log('snapshot.docChanges()', );
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
-        // console.log("New document added: ", change.doc.data());
         onRetrieve(change.doc, length);
       }
     });
@@ -109,7 +115,6 @@ export const listenToCollectionV2 = (collectionName:string, onRetrieve: (d:any, 
     console.error("Error listening to collection changes:", error);
     onFinished();
   }, () => {
-    // console.log('Listening to collection, ended');
     onFinished();
   }); // Call this function to stop listening
 }
@@ -183,13 +188,10 @@ export const fetchAllDocuments = async (collectionName: string) => {
     const f = getFirestoreObject();
     const collectionRef = collection(f, collectionName);
     const querySnapshot = await getDocs(collectionRef);
-    const documents = querySnapshot.docs.map(doc => ({
+    return querySnapshot.docs.map(doc => ({
       id: doc.id, // Document ID
       ...doc.data(), // Document data
     }));
-
-    // console.log('Documents:', documents);
-    return documents;
   } catch (error) {
     console.error('Error fetching documents:', error);
   }

@@ -6,7 +6,7 @@ import {
 } from '@contexts/index';
 import {ChangeFunctionType, ColumnIdType, MovePositionType} from '@types-dir/index';
 import {addClickListener, removeClickListener} from '@tic-tac/tic-tac-cell/on-click/OnClick';
-import {anotherPersonMove, checkWinnerIsAvailable, getTd, tdClassList} from '@tic-tac/tic-tac-cell/common';
+import {anotherPersonMove, checkWinnerIsAvailable, disableCell, getTd, tdClassList} from '@tic-tac/tic-tac-cell/common';
 
 export const Update = (
   contextData: InitializeContextsFunctionType,
@@ -24,10 +24,7 @@ export const Update = (
     checkWinnerIsAvailable( contextData, columnId );
   } else {
     if ( isItRemoteGame(contextData) && isItRemotePlayerTurn(contextData) ) {
-      if (!getTd(columnId).classList.contains(tdClassList.typeDisabled)) {
-        // console.log('disbaleing as it is other player move');
-        getTd(columnId).classList.add( tdClassList.typeDisabled );
-      }
+      disableCell(columnId);
     } else if (Array.isArray(anotherPersonMoves)) {
       if (
         !anotherPersonMoves.includes(moveType)
@@ -36,10 +33,8 @@ export const Update = (
       } else if (!getTd(columnId).classList.contains(tdClassList.typeX)) {
         anotherPersonMove(columnId);
       }
-    } else {
-      if (winnerSequence === null) {
-        addClickListener( contextData, columnId, newChangeTurn );
-      }
+    } else if (winnerSequence === null) {
+      addClickListener( contextData, columnId, newChangeTurn );
     }
   }
 

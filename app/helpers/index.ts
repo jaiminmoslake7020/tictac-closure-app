@@ -8,7 +8,7 @@ export const appLevelList = {
 } as Record<AppLevelType, AppLevelType>;
 
 
-export const StopAnimateMoveX = 200;
+export const StopAnimateMoveXDuration = 200;
 
 export const stopAnimateMoveSuccess = () => {
   let StopAnimateMoveSuccess = 100;

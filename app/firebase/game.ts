@@ -91,19 +91,14 @@ export const onGameCreated = (roomCode: string, onGameReady: (d:FirebaseGameType
   let start = 0 ;
   let didNotFound = true;
   const unsubscribe = listenToCollectionV2(`rooms/${roomCode}/games`, (d: QueryDocumentSnapshot<FirebaseGameType>, l: number) => {
-    // console.log('onGameCreated', d.data(), d.id);
     const time = d.data().time;
 
     if (time && (new Date()).getTime() - time < 10000) {
-      // console.log('onGameCreated Time Diff',  (new Date()).getTime() - time );
-      // unsubscribe();
       onGameReady(d.data(), d.id);
       didNotFound = false;
     }
     if (start === l - 1) {
-      // unsubscribe();
       if (didNotFound) {
-        // console.log("last row", start, l);
         onFinished();
       }
     }

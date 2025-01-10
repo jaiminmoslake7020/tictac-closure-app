@@ -14,6 +14,7 @@ import {GameActionCallbacksType, GameActions} from '@components/game/GameActions
 import {
   RemoteRandomWaitingRoom
 } from '@components/game/opponent-selection/remote-random-player/RemoteRandomWaitingRoom';
+import {computerProgram, remoteFriendPlayer, remoteRandomPlayer, sameDevicePlay} from '@data/index';
 
 export type OpponentSelectionType = {
   render : () => void | Promise<void>,
@@ -40,7 +41,7 @@ export const OpponentSelection = (contextsData: InitializeContextsFunctionType, 
   }
 
   const remoteFriendPlayerSelected  = () => {
-    console.log('remoteFriendPlayerSelected');
+    // console.log('remoteFriendPlayerSelected');
     const {
       startCheckRoomSelected
     } = CheckRoomSelected(
@@ -54,7 +55,8 @@ export const OpponentSelection = (contextsData: InitializeContextsFunctionType, 
       render
     } = RemoteRandomWaitingRoom(
       contextsData, () => {
-        setOpponentType('remote-friend-player');
+        // remote random player or remote LLM becomes remote friend player once room and game is selected
+        setOpponentType(remoteFriendPlayer);
         remoteFriendPlayerSelected();
       }, gameActions
     );
@@ -68,11 +70,13 @@ export const OpponentSelection = (contextsData: InitializeContextsFunctionType, 
     resetTurnStorage();
 
     setOpponentType(value);
-    if (value === 'computer-program') {
+    if (value === computerProgram) {
       askAppLevelType();
-    } else if (value === 'remote-friend-player') {
+    } else if (value === sameDevicePlay) {
+      askAppLevelType();
+    } else if (value === remoteFriendPlayer) {
       remoteFriendPlayerSelected();
-    } else if (value === 'remote-random-player') {
+    } else if (value === remoteRandomPlayer) {
       remoteRandomPlayerSelected();
     }
   }

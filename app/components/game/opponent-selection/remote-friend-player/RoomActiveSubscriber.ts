@@ -51,7 +51,7 @@ export const RoomActiveSubscriber = (
 
   // TODO: change in some kind of subscription where we can remove the listener
   const checkRoomActive = async () => {
-    console.log('checkRoomActive');
+    // console.log('checkRoomActive');
     const {
       getRoomCodeId
     } = useContextRoomCodeId(contextsData);

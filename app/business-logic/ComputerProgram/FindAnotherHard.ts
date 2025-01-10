@@ -2,6 +2,7 @@ import {MovePositionType, MovePositionTypeWithNull, WinnerType} from '@types-dir
 import {turnData, winnerData} from '@data/index';
 import { FindAnotherMedium } from './FindAnotherMedium'
 import {
+  checkGameCompleted,
   InitializeContextsFunctionType,
   useContextTurnStorage,
   useContextWinner,
@@ -21,9 +22,9 @@ export const FindAnotherHard = (
   let foundWinner = null as WinnerType;
   let foundAnotherMove = null as MovePositionTypeWithNull;
 
-  const currentValues = turnStorage[ turn ];
+  const currentValues = turnStorage[ turn ] || [];
   const anotherCurrentValues = turnStorage[ anotherTurn ] || [];
-  if (currentValues.length + anotherCurrentValues.length === 9) {
+  if (checkGameCompleted(contextsData)) {
     return undefined;
   }
 

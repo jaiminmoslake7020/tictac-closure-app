@@ -54,7 +54,7 @@ export type TDClassIdType = 'typeO' | 'typeX' | 'typeError' | 'typeSuccess' | 't
 
 export type OpponentType = 'remote-random-player' | 'remote-friend-player' | 'computer-program' | 'same-device-play';
 export type OpponentLabelType = 'Remote Random Player' | 'Remote Friend Player' | 'Computer Program' | 'Same Device Play';
-export type PlayerType = {
+export type OpponentFormButtonType = {
   label: OpponentLabelType,
   value: OpponentType
 };

@@ -1,7 +1,8 @@
-import {OpponentType, PlayerType} from '@types-dir/index';
+import {OpponentType, OpponentFormButtonType} from '@types-dir/index';
 import { useDiv, useForm } from '@components/base';
 import {History} from '@utils/index';
 import {OpponentSelectionItem, type OpponentSelectionItemType} from './OpponentSelectionItem';
+import {opponentFormButtonTypeList, opponentTypes, opponentTypesObject} from '@data/index';
 
 export type OpponentSelectionFormType = {
   render : () => HTMLDivElement,
@@ -23,30 +24,12 @@ export const OpponentSelectionForm = (onPlayerSelected: (v: OpponentType) => Pro
     e.preventDefault();
   }
 
-  const players = [
-    {
-       label: 'Remote Random Player',
-         value: 'remote-random-player'
-    },
-    {
-      label: 'Remote Friend Player',
-      value: 'remote-friend-player'
-    },
-  //   {
-  //   label: 'Computer Program',
-  //   value: 'computer-program'
-  // },  {
-  //   label: 'Same Device Play',
-  //   value: 'same-device-play'
-  // }
-  ] as PlayerType[];
-
   const render = () => {
     // console.log('Showing Opponent Selection Form');
     setDiv('player-selection');
     setForm('player-selection-form', onFormSubmit, 'player-selection-form');
 
-    players.forEach(({label,value}) => {
+    opponentFormButtonTypeList.forEach(({label,value}) => {
       const item1 = OpponentSelectionItem(label, async () => {
         remove();
         await onPlayerSelected(value as OpponentType);

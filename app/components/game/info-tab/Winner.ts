@@ -33,8 +33,7 @@ export const Winner = (
   }
 
   const render = () => {
-    // console.log('winner-render');
-    setP( P('', 'winner-found') )
+    setP( P('', 'winner-found info-p player-text') )
     return getP();
   }
 

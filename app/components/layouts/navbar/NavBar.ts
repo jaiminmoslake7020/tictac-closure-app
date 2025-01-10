@@ -1,7 +1,8 @@
 import {useDiv} from '@components/base';
 import {NavLink} from '@components/base/ux/NavLink';
-import {getGameId, getRoomCodeId, getUser} from '@session/index';
+import {getGameId, getOpponentType, getRoomCodeId, getUser} from '@session/index';
 import {GameActionsType} from '@components/game/GameActions';
+import {opponentTypesObject} from '@data/index';
 
 
 export const NavBar = (gameActions: GameActionsType) => {
@@ -12,8 +13,6 @@ export const NavBar = (gameActions: GameActionsType) => {
     getDiv: getDivOne, setDiv: setDivOne
   } = useDiv();
 
-  // console.log('gameActions', gameActions);
-
   const render = () => {
     setDiv('navbar-wrapper');
     setDivOne('navbar');
@@ -21,20 +20,22 @@ export const NavBar = (gameActions: GameActionsType) => {
     const user = getUser();
     const roomCodeId = getRoomCodeId();
     const gameId = getGameId();
+    const opponentType = getOpponentType();
 
-    // if (gameId) {
-    //   const n1 = NavLink('Exit Room', 'fa-solid fa-arrow-up-from-bracket rotate-[270deg] ', gameActions.exitGame);
-    //   getDivOne().append(n1.render());
-    // }
+    if (opponentType) {
+      const navLink = NavLink(opponentTypesObject[opponentType], 'fa-solid fa-gamepad ', gameActions.changeGameType);
+      navLink.getBtn().setAttribute('title', 'Change Game Type');
+      getDivOne().append(navLink.render());
+    }
 
     if (roomCodeId && gameActions.exitRoom) {
-      const n2 = NavLink('Exit Room', 'fa-solid fa-door-open', gameActions.exitRoom);
-      getDivOne().append(n2.render());
+      const navLink = NavLink('Exit Room', 'fa-solid fa-door-open', gameActions.exitRoom);
+      getDivOne().append(navLink.render());
     }
 
     if (user && gameActions.logout) {
-      const n3 = NavLink('Logout', 'fa-solid fa-power-off', gameActions.logout);
-      getDivOne().append(n3.render());
+      const navLink = NavLink('Logout', 'fa-solid fa-power-off', gameActions.logout);
+      getDivOne().append(navLink.render());
     }
 
     getDiv().append(getDivOne());

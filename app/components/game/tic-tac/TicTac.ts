@@ -19,7 +19,7 @@ import {
   useContextRoomCodeId,
   UseRoomCodeIdHookType,
   useContextGameId,
-  getRandomMove
+  getRandomMove, isItSameDeviceGame
 } from '@contexts/index';
 import {useDiv} from '@components/base';
 import {createGame, onGameCreated} from '@firebase-dir/game';
@@ -70,13 +70,11 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType, gameAction
     await getTicTacTable().updateOtherPersonMove( v );
   }
 
-  const resetGame = (playerType: GamePlayerType) => {
+  const resetGameJoiner = () => {
+    getInfoTabDiv().resetApp();
+  }
 
-    if (playerType === 'joiner') {
-      //remove winner
-      getInfoTabDiv().resetApp();
-    }
-
+  const resetGame = () => {
     const {
       removeWinner
     } = useContextWinner( contextsData );
@@ -89,10 +87,17 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType, gameAction
     const {
       resetTurnStorage
     } = useContextTurnStorage( contextsData );
+    const {
+      resetTurn
+    } = useContextTurnHookType( contextsData );
 
     removeWinner();
     removeWinnerSequence();
     resetTurnStorage();
+
+    if (isItSameDeviceGame(contextsData)) {
+      resetTurn();
+    }
 
     if (isItRemoteGame(contextsData)) {
       //sets correct room code and game id in info tab
@@ -141,7 +146,7 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType, gameAction
       setCurrentMove(currentMove);
       await addGameAvailableSubscriber();
       await updateGameSubscriber();
-      resetGame('creator');
+      resetGame();
     } else {
       // TODO: Show error message
       // console.log('Error creating game');
@@ -153,7 +158,7 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType, gameAction
       await reStartGame();
     } else {
       // console.log("resetGame");
-      resetGame('creator');
+      resetGame();
     }
   }
 
@@ -198,7 +203,8 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType, gameAction
         setCurrentMove(d.currentMove);
         await addGameAvailableSubscriber();
         await updateGameSubscriber();
-        resetGame('joiner');
+        resetGameJoiner();
+        resetGame();
       } else {
         if (getUser().id === d.creator) {
           // console.log('TICTAC SAME USER ');
@@ -220,7 +226,9 @@ export const TicTac = ( contextsData: InitializeContextsFunctionType, gameAction
     const table = TicTacTable( getTurnHandlerType , updateInfo , contextsData );
     setTicTacTable(table);
     getWrapperDiv().append(table.render());
-    addRestartGameListener();
+    if (isItRemoteGame(contextsData)) {
+      addRestartGameListener();
+    }
     return getWrapperDiv();
   }
 

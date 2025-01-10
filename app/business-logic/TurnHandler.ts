@@ -5,7 +5,7 @@ import { CheckWinner } from './CheckWinner';
 import {
   checkGameCompleted, getAllCurrentTurns,
   getGameDocumentPath,
-  InitializeContextsFunctionType,
+  InitializeContextsFunctionType, isItRemoteGame,
   useContextAnotherPlayer,
   useContextCurrentMove,
   useContextGameId,
@@ -92,7 +92,7 @@ export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anoth
   } = useContextTurnStorage(contextsData);
 
   const changeTurnOfTurnHandler = async (v :  MovePositionType) => {
-    if (opponentType === 'remote-friend-player') {
+    if (isItRemoteGame(contextsData)) {
       const gameDocumentPath = getGameDocumentPath(contextsData);
       const turnStorageCollectionPath = `${gameDocumentPath}/turnStorage`;
       await addNewTurnFirebase(turnStorageCollectionPath, getUser().id as string, v);
@@ -110,7 +110,7 @@ export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anoth
   }
 
   const afterChangeTurn = async () => {
-    if (opponentType === 'remote-friend-player') {
+    if (isItRemoteGame(contextsData)) {
       await CheckWinner(contextsData, setWinnerAtFirebase);
       checkGameCompletedInner(contextsData);
     } else {
@@ -124,7 +124,7 @@ export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anoth
       changeTurn();
     } else if (opponentType === 'computer-program') {
       ComputerProgramMove(contextsData);
-    } else if (opponentType === 'remote-friend-player') {
+    } else if (isItRemoteGame(contextsData)) {
       changeTurn();
     }
   }
@@ -134,7 +134,7 @@ export const TurnHandler = ( contextsData: InitializeContextsFunctionType, anoth
   }
 
   if (
-    opponentType === 'remote-friend-player'
+    isItRemoteGame(contextsData)
   ) {
     RemoteFriendPlayer( contextsData , async (doc: any) => {
       const {

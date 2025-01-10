@@ -72,17 +72,13 @@ export const createRoom = async (user: UserType): Promise<string | undefined> =>
 
 export const onRoomGotReady = (roomCodeId: string, onRoomReady: (v: Partial<RoomReadyResponseType>) => Promise<void> ) => {
   const unsubscribe = listenToDocument('rooms', roomCodeId, async (d: any) => {
-    // console.log("onRoomGotReady call");
     isRoomReady(d);
     if (d['creator'] && d['joiner']) {
       unsubscribe();
-      // console.log('unsubscribed', d);
       await onRoomReady({
         roomCode: roomCodeId,
         anotherPlayer: d.joiner
       });
-    } else {
-      // console.log('d is not ready', d);
     }
   });
 }
@@ -91,12 +87,9 @@ export const onRoomExit = (roomCodeId: string, onRoomReady: (v: RoomExitedRespon
   const unsubscribe = listenToDocument('rooms', roomCodeId, async (d: any) => {
     if (d['exited']) {
       unsubscribe();
-      // console.log('unsubscribed', d);
       await onRoomReady({
         exitedBy: d['exited']
       });
-    } else {
-      // console.log('d is not ready', d);
     }
   });
 }

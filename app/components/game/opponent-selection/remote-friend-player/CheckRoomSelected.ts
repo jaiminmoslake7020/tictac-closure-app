@@ -69,7 +69,6 @@ export const CheckRoomSelected = (
   }
 
   const onRoomSelected = async (v:RoomReadyResponseType) => {
-    // console.log('ROOM', v.roomCode);
     setRoomCodeId(v.roomCode);
     setAnotherPlayer(v.anotherPlayer);
     setPlayerType(v.playerType);
@@ -90,7 +89,7 @@ export const CheckRoomSelected = (
     if (
       isRoomReady(roomData)
     ) {
-      console.log("Room with data in session is at Firebase");
+      // console.log("Room with data in session is at Firebase");
       const userId = getUser().id;
       const playerType :GamePlayerType = userId === roomData['creator'].id ? 'creator' : 'joiner';
       const anotherPlayer = playerType === 'creator' ? roomData['joiner'] as UserType : roomData['creator'] as UserType;
@@ -102,7 +101,7 @@ export const CheckRoomSelected = (
       setPlayerType(playerType);
       setAnotherPlayer(anotherPlayer);
       if (hasGameId() && getGameId()) {
-        console.log("Room with data in session has GameId ", roomCode, getGameId(), playerType);
+        // console.log("Room with data in session has GameId ", roomCode, getGameId(), playerType);
         showLoader();
         await addRoomSubscriber(roomReadyResponse);
         await joinGameProcess();
@@ -114,7 +113,7 @@ export const CheckRoomSelected = (
       removeGameId();
       removeRoomCodeId();
 
-      console.log("Room with data in session is not at Firebase");
+      // console.log("Room with data in session is not at Firebase");
       askRoomSelection();
     }
   }

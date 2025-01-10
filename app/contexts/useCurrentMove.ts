@@ -8,7 +8,6 @@ export const useCurrentMove = () :UseCurrentMoveHookType => {
   let gameType: undefined | string;
 
   const setCurrentMove = (item: string) => {
-    // console.log("setCurrentMove", item);
     gameType = item;
   }
 

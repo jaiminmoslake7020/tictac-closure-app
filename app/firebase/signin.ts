@@ -1,7 +1,13 @@
 // These samples are intended for Web so this import would normally be
 // done in HTML however using modules here is more convenient for
 // ensuring sample correctness offline.
-import {GoogleAuthProvider, signInWithPopup, User, setPersistence, browserLocalPersistence, onAuthStateChanged} from "@firebase/auth";
+import {
+  browserLocalPersistence,
+  GoogleAuthProvider,
+  setPersistence,
+  signInWithPopup,
+  User
+} from "@firebase/auth";
 import {getFirestoreAuth} from '@firebase-dir/core';
 
 // Docs: https://source.corp.google.com/piper///depot/google3/third_party/devsite/firebase/en/docs/auth/web/google-signin.md
@@ -16,16 +22,5 @@ const getGoogleProvider = () : GoogleAuthProvider => {
 export const showGoogleSignInPopup = async () : Promise<User> => {
   await setPersistence(getFirestoreAuth(), browserLocalPersistence);
   const r = await signInWithPopup(getFirestoreAuth(), getGoogleProvider());
-  const user = r.user;
-  // console.log('Google Sign In', user);
-  return user;
+  return r.user;
 }
-
-
-onAuthStateChanged(getFirestoreAuth(), (user) => {
-  if (user) {
-    // console.log("onAuthStateChanged User is signed in:", user);
-  } else {
-    // console.log("onAuthStateChanged No user is signed in.");
-  }
-});

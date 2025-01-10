@@ -11,7 +11,8 @@ export const Game = ( contextsData: InitializeContextsFunctionType , onLogout : 
   const getGameActionsObject = () : GameActionCallbacksType => {
     return  {
       onExitRoom: init,
-      onLogout
+      onLogout,
+      onGameTypeChanged: init
     };
   }
 
@@ -26,7 +27,8 @@ export const Game = ( contextsData: InitializeContextsFunctionType , onLogout : 
   const init = async () => {
     const gameActionsCallback = {
       onExitRoom: init,
-      onLogout
+      onLogout,
+      onGameTypeChanged: init
     };
     const t = OpponentSelection(contextsData, onLevelSelected, gameActionsCallback);
     t.render()

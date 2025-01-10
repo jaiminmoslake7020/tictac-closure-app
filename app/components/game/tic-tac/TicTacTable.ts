@@ -53,6 +53,9 @@ export const TicTacTable = ( getTurnHandlerType: () => TurnHandlerType , updateI
       trArray.push(tr);
     }
     getTicTacTable().classList.add('tic-tac-table');
+    getTicTacTable().addEventListener('click',(e) => {
+      // console.log('e', e);
+    });
     return getTicTacTable();
   }
 

@@ -55,7 +55,6 @@ export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRo
       if (roomData) {
         const data  = roomData;
         if (data['creator'] && !data['joiner']) {
-          // console.log("Document data:", data); // Retrieve the document data
           const {
             getUser
           } = useContextUserSession(contextsData);

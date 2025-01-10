@@ -32,7 +32,6 @@ export type RestartGameButtonType = RestartGameButtonControllerType & {
 export const RestartGameButton = ( reload: Function , playerType : GamePlayerType) : RestartGameButtonType  => {
   const { getButton, setButton } = useButton();
 
-
   const { setButtonEnabled, getButtonEnabled } = RestartGameButtonController();
   // we are adding 2 seconds delay for joiner to join the game before ite becomes creator
   const timeOut = playerType === 'creator' ? 1000 : 1100;

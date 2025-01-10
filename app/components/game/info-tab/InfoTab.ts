@@ -20,6 +20,8 @@ export type InfoTabType = {
 
 export const InfoTab = (onLevelChange: () => void, contextsData: InitializeContextsFunctionType) :InfoTabType => {
 
+  const DEBUG_ROOM_INFO = false;
+
   const {
     getOpponentType
   } = useContextOpponentType( contextsData );
@@ -95,7 +97,9 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
       addChangeLevelBtn();
     }
     setDivOne('room-info');
-    getDiv().append(getDivOne());
+    if (DEBUG_ROOM_INFO) {
+      getDiv().append(getDivOne());
+    }
     updateRoomInfo();
     return getDiv();
   }
@@ -115,7 +119,6 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
   }
 
   const addWinner = () => {
-    // console.log("addWinner");
     removeTurn();
     setWinner( Winner( contextsData ) );
     getDiv().prepend( getWinner().render() );
@@ -157,27 +160,25 @@ export const InfoTab = (onLevelChange: () => void, contextsData: InitializeConte
   }
 
   const updateRoomInfo = () => {
-    const { getWinner } = useContextWinner(contextsData);
-    if (getWinner() === null) {
-      const result = getGameIdWithRoomCode(contextsData);
-      if (result && result.roomCodeId && result.gameId) {
-        // getDivOne().innerHTML = `Room Code: ${result.roomCodeId} Game Id: ${result.gameId}`;
-      } else{
-        // console.log('result', result);
+    if (DEBUG_ROOM_INFO) {
+      const { getWinner } = useContextWinner(contextsData);
+      if (getWinner() === null) {
+        const result = getGameIdWithRoomCode(contextsData);
+        if (result && result.roomCodeId && result.gameId) {
+          // getDivOne().innerHTML = `Room Code: ${result.roomCodeId} Game Id: ${result.gameId}`;
+        } else{
+          getDivOne().innerHTML = '';
+        }
+      } else {
         getDivOne().innerHTML = '';
       }
-    } else {
-      // console.log('winner is found');
-      getDivOne().innerHTML = '';
     }
   }
 
   const updateInfo = (reload: () => void) => {
-    // console.log('updateInfo');
     const { getWinner } = useContextWinner(contextsData);
     updateRoomInfo();
     if ( getWinner() !== null) {
-      // console.log('getWinner');
       addWinner();
       addRestartGameButton(reload);
     } else {

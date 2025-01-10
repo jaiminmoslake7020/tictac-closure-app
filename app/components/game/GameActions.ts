@@ -3,7 +3,7 @@ import {
   useContextGameId,
   useContextRoomCodeId, useContextUserSession,
   UseRoomCodeIdHookType, UserSessionHookType,
-  UseGameIdHookType, useContextOpponentType
+  UseGameIdHookType, useContextOpponentType, isItRemoteGame
 } from '@contexts/index';
 import {
   exitRoom as exitRoomFirebase
@@ -11,15 +11,15 @@ import {
 import {unliveUser} from '@firebase-dir/user';
 
 export type GameActionCallbacksType = {
-  // onExitGame: () => void;
   onExitRoom: () => void;
   onLogout: () => void;
+  onGameTypeChanged: () => void;
 }
 
 export type GameActionsType = {
-  // exitGame?: () => void;
   exitRoom: () => void;
   logout: () => void;
+  changeGameType: () => void;
 }
 
 export const GameActions = ( contextsData: InitializeContextsFunctionType , gameActionCallbacks: GameActionCallbacksType) :GameActionsType => {
@@ -32,14 +32,19 @@ export const GameActions = ( contextsData: InitializeContextsFunctionType , game
   } = useContextOpponentType( contextsData );
 
   const {
-    onExitRoom, onLogout
+    onExitRoom, onLogout, onGameTypeChanged
   } = gameActionCallbacks;
 
-  const exitGame = () => {
-    // not in use
-    // document.querySelector('.main')?.remove();
-    // removeGameId();
-    // onExitGame();
+  const changeGameType = async () => {
+   if (isItRemoteGame(contextsData)) {
+     const room = getRoomCodeId();
+     const u = getUser();
+     await exitRoomFirebase(room, u.id);
+     removeGameId();
+     removeRoomCodeId();
+   }
+    removeOpponentType(); // it makes sense to ask the user to select a new opponent,
+    onGameTypeChanged();
   }
 
   const exitRoom = async () => {
@@ -67,6 +72,7 @@ export const GameActions = ( contextsData: InitializeContextsFunctionType , game
 
   return {
     exitRoom,
-    logout
+    logout,
+    changeGameType
   };
 }

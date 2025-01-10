@@ -82,7 +82,9 @@ body {
   @apply w-full flex flex-col items-center gap-8;
 
   .info-tab{
-    @apply flex-wrap justify-center md:flex-nowrap tic-tac-width flex items-center min-h-[2.5rem];
+    @apply absolute top-12 left-0 w-full ;
+    @apply md:static md:tic-tac-width;
+    @apply flex-wrap justify-center md:flex-nowrap flex items-center min-h-[2.5rem];
     @apply gap-4 md:justify-between;
 
     .info-p{
@@ -92,13 +94,16 @@ body {
       &.player-text{
         @apply px-4 py-2 ;
         &.user-is-player{
-          @apply text-blue-700 font-bold bg-content rounded-lg;
+          @apply text-blue-700 bg-content rounded-lg;
         }
         &.user-is-not-a-player{}
       }
     }
 
     .winner-found{
+      @apply font-semibold;
+      @apply px-4 py-2 ;
+
       @apply text-blue-300;
       @apply w-full md:w-fit text-center md:text-left;
 

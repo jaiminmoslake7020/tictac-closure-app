@@ -41,7 +41,9 @@ export const RemoteRandomWaitingRoom = (contextsData: InitializeContextsFunction
       showLoader();
       addText('Waiting for other Player to join!');
       startTime = 0;
-      updateRoomSubscriber().then(() => console.log('Room updated'));
+      updateRoomSubscriber().then(() => {
+        // console.log('Room updated')
+      });
     });
     getDiv().append(H2('Please try again later!'));
     getDiv().append(getButton());
@@ -67,12 +69,12 @@ export const RemoteRandomWaitingRoom = (contextsData: InitializeContextsFunction
     const interval = setInterval(() => {
       const { getUser } = useContextUserSession(contextsData);
       if ( !(getUser() && getUser().id) ) {
-        console.log('User not found');
+        // console.log('User not found');
         clearInterval(interval)
         stopLoader();
         renderRestartAfterSomeTimeButton();
       } else if (startTime >= limitTime) {
-        console.log('Timedout');
+        // console.log('Timedout');
         clearInterval(interval);
         stopLoader();
         renderRestartAfterSomeTimeButton();
@@ -80,7 +82,7 @@ export const RemoteRandomWaitingRoom = (contextsData: InitializeContextsFunction
         checkRoomFun().then((data) => {
           if (data && data.gameId && data.roomId && data.playerType) {
             const {roomId, gameId, playerType} = data;
-            console.log('Room found', roomId, gameId);
+            // console.log('Room found', roomId, gameId);
             const {
               setRoomCodeId
             } = useContextRoomCodeId(contextsData);
@@ -116,7 +118,9 @@ export const RemoteRandomWaitingRoom = (contextsData: InitializeContextsFunction
               console.error('Game document path not found');
             }
           } else {
-            updateRoomFun().then(() => console.log('Room updated',  parseInt(String(getCurrentTime() / 1000)) ));
+            updateRoomFun().then(() => {
+              // console.log('Room updated',  parseInt(String(getCurrentTime() / 1000)) )
+            });
           }
         });
       }
@@ -131,8 +135,12 @@ export const RemoteRandomWaitingRoom = (contextsData: InitializeContextsFunction
   const render = () => {
     showLoader();
     addText('Waiting for other Player to join!');
-    adduserToRoom().then(() => console.log('User added to room'));
-    updateRoomSubscriber().then(() => console.log('Room updated'));
+    adduserToRoom().then(() => {
+      // console.log('User added to room')
+    });
+    updateRoomSubscriber().then(() => {
+      // console.log('Room updated')
+    });
   }
 
   const remove = () => {

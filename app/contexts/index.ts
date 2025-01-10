@@ -13,7 +13,7 @@ import {ColumnIdType, MovePositionType, UserType} from '@types-dir/index';
 import {getRandomInt} from '@utils/index';
 import {useGamePlayerTypeHook, UseGamePlayerTypeHookType} from '@contexts/useGamePlayerType';
 import {setGameCompletedAtFirebase} from '@business-logic/TurnHandler';
-import {turnData} from '@data/index';
+import {computerProgram, remoteFriendPlayer, remoteRandomPlayer, sameDevicePlay, turnData} from '@data/index';
 
 export type {
   UseAppLevelHookType,
@@ -224,7 +224,14 @@ export const isItRemoteGame = (contextsData:InitializeContextsFunctionType) : bo
   const {
     getOpponentType
   } = useContextOpponentType( contextsData );
-  return getOpponentType() === 'remote-friend-player' || getOpponentType() === 'remote-random-player';
+  return getOpponentType() === remoteFriendPlayer || getOpponentType() === remoteRandomPlayer;
+}
+
+export const isItSameDeviceGame = (contextsData:InitializeContextsFunctionType) : boolean => {
+  const {
+    getOpponentType
+  } = useContextOpponentType( contextsData );
+  return getOpponentType() === sameDevicePlay || getOpponentType() === computerProgram;
 }
 
 export const getGameIdWithRoomCode = (contextsData:InitializeContextsFunctionType) : {

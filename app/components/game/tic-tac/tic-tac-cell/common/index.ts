@@ -4,19 +4,17 @@ import {
   OnClickCollection,
   TdCollection,
   TdCellCollection,
-  StopAnimateMoveX
+  StopAnimateMoveXDuration
 } from '@helpers/index';
 import {
   ColumnIdType,
   MovePositionType,
-  TDClassIdType,
+  TDClassIdType, TurnType,
   WiningSequenceType,
 } from '@types-dir/index';
 import {TicTacCellValue} from '@tic-tac/tic-tac-cell/TicTacCellValue';
 import {InitializeContextsFunctionType, useContextTurnStorage, useContextWinnerSeq} from '@contexts/index';
 import {turnData} from '@data/index';
-
-// console.log("common/index");
 
 const {
   get: getStopAnimateMoveSuccess,
@@ -73,47 +71,43 @@ export const tdClassList = {
   stopAnimateMoveSuccess: 'stop-animate-move-success'
 } as Record<TDClassIdType, string>
 
+export const animateAnotherPersonMove = (newElement: HTMLDivElement) => {
+  setTimeout(() => {
+    newElement.classList.add(tdClassList.stopAnimateMoveX);
+  }, StopAnimateMoveXDuration);
+}
 
-export const userMove = (columnId: ColumnIdType) => {
+export const renderValue = (columnId: ColumnIdType, turn: TurnType) => {
   const newElement = getTd(columnId) as HTMLDivElement;
   if (!newElement) {
     console.error("newElement should not be undefined", newElement);
   }
-
-  newElement.classList.add(tdClassList.typeO);
+  if (turnData.turn === turn) {
+    newElement.classList.add(tdClassList.typeO);
+  } else {
+    newElement.classList.add(tdClassList.typeX);
+    animateAnotherPersonMove(newElement);
+  }
   if ( hasTdCell(columnId) ) {
-    getTdCell(columnId).addText(turnData.turn);
+    getTdCell(columnId).addText(turn);
   } else {
     const cv = TicTacCellValue();
     newElement.append(cv.render());
-    cv.addText(turnData.turn);
+    cv.addText(turn);
     addTdCell(columnId, cv);
   }
+}
 
+export const userMove = (columnId: ColumnIdType) => {
+  renderValue(columnId, turnData.turn);
   disableCell(columnId);
   setClicked(columnId);
 }
 
+
+
 export const anotherPersonMove = (columnId: ColumnIdType) => {
-  const newElement = getTd(columnId) as HTMLDivElement;
-  if (!newElement) {
-    console.error("newElement should not be undefined", newElement);
-  }
-
-  newElement.classList.add(tdClassList.typeX);
-  setTimeout(() => {
-    newElement.classList.add(tdClassList.stopAnimateMoveX);
-  }, StopAnimateMoveX);
-
-  if ( hasTdCell(columnId) ) {
-    getTdCell(columnId).addText(turnData.anotherTurn);
-  } else {
-    const cv = TicTacCellValue();
-    newElement.append(cv.render());
-    cv.addText(turnData.anotherTurn);
-    addTdCell(columnId, cv);
-  }
-
+  renderValue(columnId, turnData.anotherTurn);
   disableCell(columnId);
   setClicked(columnId);
 }
@@ -153,6 +147,12 @@ export const changeRelevantCellToSuccessStatus = (
 export const disableCell = (columnId: ColumnIdType) => {
   if (!getTd(columnId).classList.contains(tdClassList.typeDisabled)) {
     getTd(columnId).classList.add( tdClassList.typeDisabled );
+  }
+}
+
+export const enableCell = (columnId: ColumnIdType) => {
+  if (getTd(columnId).classList.contains(tdClassList.typeDisabled)) {
+    getTd(columnId).classList.remove( tdClassList.typeDisabled );
   }
 }
 

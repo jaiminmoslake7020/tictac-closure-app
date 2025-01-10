@@ -11,10 +11,8 @@ export const useWinnerHook = () : UseWinnerHookType => {
 
   const setWinner = (v:WinnerType) => {
     if (winner === null) {
-      console.log('setting winner', v);
       winner = v;
     } else {
-      console.trace();
       console.error('winner is already set');
     }
   }

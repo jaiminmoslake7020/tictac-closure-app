@@ -5,7 +5,8 @@ export type UseTurnHookType = {
   getTurn: () => TurnType,
   changeTurn: () => void,
   setUserTurn: () => void,
-  setAnotherUserTurn: () => void
+  setAnotherUserTurn: () => void,
+  resetTurn: () => void
 };
 
 export const useTurnHook = () : UseTurnHookType => {
@@ -27,7 +28,11 @@ export const useTurnHook = () : UseTurnHookType => {
     return turn;
   }
 
+  const resetTurn = () : void => {
+    setUserTurn();
+  }
+
   return {
-    getTurn, changeTurn, setUserTurn, setAnotherUserTurn
+    getTurn, changeTurn, setUserTurn, setAnotherUserTurn, resetTurn
   };
 }
