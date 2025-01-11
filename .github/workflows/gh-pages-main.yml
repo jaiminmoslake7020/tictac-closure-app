@@ -79,8 +79,6 @@ jobs:
         with:
           name: my-artifact
           path: ./build
-      - name: List files
-        run: cd build && ls -lah
       - name: Deploy to Netlify
         run: ./scripts/netlify-deploy.sh
         env:
