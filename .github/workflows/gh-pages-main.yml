@@ -70,6 +70,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - name: Install dependencies
+        run: npm install -g netlify-cli
       - name: List files
         run: ls -lah
       - name: Download artifact from build job
@@ -79,3 +81,9 @@ jobs:
           path: ./build
       - name: List files
         run: cd build && ls -lah
+      - name: Deploy to Netlify
+        run: ./scripts/netlify-deploy.sh
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          BUILD_DIR: ./build
