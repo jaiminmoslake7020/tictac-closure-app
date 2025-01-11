@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: my-artifact
-          path: ./build/
+          path: ./apps/web/build/
 
 
 #  Deployment job
@@ -73,17 +73,13 @@ jobs:
           cache: 'yarn'
       - name: Install Netlify CLI
         run: yarn global add netlify-cli
-      - name: Move to web app directory
-        run: cd apps/web
-      - name: List files
-        run: ls -lah
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: my-artifact
-          path: ./build
+          path: ./apps/web/build
       - name: Deploy to Netlify
-        run: yarn run netlify:publish
+        run: yarn run webapp:publish
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_QA }}

@@ -52,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: my-artifact
-          path: ./build/
+          path: ./apps/web/build/
 
 
 #  Deployment job
@@ -80,9 +80,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: my-artifact
-          path: ./build
+          path: ./apps/web/build/
       - name: Deploy to Netlify
-        run: yarn run netlify:publish
+        run: yarn run webapp:publish
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
