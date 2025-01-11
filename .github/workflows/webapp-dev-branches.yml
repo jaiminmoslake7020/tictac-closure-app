@@ -1,10 +1,10 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Build Tic-Tac-Toe Game
+# This workflow will build and deploy a static webapp to Netlify
+name: DEV Build and Deploy Tic-Tac-Toe Game to https://tic-tac-toe-dev-app.netlify.app/
 
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches-ignore: ["main"]
+    branches-ignore: ["main",'release-*'] # Skip if branch is main or release-webapp-*
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -49,4 +49,39 @@ jobs:
           FIREBASE_CONFIG_APP_ID: ${{ secrets.FIREBASE_CONFIG_APP_ID }}
           FIREBASE_CONFIG_MEASUREMENT_ID: ${{ secrets.FIREBASE_CONFIG_MEASUREMENT_ID }}
         run: npm run build
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact
+          path: ./build/
 
+  #  Deployment job
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18 ] # Test on multiple Node.js versions
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install -g netlify-cli
+      - name: List files
+        run: ls -lah
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: my-artifact
+          path: ./build
+      - name: Deploy to Netlify
+        run: ./scripts/netlify-deploy.sh
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_DEV }}
+          BUILD_DIR: ./build

@@ -13,7 +13,8 @@
     "build:dev": "rm -rf build && npx webpack --mode development --env=development",
     "dev": "webpack serve --mode development --stats-error-details --env=development",
     "lint": "eslint app",
-    "lint:fix": "eslint app --fix"
+    "lint:fix": "eslint app --fix",
+    "netlify:publish:qa": "./scripts/netlify-deploy.sh"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

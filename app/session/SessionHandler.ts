@@ -19,7 +19,7 @@ const SessionHandler = () : SessionHandlerType => {
   let session : SessionType | null = null ;
 
   const initSession = () => {
-    const s = localStorage.getItem('tic-tac-app-session');
+    const s : string | null = localStorage.getItem('tic-tac-app-session');
     if (s === null) {
       session = s;
     } else {
