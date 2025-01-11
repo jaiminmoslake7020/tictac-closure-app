@@ -1,9 +1,11 @@
 # Welcome to TicTacApp!
 
-Hi! I have build this app to learn more about JS closures and using Vanilla JS instead of framework. I have not added any JS framework like React or something else, but I have been inspired a lot by React components and try to build an app without React and only using plain vanilla JS (although all code is in TS which gets compiled into JS.)
+Hi! I have build this app using TypeScript, Webpack and babel.
+
+It is a simple Tic Tac Toe game. It is a two player game. You can play with your friend or play with another online random person if any available. You can play against Computer program and also against LLM model. It is a simple game but it is fun to play.
 
 It works same as modern JS framework and adds everything to index.html through JS.
 
 ## Try game at
 
-https://jaiminmoslake7020.github.io/tictac-closure-app/
+https://tic-tac-toe-prod.netlify.app/
