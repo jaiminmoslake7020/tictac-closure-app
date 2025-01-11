@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# show what is the current directory
-pwd
-
 # Ensure the script exits if any command fails
 FILE_TO_SOURCE="./scripts/setup-env.sh"
 # Check if the file exists and is readable
