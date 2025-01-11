@@ -10,9 +10,6 @@ if [ -r "$FILE_TO_SOURCE" ]; then
     # Source the file
     . "$FILE_TO_SOURCE"
     echo "File sourced successfully."
-else
-    echo "Error: File '$FILE_TO_SOURCE' does not exist or is not readable."
-    exit 1
 fi
 
 
