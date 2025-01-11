@@ -1,9 +1,6 @@
 # This workflow will build and deploy a static webapp to Netlify
 name: DEV Build and Deploy Tic-Tac-Toe Game to https://tic-tac-toe-dev-app.netlify.app/
 
-env:
-  DO_NOT_RUN: false # Set to 'true' to skip jobs
-
 on:
   # Runs on pushes targeting the default branch
   push:
@@ -28,7 +25,6 @@ concurrency:
 jobs:
   # Build job
   build:
-    if: env.DO_NOT_RUN == 'false' # Skip if DO_NOT_RUN is 'true'
     runs-on: ubuntu-latest
     strategy:
       matrix:
