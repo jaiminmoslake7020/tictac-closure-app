@@ -71,4 +71,4 @@ jobs:
           name: my-artifact
           path: ./build
       - name: List files
-        run: ls -lah
+        run: cd build && ls -lah
