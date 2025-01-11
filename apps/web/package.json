@@ -14,7 +14,7 @@
     "dev": "webpack serve --mode development --stats-error-details --env=development",
     "lint": "eslint app",
     "lint:fix": "eslint app --fix",
-    "netlify:publish:dev": "./scripts/netlify-deploy.sh"
+    "netlify:publish": "./scripts/netlify-deploy.sh"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
