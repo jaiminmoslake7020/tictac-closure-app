@@ -63,13 +63,15 @@ jobs:
         node-version: [ 18 ] # Test on multiple Node.js versions
     needs: build
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: List files
+        run: ls -R .
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
             node-version: ${{ matrix.node-version }}
             cache: 'npm'
-      - name: Checkout repository
-        uses: actions/checkout@v2
       - name: Create a directory for the build artifact
         run: mkdir -p ./build && cd ./build
       - name: Download artifact
