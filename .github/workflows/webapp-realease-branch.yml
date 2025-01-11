@@ -18,7 +18,7 @@ permissions:
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-  group: "pages"
+  group: "release-webapp"
   cancel-in-progress: false
 
 jobs:
@@ -37,7 +37,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Install dependencies
-        run: npm install
+        run: yarn install
       - name: Run build script with environment variables from GitHub Secrets
         env:
           FIREBASE_CONFIG_API_KEY: ${{ secrets.FIREBASE_CONFIG_API_KEY }}
@@ -70,8 +70,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - name: Install dependencies
-        run: npm install -g netlify-cli
+      - name: Install Netlify CLI
+        run: yarn global add netlify-cli
+      - name: Move to web app directory
+        run: cd apps/web
       - name: List files
         run: ls -lah
       - name: Download artifact from build job

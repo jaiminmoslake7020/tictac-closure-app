@@ -5,6 +5,8 @@ on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
+    paths:
+      - 'apps/web/**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -12,13 +14,12 @@ on:
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
-  pages: write
   id-token: write
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-  group: "pages"
+  group: "qa-webapp"
   cancel-in-progress: false
 
 jobs:
@@ -37,7 +38,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Install dependencies
-        run: npm install
+        run: yarn install
       - name: Run build script with environment variables from GitHub Secrets
         env:
           FIREBASE_CONFIG_API_KEY: ${{ secrets.FIREBASE_CONFIG_API_KEY }}
@@ -70,8 +71,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - name: Install dependencies
-        run: npm install -g netlify-cli
+      - name: Install Netlify CLI
+        run: yarn global add netlify-cli
+      - name: Move to web app directory
+        run: cd apps/web
       - name: List files
         run: ls -lah
       - name: Download artifact from build job
