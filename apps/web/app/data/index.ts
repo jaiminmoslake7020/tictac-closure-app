@@ -4,7 +4,7 @@ import {
   OpponentLabelType,
   OpponentType,
   TurnType,
-  WiningSequenceType
+  WiningSequenceType,
 } from '@types-dir/index';
 
 export const winnerData = [
@@ -21,17 +21,23 @@ export const winnerData = [
 ] as WiningSequenceType[];
 
 export const allData = [
-  '11', '12', '13',
-  '21', '22', '23',
-  '31', '32', '33',
+  '11',
+  '12',
+  '13',
+  '21',
+  '22',
+  '23',
+  '31',
+  '32',
+  '33',
 ] as MovePositionType[];
 
 export const turnData = {
   turn: 'O' as TurnType,
-  anotherTurn: 'X' as TurnType
+  anotherTurn: 'X' as TurnType,
 } as {
-  'turn': TurnType,
-  'anotherTurn': TurnType
+  turn: TurnType;
+  anotherTurn: TurnType;
 };
 
 export const remoteRandomPlayer = 'remote-random-player' as OpponentType;
@@ -43,17 +49,19 @@ export const opponentTypesObject = {
   [remoteRandomPlayer]: 'Remote Random Player',
   [remoteFriendPlayer]: 'Remote Friend Player',
   [computerProgram]: 'Computer Program',
-  [sameDevicePlay]: 'Same Device Play'
+  [sameDevicePlay]: 'Same Device Play',
 } as Record<OpponentType, OpponentLabelType>;
 
 export const opponentTypes = [
   remoteRandomPlayer,
   remoteFriendPlayer,
   computerProgram,
-  sameDevicePlay
+  sameDevicePlay,
 ] as OpponentType[];
 
-export const opponentFormButtonTypeList = opponentTypes.map((k:OpponentType) => ({
-  label: opponentTypesObject[k],
-  value: k
-})) as OpponentFormButtonType[];
+export const opponentFormButtonTypeList = opponentTypes.map(
+  (k: OpponentType) => ({
+    label: opponentTypesObject[k],
+    value: k,
+  }),
+) as OpponentFormButtonType[];

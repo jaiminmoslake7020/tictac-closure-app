@@ -1,72 +1,81 @@
-import {OpponentType} from '@types-dir/index';
-import {OpponentSelectionForm} from '@components/game/opponent-selection/OpponentSelectionForm';
-import {AskForAppLevelType} from '@components/game/info-tab/AskForAppLevelType';
-import {addToRoot} from '@utils/index';
-import {Layout} from '@components/layouts/layout/Layout';
-import {CheckRoomSelected} from '@components/game/opponent-selection/remote-friend-player/CheckRoomSelected';
+import { OpponentType } from '@types-dir/index';
+import { OpponentSelectionForm } from '@components/game/opponent-selection/OpponentSelectionForm';
+import { AskForAppLevelType } from '@components/game/info-tab/AskForAppLevelType';
+import { addToRoot } from '@utils/index';
+import { Layout } from '@components/layouts/layout/Layout';
+import { CheckRoomSelected } from '@components/game/opponent-selection/remote-friend-player/CheckRoomSelected';
 import {
-  InitializeContextsFunctionType, useContextGameId,
-  useContextOpponentType, useContextRoomCodeId, useContextTurnStorage,
+  InitializeContextsFunctionType,
+  useContextGameId,
+  useContextOpponentType,
+  useContextRoomCodeId,
+  useContextTurnStorage,
   UseOpponentTypeHookType,
 } from '@contexts/index';
-import {useState} from '@components/base';
-import {GameActionCallbacksType, GameActions} from '@components/game/GameActions';
+import { useState } from '@components/base';
 import {
-  RemoteRandomWaitingRoom
-} from '@components/game/opponent-selection/remote-random-player/RemoteRandomWaitingRoom';
-import {computerProgram, remoteFriendPlayer, remoteRandomPlayer, sameDevicePlay} from '@data/index';
+  GameActionCallbacksType,
+  GameActions,
+} from '@components/game/GameActions';
+import { RemoteRandomWaitingRoom } from '@components/game/opponent-selection/remote-random-player/RemoteRandomWaitingRoom';
+import {
+  computerProgram,
+  remoteFriendPlayer,
+  remoteRandomPlayer,
+  sameDevicePlay,
+} from '@data/index';
 
 export type OpponentSelectionType = {
-  render : () => void | Promise<void>,
-  remove : () => void
+  render: () => void | Promise<void>;
+  remove: () => void;
 };
 
-export const OpponentSelection = (contextsData: InitializeContextsFunctionType, onLevelSelected: () => void, gameActions: GameActionCallbacksType ) :OpponentSelectionType => {
+export const OpponentSelection = (
+  contextsData: InitializeContextsFunctionType,
+  onLevelSelected: () => void,
+  gameActions: GameActionCallbacksType,
+): OpponentSelectionType => {
+  const { get: getVarOne, set: setVarOne } = useState();
 
-  const {
-    get: getVarOne, set: setVarOne
-  } = useState();
-
-  const { setOpponentType, hasOpponentType, getOpponentType  } = useContextOpponentType( contextsData ) as UseOpponentTypeHookType;
-  const { removeGameId  } = useContextGameId( contextsData );
-  const { removeRoomCodeId  } = useContextRoomCodeId( contextsData );
+  const { setOpponentType, hasOpponentType, getOpponentType } =
+    useContextOpponentType(contextsData) as UseOpponentTypeHookType;
+  const { removeGameId } = useContextGameId(contextsData);
+  const { removeRoomCodeId } = useContextRoomCodeId(contextsData);
 
   const askAppLevelType = () => {
-    const t = AskForAppLevelType( onLevelSelected , false, contextsData);
+    const t = AskForAppLevelType(onLevelSelected, false, contextsData);
     const f = t.render();
-    if ( f ) {
+    if (f) {
       const gA = GameActions(contextsData, gameActions);
       addToRoot(Layout(f, gA));
     }
-  }
+  };
 
-  const remoteFriendPlayerSelected  = () => {
+  const remoteFriendPlayerSelected = () => {
     // console.log('remoteFriendPlayerSelected');
-    const {
-      startCheckRoomSelected
-    } = CheckRoomSelected(
-      contextsData, onLevelSelected, gameActions
+    const { startCheckRoomSelected } = CheckRoomSelected(
+      contextsData,
+      onLevelSelected,
+      gameActions,
     );
     startCheckRoomSelected();
-  }
+  };
 
-  const remoteRandomPlayerSelected  = () => {
-    const {
-      render
-    } = RemoteRandomWaitingRoom(
-      contextsData, () => {
+  const remoteRandomPlayerSelected = () => {
+    const { render } = RemoteRandomWaitingRoom(
+      contextsData,
+      () => {
         // remote random player or remote LLM becomes remote friend player once room and game is selected
         setOpponentType(remoteFriendPlayer);
         remoteFriendPlayerSelected();
-      }, gameActions
+      },
+      gameActions,
     );
     render();
-  }
+  };
 
   const onPlayerSelected = async (value: OpponentType) => {
-    const {
-      resetTurnStorage
-    } = useContextTurnStorage(contextsData);
+    const { resetTurnStorage } = useContextTurnStorage(contextsData);
     resetTurnStorage();
 
     setOpponentType(value);
@@ -79,31 +88,31 @@ export const OpponentSelection = (contextsData: InitializeContextsFunctionType, 
     } else if (value === remoteRandomPlayer) {
       remoteRandomPlayerSelected();
     }
-  }
+  };
 
-  const showForm = ()   => {
+  const showForm = () => {
     removeGameId();
     removeRoomCodeId();
-    setVarOne((OpponentSelectionForm(onPlayerSelected)));
+    setVarOne(OpponentSelectionForm(onPlayerSelected));
     const gA = GameActions(contextsData, gameActions);
-    addToRoot( Layout(getVarOne().render(),  gA) );
-  }
+    addToRoot(Layout(getVarOne().render(), gA));
+  };
 
   const render = async () => {
-    if ( hasOpponentType() ) {
+    if (hasOpponentType()) {
       // console.log('OpponentType Exists', getOpponentType());
       await onPlayerSelected(getOpponentType());
     } else {
       showForm();
     }
-  }
+  };
 
   const remove = () => {
     getVarOne().remove();
-  }
+  };
 
   return {
     render,
-    remove
+    remove,
   };
-}
+};

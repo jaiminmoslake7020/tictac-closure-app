@@ -1,142 +1,115 @@
-@use "loading/loading";
+@use 'loading/loading';
 
-
-.btn.btn-icon{
+.btn.btn-icon {
   @apply flex justify-start items-center gap-0;
-  &.with-text{
+  &.with-text {
     @apply gap-2;
   }
 }
 
 .radio-btn {
-  @apply btn ;
+  @apply btn;
   @apply flex justify-center;
   input {
     @apply invisible h-0 w-0;
   }
 }
 
-.player-selection-form{
+.player-selection-form {
   @apply flex flex-col gap-4;
 }
 
-.room-selection-form{
+.room-selection-form {
   @apply flex flex-col gap-4;
 }
 
-
-
-
-.header-wrapper{
+.header-wrapper {
   @apply absolute top-0 left-0 w-screen hidden md:flex;
 
   .header {
     @apply flex justify-end w-full;
 
-    .header-content{
+    .header-content {
       @apply flex justify-between items-center w-fit mr-6 font-semibold uppercase;
     }
 
-    .navbar-wrapper{
-      .navbar{
-        @apply flex gap-4 p-4 ;
+    .navbar-wrapper {
+      .navbar {
+        @apply flex gap-4 p-4;
 
-        .nav-link{
-          .btn.btn-icon{
+        .nav-link {
+          .btn.btn-icon {
             @apply flex justify-start gap-2 items-center;
           }
         }
-
       }
     }
-
   }
-
 }
 
+.sidebar-wrapper {
+  @apply absolute top-0 left-0 w-screen flex md:hidden;
 
-.sidebar-wrapper{
-  @apply absolute top-0 left-0 w-screen flex md:hidden ;
-
-  .sidebar{
-
-    .cls-btn-wrapper{
+  .sidebar {
+    .cls-btn-wrapper {
       @apply absolute p-4 right-0 top-0;
-      .btn.btn-icon{
+      .btn.btn-icon {
         @apply rounded-full px-3 py-3;
       }
 
-      .show-sidebar-btn{
+      .show-sidebar-btn {
         @apply flex;
       }
 
-      .close-sidebar-btn{
+      .close-sidebar-btn {
         @apply hidden;
       }
-
     }
 
-    .navbar-wrapper{
+    .navbar-wrapper {
       @apply hidden;
     }
-
   }
 
-  &.open{
-    @apply h-[100dvh] md:h-screen ;
+  &.open {
+    @apply h-[100dvh] md:h-screen;
 
-    .sidebar{
+    .sidebar {
       @apply flex justify-center items-center h-full w-full relative bg-content bg-opacity-80 z-50;
 
-      .cls-btn-wrapper{
+      .cls-btn-wrapper {
         @apply absolute p-4 right-0 top-0;
-        .btn.btn-icon{
+        .btn.btn-icon {
           @apply bg-bkg text-content rounded-full px-3 py-3;
         }
 
-        .show-sidebar-btn{
+        .show-sidebar-btn {
           @apply hidden;
         }
 
-        .close-sidebar-btn{
+        .close-sidebar-btn {
           @apply flex;
         }
-
       }
 
-      .navbar-wrapper{
+      .navbar-wrapper {
         @apply block;
 
-        .navbar{
-          @apply flex flex-col gap-4 p-4 ;
+        .navbar {
+          @apply flex flex-col gap-4 p-4;
 
-          .nav-link{
-            .btn.btn-icon{
+          .nav-link {
+            .btn.btn-icon {
               @apply w-44;
               @apply flex justify-center gap-2 items-center;
               @apply bg-bkg text-content;
             }
           }
-
         }
       }
-
     }
-
   }
-
 }
-
-
-
-
-
-
-
-
-
-
-
 
 .notification-wrapper {
   @apply fixed top-0 right-0 w-full h-fit z-50 p-4;
@@ -186,19 +159,14 @@
   @apply flex justify-center items-center;
 }
 
-.notification-secondary-action{
+.notification-secondary-action {
   @apply flex w-full justify-end gap-4;
 
-  .btn{
+  .btn {
     @apply scale-75;
   }
-
 }
 
-
-
-
-
-.restart-after-some-time-wrapper{
+.restart-after-some-time-wrapper {
   @apply flex flex-col gap-4 justify-center items-center;
 }

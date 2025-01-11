@@ -1,22 +1,21 @@
-import {getUser,} from './UserSessionHandler';
-import {getSession, setSession} from './SessionHandler';
+import { getUser } from './UserSessionHandler';
+import { getSession, setSession } from './SessionHandler';
 
 const RoomCodeIdSessionHandler = () => {
-
   const getRoomCodeId = () => {
     if (getUser()) {
       return getSession().roomCodeId;
     }
-  }
+  };
 
   const setRoomCodeId = (roomCodeId: string) => {
     if (getUser()) {
       setSession({
         ...getSession(),
-        roomCodeId
+        roomCodeId,
       });
     }
-  }
+  };
 
   const removeRoomCodeId = () => {
     if (getUser()) {
@@ -24,26 +23,19 @@ const RoomCodeIdSessionHandler = () => {
         ...getSession(),
         roomCodeId: undefined,
         gameId: undefined,
-        opponentType: undefined
+        opponentType: undefined,
       });
     }
-  }
+  };
 
   return {
     getRoomCodeId,
     setRoomCodeId,
-    removeRoomCodeId
-  }
-}
-
-const {
-  getRoomCodeId,
-  setRoomCodeId,
-  removeRoomCodeId
-} = RoomCodeIdSessionHandler();
-
-export {
-  getRoomCodeId,
-  setRoomCodeId,
-  removeRoomCodeId
+    removeRoomCodeId,
+  };
 };
+
+const { getRoomCodeId, setRoomCodeId, removeRoomCodeId } =
+  RoomCodeIdSessionHandler();
+
+export { getRoomCodeId, setRoomCodeId, removeRoomCodeId };

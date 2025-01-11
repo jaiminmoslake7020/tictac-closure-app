@@ -1,33 +1,29 @@
-import {appLevelList} from '@helpers/index';
-import {FindAnotherEasy} from './FindAnotherEasy';
-import {FindAnotherMedium} from './FindAnotherMedium';
-import {FindAnotherHard} from './FindAnotherHard';
-import {CheckWinner} from '@business-logic/CheckWinner';
+import { appLevelList } from '@helpers/index';
+import { FindAnotherEasy } from './FindAnotherEasy';
+import { FindAnotherMedium } from './FindAnotherMedium';
+import { FindAnotherHard } from './FindAnotherHard';
+import { CheckWinner } from '@business-logic/CheckWinner';
 import {
   InitializeContextsFunctionType,
   useContextAppLevelType,
   useContextTurnStorage,
-  useContextWinner
+  useContextWinner,
 } from '@contexts/index';
-import {turnData} from '@data/index';
+import { turnData } from '@data/index';
 
 export const ComputerProgramMove = (
-  contextsData : InitializeContextsFunctionType
+  contextsData: InitializeContextsFunctionType,
 ) => {
   const { anotherTurn } = turnData;
-  const {
-    getAppLevelType
-  } = useContextAppLevelType(contextsData);
-  const { getWinner } = useContextWinner( contextsData );
-  const { addNewTurn } = useContextTurnStorage( contextsData );
+  const { getAppLevelType } = useContextAppLevelType(contextsData);
+  const { getWinner } = useContextWinner(contextsData);
+  const { addNewTurn } = useContextTurnStorage(contextsData);
   const appLevel = getAppLevelType();
-  if ( getWinner() === null ) {
+  if (getWinner() === null) {
     let nextMove;
-    if ( appLevel === appLevelList.easy ) {
+    if (appLevel === appLevelList.easy) {
       nextMove = FindAnotherEasy(contextsData);
-    } else if (
-      appLevel === appLevelList.medium
-    ) {
+    } else if (appLevel === appLevelList.medium) {
       nextMove = FindAnotherMedium(contextsData);
     } else {
       nextMove = FindAnotherHard(contextsData);
@@ -37,4 +33,4 @@ export const ComputerProgramMove = (
     }
     CheckWinner(contextsData);
   }
-}
+};

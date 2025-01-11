@@ -5,26 +5,26 @@ import {
 } from '@session/index';
 
 export type UseGameIdHookType = {
-  getGameId: () => string,
-  setGameId: (v:string) => void,
-  removeGameId: () => void,
-  hasGameId: () => boolean
+  getGameId: () => string;
+  setGameId: (v: string) => void;
+  removeGameId: () => void;
+  hasGameId: () => boolean;
 };
 
 // hooks should be component based
-export const useGameIdHook = () :UseGameIdHookType => {
+export const useGameIdHook = (): UseGameIdHookType => {
   let gameId: undefined | string;
 
   const setGameId = (item: string) => {
     setGameIdSession(item);
     gameId = item;
-  }
+  };
 
-  const getGameId = () : string => {
+  const getGameId = (): string => {
     return gameId as string;
-  }
+  };
 
-  const hasGameId = () : boolean => {
+  const hasGameId = (): boolean => {
     if (gameId) {
       return true;
     }
@@ -34,18 +34,17 @@ export const useGameIdHook = () :UseGameIdHookType => {
       return true;
     }
     return gameId !== undefined;
-  }
+  };
 
-  const removeGameId = () : void => {
+  const removeGameId = (): void => {
     gameId = undefined;
     removeGameIdSession();
-  }
+  };
 
   return {
     getGameId,
     setGameId,
     removeGameId,
-    hasGameId
-  }
-}
-
+    hasGameId,
+  };
+};

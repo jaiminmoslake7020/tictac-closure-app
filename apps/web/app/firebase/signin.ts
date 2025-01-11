@@ -7,24 +7,24 @@ import {
   setPersistence,
   signInWithPopup,
   User,
-  onAuthStateChanged
-} from "@firebase/auth";
-import {getFirestoreAuth} from './core';
+  onAuthStateChanged,
+} from '@firebase/auth';
+import { getFirestoreAuth } from './core';
 
 // Docs: https://source.corp.google.com/piper///depot/google3/third_party/devsite/firebase/en/docs/auth/web/google-signin.md
 
-const getGoogleProvider = () : GoogleAuthProvider => {
+const getGoogleProvider = (): GoogleAuthProvider => {
   const provider = new GoogleAuthProvider();
   provider.addScope('https://www.googleapis.com/auth/userinfo.email');
   provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
   return provider;
-}
+};
 
-export const showGoogleSignInPopup = async () : Promise<User> => {
+export const showGoogleSignInPopup = async (): Promise<User> => {
   await setPersistence(getFirestoreAuth(), browserLocalPersistence);
   const r = await signInWithPopup(getFirestoreAuth(), getGoogleProvider());
   return r.user;
-}
+};
 
 onAuthStateChanged(getFirestoreAuth(), (user) => {
   if (user) {

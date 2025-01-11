@@ -1,65 +1,70 @@
-import {InitializeContextsFunctionType, useContextUserSession} from '@contexts/index';
-import {RoomReadyResponseType, UserType} from '@types-dir/index';
-import { useDiv, useState, Label, useTextInput, useButton, Loader, H2, Span } from '@components/base';
-import {joinRoom, getRoomData} from '@firebase-dir/index';
-import {getCurrentTime} from '@utils/index';
-
+import {
+  InitializeContextsFunctionType,
+  useContextUserSession,
+} from '@contexts/index';
+import { RoomReadyResponseType, UserType } from '@types-dir/index';
+import {
+  useDiv,
+  useState,
+  Label,
+  useTextInput,
+  useButton,
+  Loader,
+  H2,
+  Span,
+} from '@components/base';
+import { joinRoom, getRoomData } from '@firebase-dir/index';
+import { getCurrentTime } from '@utils/index';
 
 export type JoinRoomInputType = {
-  render: () => HTMLDivElement,
-  remove: () => void
+  render: () => HTMLDivElement;
+  remove: () => void;
 };
 
-export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRoomReady: (v: RoomReadyResponseType) => Promise<void>): JoinRoomInputType => {
+export const JoinRoomInput = (
+  contextsData: InitializeContextsFunctionType,
+  onRoomReady: (v: RoomReadyResponseType) => Promise<void>,
+): JoinRoomInputType => {
+  const { getDiv, setDiv, removeDiv } = useDiv();
+  const {
+    getDiv: getDivOne,
+    setDiv: setDivOne,
+    removeDiv: removeDivOne,
+  } = useDiv();
+  const {
+    getDiv: getDivTwo,
+    setDiv: setDivTwo,
+    removeDiv: removeDivTwo,
+  } = useDiv();
+  const { getInput, setInput, removeInput } = useTextInput();
+  const { get, set, remove: removeState } = useState();
+  const { get: get2, set: set2, remove: removeState2 } = useState();
+  const { get: get3, set: set3, remove: removeState3 } = useState();
+  const { getButton, setButton, removeButton } = useButton();
 
-  const {
-    getDiv, setDiv, removeDiv
-  } = useDiv();
-  const {
-    getDiv: getDivOne, setDiv: setDivOne, removeDiv: removeDivOne
-  } = useDiv();
-  const {
-    getDiv: getDivTwo, setDiv: setDivTwo, removeDiv: removeDivTwo
-  } = useDiv();
-  const {
-    getInput, setInput, removeInput
-  } = useTextInput();
-  const {
-    get, set, remove: removeState
-  } = useState();
-  const {
-    get: get2, set: set2, remove: removeState2
-  } = useState();
-  const {
-    get: get3, set: set3, remove: removeState3
-  } = useState();
-  const {
-    getButton, setButton, removeButton
-  } = useButton();
-
-  const {showLoader, stopLoader} = Loader();
+  const { showLoader, stopLoader } = Loader();
 
   const resetErrorState = () => {
     get3().innerText = '';
     getDivOne().classList.remove('input-error');
-  }
+  };
 
   const validateCode = async () => {
     resetErrorState();
 
     const roomCode = getInput().value;
     if (roomCode.length > 0) {
-
       showLoader();
       const roomData = await getRoomData(roomCode);
       if (roomData) {
-        const data  = roomData;
+        const data = roomData;
         if (data['creator'] && !data['joiner']) {
-          const {
-            getUser
-          } = useContextUserSession(contextsData);
+          const { getUser } = useContextUserSession(contextsData);
           const userItem = getUser() as UserType;
-          const updatedDocData = {joiner: userItem, joiner_last_visit: getCurrentTime()};
+          const updatedDocData = {
+            joiner: userItem,
+            joiner_last_visit: getCurrentTime(),
+          };
           await joinRoom(roomCode, updatedDocData);
           remove();
           stopLoader();
@@ -67,9 +72,8 @@ export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRo
           await onRoomReady({
             roomCode: roomCode,
             anotherPlayer: data['creator'] as UserType,
-            playerType: 'joiner'
+            playerType: 'joiner',
           });
-
         } else {
           get3().innerText = 'Please input correct code.';
           getDivOne().classList.add('input-error');
@@ -84,7 +88,7 @@ export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRo
       get3().innerText = 'Please input correct code.';
       getDivOne().classList.add('input-error');
     }
-  }
+  };
 
   const render = () => {
     setDiv('join-room-input-group');
@@ -94,7 +98,7 @@ export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRo
 
     setDivTwo('flex justify-end w-full');
     setButton('Join', 'btn w-fit', validateCode);
-    getDivTwo().append(getButton())
+    getDivTwo().append(getButton());
 
     setDivOne('input-group');
     const l = Label('input-group-label');
@@ -112,7 +116,7 @@ export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRo
     getDiv().append(getDivTwo());
 
     return getDiv();
-  }
+  };
 
   const remove = () => {
     if (get()) {
@@ -135,10 +139,10 @@ export const JoinRoomInput = (contextsData: InitializeContextsFunctionType, onRo
     removeButton();
     removeDivTwo();
     removeDiv();
-  }
+  };
 
   return {
     render,
-    remove
+    remove,
   };
-}
+};

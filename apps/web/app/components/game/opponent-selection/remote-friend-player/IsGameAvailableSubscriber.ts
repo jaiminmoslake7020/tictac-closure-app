@@ -1,42 +1,54 @@
 import {
   getGameDocumentPath,
-  InitializeContextsFunctionType
+  InitializeContextsFunctionType,
 } from '@contexts/index';
-import {GameActionCallbacksType, GameActions, GameActionsType} from '@components/game/GameActions';
-import {getGame} from '@firebase-dir/game';
-import {AddErrorWithAction} from '@components/base/ux/notification/AddErrorWithAction';
-import {addToRoot, createEL, getCurrentTime} from '@utils/index';
-import {Layout} from '@components/layouts/layout/Layout';
+import {
+  GameActionCallbacksType,
+  GameActions,
+  GameActionsType,
+} from '@components/game/GameActions';
+import { getGame } from '@firebase-dir/game';
+import { AddErrorWithAction } from '@components/base/ux/notification/AddErrorWithAction';
+import { addToRoot, createEL, getCurrentTime } from '@utils/index';
+import { Layout } from '@components/layouts/layout/Layout';
 
-export const IsGameAvailableSubscriber = (contextsData:InitializeContextsFunctionType, gameActionsCallback:GameActionCallbacksType) => {
-
+export const IsGameAvailableSubscriber = (
+  contextsData: InitializeContextsFunctionType,
+  gameActionsCallback: GameActionCallbacksType,
+) => {
   let errorAdded = false;
 
   const showErrorMessage = (message: string) => {
     if (errorAdded) {
-      const gA = GameActions(contextsData, gameActionsCallback) as GameActionsType;
+      const gA = GameActions(
+        contextsData,
+        gameActionsCallback,
+      ) as GameActionsType;
       gA.exitRoom();
     } else {
-      const gA = GameActions(contextsData, gameActionsCallback) as GameActionsType;
+      const gA = GameActions(
+        contextsData,
+        gameActionsCallback,
+      ) as GameActionsType;
       addToRoot(Layout(createEL('div') as HTMLDivElement, gA));
       AddErrorWithAction(message, gA.exitRoom);
       errorAdded = true;
     }
-  }
+  };
 
-  const isGameAvailable = async () : Promise<boolean> => {
+  const isGameAvailable = async (): Promise<boolean> => {
     // console.log('isGameAvailable');
     const gamePath = getGameDocumentPath(contextsData);
     if (gamePath) {
       const gameData = await getGame(gamePath);
       if (gameData) {
         const { creator_last_active_time, joiner_last_active_time } = gameData;
-        const isJoinerActive = getCurrentTime() - joiner_last_active_time > 5000;
-        const isCreatorActive = getCurrentTime() - creator_last_active_time > 5000;
+        const isJoinerActive =
+          getCurrentTime() - joiner_last_active_time > 5000;
+        const isCreatorActive =
+          getCurrentTime() - creator_last_active_time > 5000;
         // checking one of them has closed browser
-        if (
-          isJoinerActive || isCreatorActive
-        ) {
+        if (isJoinerActive || isCreatorActive) {
           // console.log('Game is expired.', getCurrentTime(), joiner_last_active_time, creator_last_active_time);
           showErrorMessage('Game is expired.');
           return false;
@@ -51,7 +63,7 @@ export const IsGameAvailableSubscriber = (contextsData:InitializeContextsFunctio
       showErrorMessage('Game path is incorrect.');
     }
     return false;
-  }
+  };
 
   const isGameAvailableSubscriber = async () => {
     // console.log('isGameAvailableSubscriber');
@@ -65,10 +77,10 @@ export const IsGameAvailableSubscriber = (contextsData:InitializeContextsFunctio
         clearInterval(interval);
       }
     }, 5000);
-  }
+  };
 
   return {
     isGameAvailableSubscriber,
-    isGameAvailable
-  }
-}
+    isGameAvailable,
+  };
+};

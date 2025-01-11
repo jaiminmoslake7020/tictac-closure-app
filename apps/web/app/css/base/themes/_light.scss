@@ -1,5 +1,4 @@
-@layer  base {
-
+@layer base {
   :root {
     --color-bkg: 226 232 240;
     --color-content: 39 39 42;
@@ -11,10 +10,9 @@
     --color-theme-btn-active-bg: 87 83 78;
     --color-theme-btn-active-text: 244 244 245;
     --color-theme-btn-active-border: 214 211 209;
-
   }
 
-  body[data-theme="light"] {
+  body[data-theme='light'] {
     --color-bkg: 226 232 240;
     --color-content: 39 39 42;
 
@@ -26,5 +24,4 @@
     --color-theme-btn-active-text: 244 244 245;
     --color-theme-btn-active-border: 214 211 209;
   }
-
 }

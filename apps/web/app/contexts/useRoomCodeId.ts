@@ -5,26 +5,26 @@ import {
 } from '@session/index';
 
 export type UseRoomCodeIdHookType = {
-  getRoomCodeId: () => string,
-  setRoomCodeId: (v:string) => void,
-  hasRoomCodeId: () => boolean,
-  removeRoomCodeId: () => void
+  getRoomCodeId: () => string;
+  setRoomCodeId: (v: string) => void;
+  hasRoomCodeId: () => boolean;
+  removeRoomCodeId: () => void;
 };
 
 // hooks should be component based
-export const useRoomCodeIdHook = () :UseRoomCodeIdHookType => {
+export const useRoomCodeIdHook = (): UseRoomCodeIdHookType => {
   let roomCodeId: undefined | string;
 
   const setRoomCodeId = (item: string) => {
     setRoomCodeIdSession(item);
     roomCodeId = item;
-  }
+  };
 
-  const getRoomCodeId = () : string => {
+  const getRoomCodeId = (): string => {
     return roomCodeId as string;
-  }
+  };
 
-  const hasRoomCodeId = () : boolean => {
+  const hasRoomCodeId = (): boolean => {
     if (roomCodeId) {
       return true;
     }
@@ -34,18 +34,17 @@ export const useRoomCodeIdHook = () :UseRoomCodeIdHookType => {
       return true;
     }
     return false;
-  }
+  };
 
   const removeRoomCodeId = () => {
     roomCodeId = undefined;
     removeRoomCodeIdSession();
-  }
+  };
 
   return {
     getRoomCodeId,
     setRoomCodeId,
     hasRoomCodeId,
-    removeRoomCodeId
-  }
-}
-
+    removeRoomCodeId,
+  };
+};

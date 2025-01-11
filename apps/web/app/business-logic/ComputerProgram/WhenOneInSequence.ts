@@ -1,4 +1,4 @@
-import {MovePositionType, WiningSequenceType} from '@types-dir/index';
+import { MovePositionType, WiningSequenceType } from '@types-dir/index';
 
 export const WhenOneInSequence = (
   seq: WiningSequenceType,
@@ -7,25 +7,31 @@ export const WhenOneInSequence = (
 ) => {
   let foundAnotherMove = null;
   if (
-    ( currentValues.includes( seq[0] ) && !anotherCurrentValues.includes( seq[1] ) && !anotherCurrentValues.includes( seq[2] ) )
+    currentValues.includes(seq[0]) &&
+    !anotherCurrentValues.includes(seq[1]) &&
+    !anotherCurrentValues.includes(seq[2])
   ) {
-    if ( seq[0] === "11" || seq[0] === "13"  ) {
+    if (seq[0] === '11' || seq[0] === '13') {
       foundAnotherMove = seq[1];
     } else {
       foundAnotherMove = seq[2];
     }
-  } else  if (
-    ( currentValues.includes( seq[1] ) && !anotherCurrentValues.includes( seq[2] ) && !anotherCurrentValues.includes( seq[0] ) )
+  } else if (
+    currentValues.includes(seq[1]) &&
+    !anotherCurrentValues.includes(seq[2]) &&
+    !anotherCurrentValues.includes(seq[0])
   ) {
     foundAnotherMove = seq[2];
-  } else  if (
-    ( currentValues.includes( seq[2] ) && !anotherCurrentValues.includes( seq[0] ) && !anotherCurrentValues.includes( seq[1] ) )
+  } else if (
+    currentValues.includes(seq[2]) &&
+    !anotherCurrentValues.includes(seq[0]) &&
+    !anotherCurrentValues.includes(seq[1])
   ) {
-    if ( seq[0] === "33" || seq[0] === "31"  ) {
+    if (seq[0] === '33' || seq[0] === '31') {
       foundAnotherMove = seq[1];
     } else {
       foundAnotherMove = seq[0];
     }
   }
   return foundAnotherMove;
-}
+};

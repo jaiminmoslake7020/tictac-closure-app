@@ -1,17 +1,17 @@
-import {useDiv} from '@components/base';
+import { useDiv } from '@components/base';
 
 export type NotificationWrapperType = {
-  render: () => HTMLDivElement,
-  remove: () => void,
-}
+  render: () => HTMLDivElement;
+  remove: () => void;
+};
 
-export const NotificationWrapper = () : NotificationWrapperType => {
-  const {
-    setDiv, getDiv, removeDiv
-  } = useDiv();
+export const NotificationWrapper = (): NotificationWrapperType => {
+  const { setDiv, getDiv, removeDiv } = useDiv();
 
   const {
-    setDiv: setDivOne, getDiv: getDivOne, removeDiv: removeDivOne
+    setDiv: setDivOne,
+    getDiv: getDivOne,
+    removeDiv: removeDivOne,
   } = useDiv();
 
   const render = () => {
@@ -19,15 +19,15 @@ export const NotificationWrapper = () : NotificationWrapperType => {
     setDivOne('notification');
     getDiv().append(getDivOne());
     return getDiv();
-  }
+  };
 
   const remove = () => {
     removeDiv();
     removeDivOne();
-  }
+  };
 
   return {
     render,
-    remove
+    remove,
   };
-}
+};

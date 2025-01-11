@@ -1,4 +1,4 @@
-import {applyClassList, createEL} from '@utils/index';
+import { applyClassList, createEL } from '@utils/index';
 
 export const Div = (classList?: string) => {
   let div = createEL('div');
@@ -6,7 +6,7 @@ export const Div = (classList?: string) => {
     div = applyClassList(div, classList);
   }
   return div as HTMLDivElement;
-}
+};
 
 export const Dropdown = (classList: string) => {
   let dropdown = Div('dropdown');
@@ -14,7 +14,7 @@ export const Dropdown = (classList: string) => {
     dropdown = applyClassList(dropdown, classList);
   }
   return dropdown;
-}
+};
 
 export const DropdownContainer = (classList: string) => {
   let dropdownCotainer = Div('dropdown-container');
@@ -22,65 +22,63 @@ export const DropdownContainer = (classList: string) => {
     dropdownCotainer = applyClassList(dropdownCotainer, classList);
   }
   return dropdownCotainer;
-}
-
-
-export type useStateType = {
-  get: () => any,
-  set: (item: any) => void,
-  remove: () => any
 };
 
-export const useState = () : useStateType => {
+export type useStateType = {
+  get: () => any;
+  set: (item: any) => void;
+  remove: () => any;
+};
 
-  let item : any = undefined;
+export const useState = (): useStateType => {
+  let item: any = undefined;
 
-  const get = () : any => {
+  const get = (): any => {
     return item;
-  }
+  };
 
   const set = (itemValue: any) => {
-    item =  itemValue;
-  }
+    item = itemValue;
+  };
 
-  const remove = () =>{
+  const remove = () => {
     item = undefined;
-  }
+  };
 
   return {
     get,
     set,
-    remove
-  }
-}
-
-export type useDivType = {
-  getDiv: () => HTMLDivElement,
-  setDiv: (classList?: string) => void,
-  removeDiv: () => void
+    remove,
+  };
 };
 
-export const useDiv = () : useDivType => {
-  let div : undefined | HTMLDivElement;
+export type useDivType = {
+  getDiv: () => HTMLDivElement;
+  setDiv: (classList?: string) => void;
+  removeDiv: () => void;
+};
+
+export const useDiv = (): useDivType => {
+  let div: undefined | HTMLDivElement;
 
   const getDiv = () => {
     return div as HTMLDivElement;
-  }
+  };
 
   const setDiv = (classList?: string) => {
     div = Div(classList);
-  }
+  };
 
   const removeDiv = () => {
     if (getDiv()) {
-      (getDiv() as HTMLDivElement).remove()
+      (getDiv() as HTMLDivElement).remove();
     }
-    div = undefined
-  }
+    div = undefined;
+  };
 
   return {
     getDiv,
     setDiv,
-    removeDiv
-  }
-}
+    removeDiv,
+  };
+};

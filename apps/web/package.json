@@ -14,7 +14,9 @@
     "dev": "webpack serve --mode development --stats-error-details --env=development",
     "lint": "eslint app",
     "lint:fix": "eslint app --fix",
-    "netlify:publish": "./scripts/netlify-deploy.sh"
+    "netlify:publish": "./scripts/netlify-deploy.sh",
+    "prettier:check": "npx prettier ./app/ --check",
+    "prettier:fix": "npx prettier ./app/ --write"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
@@ -46,7 +48,10 @@
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.1.0",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0"
   },
   "browserslist": [
     "> 0.25%",

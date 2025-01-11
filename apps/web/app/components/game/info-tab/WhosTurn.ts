@@ -1,48 +1,49 @@
-import {P} from '@components/base';
+import { P } from '@components/base';
 import {
-  InitializeContextsFunctionType, isItRemoteGame, isItRemotePlayerTurn,
+  InitializeContextsFunctionType,
+  isItRemoteGame,
+  isItRemotePlayerTurn,
   useContextAnotherPlayer,
   useContextOpponentType,
   useContextTurnHookType,
 } from '@contexts/index';
-import {computerProgram, remoteFriendPlayer, sameDevicePlay} from '@data/index';
+import {
+  computerProgram,
+  remoteFriendPlayer,
+  sameDevicePlay,
+} from '@data/index';
 
 export type WhosTurnFunctionType = {
-  render: () => HTMLParagraphElement,
-  remove: () => void,
-  updateTurn: () => void
+  render: () => HTMLParagraphElement;
+  remove: () => void;
+  updateTurn: () => void;
 };
 
-export const WhosTurn = (contextsData: InitializeContextsFunctionType) : WhosTurnFunctionType => {
+export const WhosTurn = (
+  contextsData: InitializeContextsFunctionType,
+): WhosTurnFunctionType => {
+  const { getOpponentType } = useContextOpponentType(contextsData);
 
-  const {
-    getOpponentType
-  } = useContextOpponentType( contextsData );
+  const { getAnotherPlayer } = useContextAnotherPlayer(contextsData);
 
-  const {
-    getAnotherPlayer
-  } = useContextAnotherPlayer( contextsData );
+  const { getTurn } = useContextTurnHookType(contextsData);
 
-  const {
-    getTurn
-  } = useContextTurnHookType( contextsData );
-
-  let p : undefined | HTMLParagraphElement;
-  const setP = (item: HTMLParagraphElement) =>{
+  let p: undefined | HTMLParagraphElement;
+  const setP = (item: HTMLParagraphElement) => {
     p = item;
-  }
-  const getP = () : HTMLParagraphElement => {
+  };
+  const getP = (): HTMLParagraphElement => {
     return p as HTMLParagraphElement;
-  }
+  };
 
   const render = () => {
-    setP( P('', 'info-p player-text') );
+    setP(P('', 'info-p player-text'));
     return getP();
-  }
+  };
 
   const updateClasses = () => {
     if (isItRemoteGame(contextsData)) {
-      if ( !isItRemotePlayerTurn(contextsData) ) {
+      if (!isItRemotePlayerTurn(contextsData)) {
         getP().classList.remove('user-is-not-a-player');
         getP().classList.add('user-is-player');
       } else {
@@ -50,36 +51,39 @@ export const WhosTurn = (contextsData: InitializeContextsFunctionType) : WhosTur
         getP().classList.remove('user-is-player');
       }
     }
-  }
+  };
 
   const update = (text: string) => {
     getP().innerHTML = text;
     updateClasses();
-  }
+  };
 
   const remove = () => {
     getP().remove();
-  }
+  };
 
-  const getPlayerName = () : string => {
-    if ( !isItRemotePlayerTurn(contextsData) ) {
+  const getPlayerName = (): string => {
+    if (!isItRemotePlayerTurn(contextsData)) {
       return 'Your Turn';
     }
-    return 'Current Turn: "'+getAnotherPlayer().username+'"';
-  }
+    return 'Current Turn: "' + getAnotherPlayer().username + '"';
+  };
 
   const updateTurn = () => {
-    if ( getOpponentType() === computerProgram || getOpponentType() === sameDevicePlay) {
+    if (
+      getOpponentType() === computerProgram ||
+      getOpponentType() === sameDevicePlay
+    ) {
       const newTurn = getTurn();
-      update( 'Current turn: '+newTurn );
+      update('Current turn: ' + newTurn);
     } else if (getOpponentType() === remoteFriendPlayer) {
-      update( getPlayerName() );
+      update(getPlayerName());
     }
-  }
+  };
 
   return {
     render,
     remove,
-    updateTurn
-  }
-}
+    updateTurn,
+  };
+};

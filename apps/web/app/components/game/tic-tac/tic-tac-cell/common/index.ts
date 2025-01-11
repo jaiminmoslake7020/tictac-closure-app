@@ -4,17 +4,22 @@ import {
   OnClickCollection,
   TdCollection,
   TdCellCollection,
-  StopAnimateMoveXDuration
+  StopAnimateMoveXDuration,
 } from '@helpers/index';
 import {
   ColumnIdType,
   MovePositionType,
-  TDClassIdType, TurnType,
+  TDClassIdType,
+  TurnType,
   WiningSequenceType,
 } from '@types-dir/index';
-import {TicTacCellValue} from '@tic-tac/tic-tac-cell/TicTacCellValue';
-import {InitializeContextsFunctionType, useContextTurnStorage, useContextWinnerSeq} from '@contexts/index';
-import {turnData} from '@data/index';
+import { TicTacCellValue } from '@tic-tac/tic-tac-cell/TicTacCellValue';
+import {
+  InitializeContextsFunctionType,
+  useContextTurnStorage,
+  useContextWinnerSeq,
+} from '@contexts/index';
+import { turnData } from '@data/index';
 
 const {
   get: getStopAnimateMoveSuccess,
@@ -22,29 +27,19 @@ const {
   reset: resetStopAnimateMoveSuccess,
 } = stopAnimateMoveSuccess();
 
-const {
-  addFn, getFn, hasFn
-} = OnClickCollection();
+const { addFn, getFn, hasFn } = OnClickCollection();
 
-const {
-  addTd, hasTd, getTd
-} = TdCollection();
+const { addTd, hasTd, getTd } = TdCollection();
 
-const {
-  addTdCell, hasTdCell, getTdCell
-} = TdCellCollection();
+const { addTdCell, hasTdCell, getTdCell } = TdCellCollection();
 
 export {
   getStopAnimateMoveSuccess,
   incrementStopAnimateMoveSuccess,
-  resetStopAnimateMoveSuccess
+  resetStopAnimateMoveSuccess,
 };
 
-const {
-  setUnClicked,
-  setClicked,
-  getClicked
-} = clickedHelper();
+const { setUnClicked, setClicked, getClicked } = clickedHelper();
 
 export {
   setUnClicked,
@@ -58,7 +53,7 @@ export {
   getTd,
   addTdCell,
   hasTdCell,
-  getTdCell
+  getTdCell,
 };
 
 export const tdClassList = {
@@ -68,19 +63,19 @@ export const tdClassList = {
   typeSuccess: 'type-Success',
   typeDisabled: 'type-Disabled',
   stopAnimateMoveX: 'stop-animate-move-x',
-  stopAnimateMoveSuccess: 'stop-animate-move-success'
-} as Record<TDClassIdType, string>
+  stopAnimateMoveSuccess: 'stop-animate-move-success',
+} as Record<TDClassIdType, string>;
 
 export const animateAnotherPersonMove = (newElement: HTMLDivElement) => {
   setTimeout(() => {
     newElement.classList.add(tdClassList.stopAnimateMoveX);
   }, StopAnimateMoveXDuration);
-}
+};
 
 export const renderValue = (columnId: ColumnIdType, turn: TurnType) => {
   const newElement = getTd(columnId) as HTMLDivElement;
   if (!newElement) {
-    console.error("newElement should not be undefined", newElement);
+    console.error('newElement should not be undefined', newElement);
   }
   if (turnData.turn === turn) {
     newElement.classList.add(tdClassList.typeO);
@@ -88,7 +83,7 @@ export const renderValue = (columnId: ColumnIdType, turn: TurnType) => {
     newElement.classList.add(tdClassList.typeX);
     animateAnotherPersonMove(newElement);
   }
-  if ( hasTdCell(columnId) ) {
+  if (hasTdCell(columnId)) {
     getTdCell(columnId).addText(turn);
   } else {
     const cv = TicTacCellValue();
@@ -96,21 +91,19 @@ export const renderValue = (columnId: ColumnIdType, turn: TurnType) => {
     cv.addText(turn);
     addTdCell(columnId, cv);
   }
-}
+};
 
 export const userMove = (columnId: ColumnIdType) => {
   renderValue(columnId, turnData.turn);
   disableCell(columnId);
   setClicked(columnId);
-}
-
-
+};
 
 export const anotherPersonMove = (columnId: ColumnIdType) => {
   renderValue(columnId, turnData.anotherTurn);
   disableCell(columnId);
   setClicked(columnId);
-}
+};
 
 export const performSuccessAnimation = (columnId: ColumnIdType) => {
   setTimeout(() => {
@@ -120,49 +113,49 @@ export const performSuccessAnimation = (columnId: ColumnIdType) => {
     }, 200);
   }, getStopAnimateMoveSuccess());
   incrementStopAnimateMoveSuccess();
-}
+};
 
 export const changeRelevantCellToSuccessStatus = (
-  contextData: InitializeContextsFunctionType ,
+  contextData: InitializeContextsFunctionType,
   columnId: ColumnIdType,
-  winnerSequence: WiningSequenceType
+  winnerSequence: WiningSequenceType,
 ) => {
-  const {getAnotherPlayerTurns} = useContextTurnStorage(contextData);
+  const { getAnotherPlayerTurns } = useContextTurnStorage(contextData);
   const anotherPersonMoves = getAnotherPlayerTurns();
   const moveType = columnId.replace('-', '') as MovePositionType;
-  if (winnerSequence.includes( moveType )) {
+  if (winnerSequence.includes(moveType)) {
     performSuccessAnimation(columnId);
     if (
-      Array.isArray(anotherPersonMoves)
-      && anotherPersonMoves.includes(moveType)
-      && !getTd(columnId).classList.contains(tdClassList.typeX)
+      Array.isArray(anotherPersonMoves) &&
+      anotherPersonMoves.includes(moveType) &&
+      !getTd(columnId).classList.contains(tdClassList.typeX)
     ) {
       anotherPersonMove(columnId);
     }
   } else {
     getTd(columnId).classList.add(tdClassList.typeDisabled);
   }
-}
+};
 
 export const disableCell = (columnId: ColumnIdType) => {
   if (!getTd(columnId).classList.contains(tdClassList.typeDisabled)) {
-    getTd(columnId).classList.add( tdClassList.typeDisabled );
+    getTd(columnId).classList.add(tdClassList.typeDisabled);
   }
-}
+};
 
 export const enableCell = (columnId: ColumnIdType) => {
   if (getTd(columnId).classList.contains(tdClassList.typeDisabled)) {
-    getTd(columnId).classList.remove( tdClassList.typeDisabled );
+    getTd(columnId).classList.remove(tdClassList.typeDisabled);
   }
-}
+};
 
 export const checkWinnerIsAvailable = (
-  contextData: InitializeContextsFunctionType ,
-  columnId: ColumnIdType
+  contextData: InitializeContextsFunctionType,
+  columnId: ColumnIdType,
 ) => {
-  const {getWinnerSequence} = useContextWinnerSeq(contextData);
+  const { getWinnerSequence } = useContextWinnerSeq(contextData);
   const winnerSequence = getWinnerSequence();
   if (Array.isArray(winnerSequence)) {
-    changeRelevantCellToSuccessStatus( contextData, columnId , winnerSequence);
+    changeRelevantCellToSuccessStatus(contextData, columnId, winnerSequence);
   }
-}
+};

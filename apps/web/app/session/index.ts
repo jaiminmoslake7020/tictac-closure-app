@@ -1,15 +1,16 @@
-import {getSession, removeSession, setSession, initSession} from './SessionHandler';
+import {
+  getSession,
+  removeSession,
+  setSession,
+  initSession,
+} from './SessionHandler';
 import {
   setUser,
   getUser,
   logoutUser,
-  checkUserExists
+  checkUserExists,
 } from './UserSessionHandler';
-import {
-  getGameId,
-  setGameId,
-  removeGameId,
-} from './GameSessionHandler';
+import { getGameId, setGameId, removeGameId } from './GameSessionHandler';
 import {
   getRoomCodeId,
   setRoomCodeId,
@@ -23,7 +24,7 @@ import {
 import {
   getOpponentType,
   setOpponentType,
-  removeOpponentType
+  removeOpponentType,
 } from './OpponentTypeSessionHandler';
 
 export {
@@ -46,5 +47,5 @@ export {
   removeAppLevelType,
   getOpponentType,
   setOpponentType,
-  removeOpponentType
+  removeOpponentType,
 };

@@ -1,10 +1,20 @@
-import {getGameDocumentPath, InitializeContextsFunctionType, useContextGamePlayerType} from '@contexts/index';
-import {GameActionCallbacksType, GameActions, GameActionsType} from '@components/game/GameActions';
-import {AddErrorWithAction} from '@components/base/ux/notification/AddErrorWithAction';
-import {updateLastActive} from '@firebase-dir/game';
+import {
+  getGameDocumentPath,
+  InitializeContextsFunctionType,
+  useContextGamePlayerType,
+} from '@contexts/index';
+import {
+  GameActionCallbacksType,
+  GameActions,
+  GameActionsType,
+} from '@components/game/GameActions';
+import { AddErrorWithAction } from '@components/base/ux/notification/AddErrorWithAction';
+import { updateLastActive } from '@firebase-dir/game';
 
-export const UpdateLastActiveTimeSubscriber = (contextsData: InitializeContextsFunctionType, gameActionsCallback: GameActionCallbacksType) => {
-
+export const UpdateLastActiveTimeSubscriber = (
+  contextsData: InitializeContextsFunctionType,
+  gameActionsCallback: GameActionCallbacksType,
+) => {
   let errorAdded = false;
 
   const updateGameIsActive = async () => {
@@ -17,15 +27,21 @@ export const UpdateLastActiveTimeSubscriber = (contextsData: InitializeContextsF
     } else {
       // console.log('Game path is incorrect.', gamePath);
       if (errorAdded) {
-        const gA = GameActions(contextsData, gameActionsCallback) as GameActionsType;
+        const gA = GameActions(
+          contextsData,
+          gameActionsCallback,
+        ) as GameActionsType;
         gA.exitRoom();
       } else {
-        const gA = GameActions(contextsData, gameActionsCallback) as GameActionsType;
+        const gA = GameActions(
+          contextsData,
+          gameActionsCallback,
+        ) as GameActionsType;
         AddErrorWithAction('Game path is incorrect.', gA.exitRoom);
         errorAdded = true;
       }
     }
-  }
+  };
 
   const updateGameIsActiveSubscriber = async () => {
     // console.log('updateGameIsActiveSubscriber');
@@ -39,10 +55,10 @@ export const UpdateLastActiveTimeSubscriber = (contextsData: InitializeContextsF
         clearInterval(interval);
       }
     }, 3000);
-  }
+  };
 
   return {
     updateGameIsActive,
-    updateGameIsActiveSubscriber
-  }
-}
+    updateGameIsActiveSubscriber,
+  };
+};

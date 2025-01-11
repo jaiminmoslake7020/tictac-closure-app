@@ -1,19 +1,20 @@
-import {useDiv} from '@components/base';
+import { useDiv } from '@components/base';
 
 export type NotificationSecondaryActionType = {
-  render: () => HTMLDivElement,
-  remove: () => void
-}
+  render: () => HTMLDivElement;
+  remove: () => void;
+};
 
-export const NotificationSecondaryAction = (content: HTMLElement) :NotificationSecondaryActionType => {
+export const NotificationSecondaryAction = (
+  content: HTMLElement,
+): NotificationSecondaryActionType => {
+  const { setDiv, getDiv, removeDiv } = useDiv();
 
   const {
-    setDiv, getDiv, removeDiv
-  } = useDiv()
-
-  const {
-    setDiv: setDivOne, getDiv: getDivOne, removeDiv: removeDivOne
-  } = useDiv()
+    setDiv: setDivOne,
+    getDiv: getDivOne,
+    removeDiv: removeDivOne,
+  } = useDiv();
 
   const render = () => {
     setDiv('notification-secondary-action-wrapper');
@@ -21,16 +22,16 @@ export const NotificationSecondaryAction = (content: HTMLElement) :NotificationS
     getDivOne().append(content);
     getDiv().append(getDivOne());
     return getDiv();
-  }
+  };
 
   const remove = () => {
     content.remove();
     removeDivOne();
     removeDiv();
-  }
+  };
 
   return {
     render,
-    remove
-  }
-}
+    remove,
+  };
+};

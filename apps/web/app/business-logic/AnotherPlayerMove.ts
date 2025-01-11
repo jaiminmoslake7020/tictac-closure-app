@@ -1,3 +1,1 @@
-export const AnotherPlayerMove = () => {
-
-}
+export const AnotherPlayerMove = () => {};

@@ -1,14 +1,12 @@
-@layer  base {
-
+@layer base {
   @media (prefers-color-scheme: dark) {
     :root {
       --color-bkg: 2 6 23;
       --color-content: 243 244 246;
-
     }
   }
 
-  body[data-theme="dark"] {
+  body[data-theme='dark'] {
     --color-bkg: 2 6 23;
     --color-content: 243 244 246;
 
@@ -20,5 +18,4 @@
     --color-theme-btn-text: 244 244 245;
     --color-theme-btn-border: 214 211 209;
   }
-
 }

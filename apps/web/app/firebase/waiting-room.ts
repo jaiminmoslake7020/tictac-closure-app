@@ -1,11 +1,20 @@
-import {deleteDocument, getDocument, insertNewDocumentWithId, updateDocument} from '@firebase-dir/core';
-import {FirebaseRoomType, UserType, WaitingRoomDbItemType} from '@types-dir/index';
+import {
+  deleteDocument,
+  getDocument,
+  insertNewDocumentWithId,
+  updateDocument,
+} from '@firebase-dir/core';
+import {
+  FirebaseRoomType,
+  UserType,
+  WaitingRoomDbItemType,
+} from '@types-dir/index';
 
 export const joinWaitingRoom = async (user: UserType) => {
   try {
-    await insertNewDocumentWithId('waiting-room', user.id,{
+    await insertNewDocumentWithId('waiting-room', user.id, {
       id: user.id,
-      live: (new Date()).getTime(),
+      live: new Date().getTime(),
       username: user.username,
     });
     return user;
@@ -16,13 +25,12 @@ export const joinWaitingRoom = async (user: UserType) => {
 
 export const updateRoom = async (userId: string, time: number) => {
   try {
-    await updateDocument(`waiting-room/${userId}`, {live: time});
-    return {uid: userId, live: time};
+    await updateDocument(`waiting-room/${userId}`, { live: time });
+    return { uid: userId, live: time };
   } catch (e) {
     console.error('Error updating user:', e);
   }
-}
-
+};
 
 export const checkRoom = async (userId: string) => {
   try {
@@ -35,8 +43,7 @@ export const checkRoom = async (userId: string) => {
   } catch (e) {
     console.error('Error updating user:', e);
   }
-}
-
+};
 
 export const deleteWaitingRoomUser = async (userId: string) => {
   try {
@@ -45,7 +52,4 @@ export const deleteWaitingRoomUser = async (userId: string) => {
     console.error('Error updating user:', e);
   }
   return false;
-}
-
-
-
+};

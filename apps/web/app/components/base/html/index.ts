@@ -1,5 +1,13 @@
-import {Button, useButton, useButtonType} from './Button';
-import {Div, Dropdown, DropdownContainer, useStateType, useState, useDivType, useDiv} from './Div';
+import { Button, useButton, useButtonType } from './Button';
+import {
+  Div,
+  Dropdown,
+  DropdownContainer,
+  useStateType,
+  useState,
+  useDivType,
+  useDiv,
+} from './Div';
 import {
   Label,
   Input,
@@ -11,13 +19,20 @@ import {
   useForm,
   useFormType,
 } from './Input';
+import { RadioButton } from './RadioButton';
 import {
-  RadioButton
-} from './RadioButton';
-import {
-  Text, P, Span, H1, H2, H3, H4, H5, H6, useSpanType, useSpan,
+  Text,
+  P,
+  Span,
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  useSpanType,
+  useSpan,
 } from './Text';
-
 
 export type {
   useButtonType,
@@ -27,7 +42,7 @@ export type {
   useFormType,
 };
 
-export  {
+export {
   Button,
   useButton,
   Div,
@@ -36,7 +51,16 @@ export  {
   useStateType,
   useState,
   useDiv,
-  Text, P, Span, H1, H2, H3, H4, H5, H6,  useSpan,
+  Text,
+  P,
+  Span,
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  useSpan,
   RadioButton,
   Label,
   Input,

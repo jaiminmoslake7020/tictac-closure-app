@@ -1,10 +1,10 @@
-import {Firestore} from '@firebase/firestore';
-import {FirebaseApp} from '@firebase/app';
-import {Auth} from '@firebase/auth';
-import {Analytics} from '@firebase/analytics';
-import {initializeApp} from 'firebase/app';
-import {getAnalytics} from "firebase/analytics";
-import {getAuth} from "firebase/auth";
+import { Firestore } from '@firebase/firestore';
+import { FirebaseApp } from '@firebase/app';
+import { Auth } from '@firebase/auth';
+import { Analytics } from '@firebase/analytics';
+import { initializeApp } from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
+import { getAuth } from 'firebase/auth';
 import {
   addDoc,
   collection,
@@ -15,7 +15,7 @@ import {
   getFirestore,
   onSnapshot,
   setDoc,
-  updateDoc
+  updateDoc,
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -29,7 +29,6 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 
-
 let firestore: undefined | Firestore;
 let app: undefined | FirebaseApp;
 let auth: undefined | Auth;
@@ -40,87 +39,113 @@ export const getFirebaseApp = (): FirebaseApp => {
     app = initializeApp(firebaseConfig);
   }
   return app;
-}
+};
 
 export const getFirestoreAuth = (): Auth => {
   if (!auth) {
     auth = getAuth(getFirebaseApp());
   }
   return auth as Auth;
-}
+};
 
 export const getFirebaseAnalytics = (): Analytics => {
   if (!auth) {
     analytics = getAnalytics(getFirebaseApp());
   }
   return analytics as Analytics;
-}
+};
 
 export const getFirestoreObject = (): Firestore => {
   if (!firestore) {
     firestore = getFirestore(getFirebaseApp());
   }
   return firestore;
-}
-
+};
 
 // Listen for real-time updates to a specific document
-export const listenToDocument = (collectionName:string, documentId: string, onRetrieve: (d:any) => void) => {
+export const listenToDocument = (
+  collectionName: string,
+  documentId: string,
+  onRetrieve: (d: any) => void,
+) => {
   const db = getFirestoreObject();
   const docRef = doc(db, collectionName, documentId);
 
-  const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
-    if (docSnapshot.exists()) {
-      onRetrieve( docSnapshot.data() );
-    } else {
-      console.log('Document does not exist');
-    }
-  }, (error) => {
-    console.error("Error listening to document changes:", error);
-  });
+  const unsubscribe = onSnapshot(
+    docRef,
+    (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        onRetrieve(docSnapshot.data());
+      } else {
+        console.log('Document does not exist');
+      }
+    },
+    (error) => {
+      console.error('Error listening to document changes:', error);
+    },
+  );
 
   return unsubscribe; // Call this function to stop listening
-}
+};
 
 // Listen for real-time updates to a specific document
-export const listenToCollection = (collectionName:string, onRetrieve: (d:any, length: number) => void) => {
+export const listenToCollection = (
+  collectionName: string,
+  onRetrieve: (d: any, length: number) => void,
+) => {
   const db = getFirestoreObject();
   const collectionRef = collection(db, collectionName);
 
-  return onSnapshot(collectionRef, (snapshot) => {
-    const length = snapshot.docChanges().length;
-    snapshot.docChanges().forEach((change) => {
-      if (change.type === "added") {
-        onRetrieve(change.doc.data(), length);
-      }
-    });
-  }, (error) => {
-    console.error("Error listening to collection changes:", error);
-  }); // Call this function to stop listening
-}
+  return onSnapshot(
+    collectionRef,
+    (snapshot) => {
+      const length = snapshot.docChanges().length;
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === 'added') {
+          onRetrieve(change.doc.data(), length);
+        }
+      });
+    },
+    (error) => {
+      console.error('Error listening to collection changes:', error);
+    },
+  ); // Call this function to stop listening
+};
 
 // Listen for real-time updates to a specific document
-export const listenToCollectionV2 = (collectionName:string, onRetrieve: (d:any, l: number) => void, onFinished: () => void) => {
+export const listenToCollectionV2 = (
+  collectionName: string,
+  onRetrieve: (d: any, l: number) => void,
+  onFinished: () => void,
+) => {
   const db = getFirestoreObject();
   const collectionRef = collection(db, collectionName);
 
-  return onSnapshot(collectionRef, (snapshot) => {
-    const length = snapshot.docChanges().length;
-    snapshot.docChanges().forEach((change) => {
-      if (change.type === "added") {
-        onRetrieve(change.doc, length);
-      }
-    });
-  }, (error) => {
-    console.error("Error listening to collection changes:", error);
-    onFinished();
-  }, () => {
-    onFinished();
-  }); // Call this function to stop listening
-}
+  return onSnapshot(
+    collectionRef,
+    (snapshot) => {
+      const length = snapshot.docChanges().length;
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === 'added') {
+          onRetrieve(change.doc, length);
+        }
+      });
+    },
+    (error) => {
+      console.error('Error listening to collection changes:', error);
+      onFinished();
+    },
+    () => {
+      onFinished();
+    },
+  ); // Call this function to stop listening
+};
 
-
-export const insertNewDocumentWithId = async (path: string, proposedDocId: string, docData: any) => {
+export const insertNewDocumentWithId = async (
+  path: string,
+  proposedDocId: string,
+  docData: any,
+) => {
   try {
     const f = getFirestoreObject();
     const docRef = doc(f, path, proposedDocId);
@@ -130,7 +155,10 @@ export const insertNewDocumentWithId = async (path: string, proposedDocId: strin
   }
 };
 
-export const insertNewDocumentWithoutId = async (path: string, docData: any) => {
+export const insertNewDocumentWithoutId = async (
+  path: string,
+  docData: any,
+) => {
   try {
     const f = getFirestoreObject();
     const docRef = doc(f, path);
@@ -140,7 +168,10 @@ export const insertNewDocumentWithoutId = async (path: string, docData: any) => 
   }
 };
 
-export const addDocument = async (collectionPath: string, docData: any) : Promise<any> => {
+export const addDocument = async (
+  collectionPath: string,
+  docData: any,
+): Promise<any> => {
   try {
     const f = getFirestoreObject();
     const collectionRef = collection(f, collectionPath);
@@ -188,7 +219,7 @@ export const fetchAllDocuments = async (collectionName: string) => {
     const f = getFirestoreObject();
     const collectionRef = collection(f, collectionName);
     const querySnapshot = await getDocs(collectionRef);
-    return querySnapshot.docs.map(doc => ({
+    return querySnapshot.docs.map((doc) => ({
       id: doc.id, // Document ID
       ...doc.data(), // Document data
     }));
