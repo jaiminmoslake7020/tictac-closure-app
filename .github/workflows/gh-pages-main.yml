@@ -48,11 +48,10 @@ jobs:
           FIREBASE_CONFIG_APP_ID: ${{ secrets.FIREBASE_CONFIG_APP_ID }}
           FIREBASE_CONFIG_MEASUREMENT_ID: ${{ secrets.FIREBASE_CONFIG_MEASUREMENT_ID }}
         run: npm run build
-      - name: Setup Pages environment
-        uses: actions/configure-pages@v5
       - name: Upload artifact for deployment job
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
+          name: my-artifact
           path: ./build/
 
 #  Deployment job
@@ -68,9 +67,15 @@ jobs:
         with:
             node-version: ${{ matrix.node-version }}
             cache: 'npm'
-      - name: Download Pages artifact
-        uses: actions/download-pages-artifact@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Create a directory for the build artifact
+        run: mkdir -p ./build && cd ./build
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
-          path: ./pages-artifact # Directory to save the artifact
+          name: my-artifact
+      - name: get out of directory
+        run: cd ..
       - name: List files
-        run: ls -R ./pages-artifact
+        run: ls -R ./build
