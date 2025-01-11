@@ -65,8 +65,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: List files
-        run: ls -R .
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -78,7 +76,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: my-artifact
+      - name: List files
+        run: ls -lah
       - name: get out of directory
         run: cd ..
       - name: List files
-        run: ls -R ./build
+        run: ls -lah
