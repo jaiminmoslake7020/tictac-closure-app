@@ -4,7 +4,7 @@ name: Build and Deploy Tic-Tac-Toe Game
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: ["uath-changed-bug"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -61,8 +61,19 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18 ] # Test on multiple Node.js versions
     needs: build
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+            node-version: ${{ matrix.node-version }}
+            cache: 'npm'
+      - name: Download Pages artifact
+        uses: actions/download-pages-artifact@v3
+        with:
+          path: ./pages-artifact # Directory to save the artifact
+      - name: List files
+        run: ls -R ./pages-artifact

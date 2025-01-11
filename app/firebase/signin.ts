@@ -30,7 +30,10 @@ onAuthStateChanged(getFirestoreAuth(), (user) => {
   if (user) {
     // console.log("onAuthStateChanged User is signed in:", user);
   } else {
-    localStorage.clear();
-    window.location.reload();
+    // console.log("onAuthStateChanged User is signed out");
+    if (localStorage.getItem('tic-tac-app-session') !== null) {
+      localStorage.clear();
+      window.location.reload();
+    }
   }
 });
