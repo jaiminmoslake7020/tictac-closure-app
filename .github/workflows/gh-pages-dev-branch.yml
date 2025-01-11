@@ -1,6 +1,9 @@
 # Sample workflow for building and deploying a Jekyll site to GitHub Pages
 name: Build Tic-Tac-Toe Game
 
+env:
+  DO_NOT_RUN: true # Set to 'true' to skip jobs
+
 on:
   # Runs on pushes targeting the default branch
   push:
@@ -25,6 +28,7 @@ concurrency:
 jobs:
   # Build job
   build:
+    if: env.DO_NOT_RUN == 'false' # Skip if DO_NOT_RUN is 'true'
     runs-on: ubuntu-latest
     strategy:
       matrix:
