@@ -1,5 +1,5 @@
 # This workflow will build and deploy a static webapp to Netlify
-name: Build and Deploy Tic-Tac-Toe Game to https://tic-tac-toe-qa-app.netlify.app/
+name: QA Build and Deploy Tic-Tac-Toe Game to https://tic-tac-toe-qa-app.netlify.app/
 
 on:
   # Runs on pushes targeting the default branch

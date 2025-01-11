@@ -1,5 +1,5 @@
 # This workflow will build and deploy a static webapp to Netlify
-name: Build and Deploy Tic-Tac-Toe Game to https://tic-tac-toe-dev-app.netlify.app/
+name: DEV Build and Deploy Tic-Tac-Toe Game to https://tic-tac-toe-dev-app.netlify.app/
 
 env:
   DO_NOT_RUN: false # Set to 'true' to skip jobs
