@@ -1,13 +1,10 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Build Tic-Tac-Toe Game
-
-env:
-  DO_NOT_RUN: true # Set to 'true' to skip jobs
+# This workflow will build and deploy a static webapp to Netlify
+name: Build and Deploy Tic-Tac-Toe Game to https://tic-tac-toe-prod.netlify.app/
 
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches-ignore: ["main"]
+    branches: ["release-webapp-*"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -18,7 +15,6 @@ permissions:
   pages: write
   id-token: write
 
-
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
@@ -28,7 +24,6 @@ concurrency:
 jobs:
   # Build job
   build:
-    if: env.DO_NOT_RUN == 'false' # Skip if DO_NOT_RUN is 'true'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -53,4 +48,40 @@ jobs:
           FIREBASE_CONFIG_APP_ID: ${{ secrets.FIREBASE_CONFIG_APP_ID }}
           FIREBASE_CONFIG_MEASUREMENT_ID: ${{ secrets.FIREBASE_CONFIG_MEASUREMENT_ID }}
         run: npm run build
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact
+          path: ./build/
 
+
+#  Deployment job
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18 ] # Test on multiple Node.js versions
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install -g netlify-cli
+      - name: List files
+        run: ls -lah
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: my-artifact
+          path: ./build
+      - name: Deploy to Netlify
+        run: ./scripts/netlify-deploy.sh
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          BUILD_DIR: ./build
