@@ -1,9 +1,5 @@
 import { RoomReadyResponseType } from '@types-dir/index';
-import {
-  getRoomData,
-  setCreatorIsInRoom,
-  setJoinerIsInRoom,
-} from '@firebase-dir/room';
+import { getRoomData, setCreatorIsInRoom, setJoinerIsInRoom } from '@firebase-dir/room';
 import { isRoomReady } from '@utils/room';
 import {
   GameActionCallbacksType,

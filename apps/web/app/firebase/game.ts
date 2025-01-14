@@ -15,10 +15,7 @@ import {
 } from '@types-dir/index';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
 
-export const updateGameWithCurrentMove = async (
-  gamePath: string,
-  currentMove: string,
-) => {
+export const updateGameWithCurrentMove = async (gamePath: string, currentMove: string) => {
   try {
     await updateDocument(gamePath, { currentMove });
   } catch (e) {
@@ -32,11 +29,10 @@ export const addNewTurnFirebase = async (
   position: MovePositionType,
 ) => {
   try {
-    return await insertNewDocumentWithId(
-      turnStorageCollectionPath,
-      String(position),
-      { userId, position },
-    );
+    return await insertNewDocumentWithId(turnStorageCollectionPath, String(position), {
+      userId,
+      position,
+    });
   } catch (e) {
     console.error('Error addNewTurnFirebase: ', e);
   }
@@ -71,9 +67,7 @@ export const updateLastActive = async (
   }
 };
 
-export const getGame = async (
-  gamePath: string,
-): Promise<FirebaseGameType | undefined> => {
+export const getGame = async (gamePath: string): Promise<FirebaseGameType | undefined> => {
   try {
     const gameDocument = await getDocument(gamePath);
     if (gameDocument && gameDocument.exists()) {
@@ -122,7 +116,7 @@ export const onGameCreated = (
 ) => {
   let start = 0;
   let didNotFound = true;
-  const unsubscribe = listenToCollectionV2(
+  listenToCollectionV2(
     `rooms/${roomCode}/games`,
     (d: QueryDocumentSnapshot<FirebaseGameType>, l: number) => {
       const time = d.data().time;

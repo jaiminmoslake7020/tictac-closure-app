@@ -7,11 +7,7 @@ import {
   useContextOpponentType,
   useContextTurnHookType,
 } from '@contexts/index';
-import {
-  computerProgram,
-  remoteFriendPlayer,
-  sameDevicePlay,
-} from '@data/index';
+import { computerProgram, remoteFriendPlayer, sameDevicePlay } from '@data/index';
 
 export type WhosTurnFunctionType = {
   render: () => HTMLParagraphElement;
@@ -19,9 +15,7 @@ export type WhosTurnFunctionType = {
   updateTurn: () => void;
 };
 
-export const WhosTurn = (
-  contextsData: InitializeContextsFunctionType,
-): WhosTurnFunctionType => {
+export const WhosTurn = (contextsData: InitializeContextsFunctionType): WhosTurnFunctionType => {
   const { getOpponentType } = useContextOpponentType(contextsData);
 
   const { getAnotherPlayer } = useContextAnotherPlayer(contextsData);
@@ -70,10 +64,7 @@ export const WhosTurn = (
   };
 
   const updateTurn = () => {
-    if (
-      getOpponentType() === computerProgram ||
-      getOpponentType() === sameDevicePlay
-    ) {
+    if (getOpponentType() === computerProgram || getOpponentType() === sameDevicePlay) {
       const newTurn = getTurn();
       update('Current turn: ' + newTurn);
     } else if (getOpponentType() === remoteFriendPlayer) {

@@ -1,7 +1,4 @@
-import {
-  getGameDocumentPath,
-  InitializeContextsFunctionType,
-} from '@contexts/index';
+import { getGameDocumentPath, InitializeContextsFunctionType } from '@contexts/index';
 import {
   GameActionCallbacksType,
   GameActions,
@@ -20,16 +17,10 @@ export const IsGameAvailableSubscriber = (
 
   const showErrorMessage = (message: string) => {
     if (errorAdded) {
-      const gA = GameActions(
-        contextsData,
-        gameActionsCallback,
-      ) as GameActionsType;
+      const gA = GameActions(contextsData, gameActionsCallback) as GameActionsType;
       gA.exitRoom();
     } else {
-      const gA = GameActions(
-        contextsData,
-        gameActionsCallback,
-      ) as GameActionsType;
+      const gA = GameActions(contextsData, gameActionsCallback) as GameActionsType;
       addToRoot(Layout(createEL('div') as HTMLDivElement, gA));
       AddErrorWithAction(message, gA.exitRoom);
       errorAdded = true;
@@ -43,10 +34,8 @@ export const IsGameAvailableSubscriber = (
       const gameData = await getGame(gamePath);
       if (gameData) {
         const { creator_last_active_time, joiner_last_active_time } = gameData;
-        const isJoinerActive =
-          getCurrentTime() - joiner_last_active_time > 5000;
-        const isCreatorActive =
-          getCurrentTime() - creator_last_active_time > 5000;
+        const isJoinerActive = getCurrentTime() - joiner_last_active_time > 5000;
+        const isCreatorActive = getCurrentTime() - creator_last_active_time > 5000;
         // checking one of them has closed browser
         if (isJoinerActive || isCreatorActive) {
           // console.log('Game is expired.', getCurrentTime(), joiner_last_active_time, creator_last_active_time);

@@ -72,9 +72,7 @@ export const NotificationHandler = (): NotificationHandlerType => {
     timeout: null | number = 5000,
     secondaryAction?: NotificationSecondaryActionType,
   ) => {
-    addNotification(
-      createNotificationObject(message, 'error', timeout, secondaryAction),
-    );
+    addNotification(createNotificationObject(message, 'error', timeout, secondaryAction));
   };
 
   const addInfo = (
@@ -83,9 +81,7 @@ export const NotificationHandler = (): NotificationHandlerType => {
     secondaryAction?: NotificationSecondaryActionType,
   ) => {
     console.info('INFO', message);
-    addNotification(
-      createNotificationObject(message, 'info', timeout, secondaryAction),
-    );
+    addNotification(createNotificationObject(message, 'info', timeout, secondaryAction));
   };
 
   const addSuccess = (
@@ -94,9 +90,7 @@ export const NotificationHandler = (): NotificationHandlerType => {
     secondaryAction?: NotificationSecondaryActionType,
   ) => {
     console.info('SUCCESS', message);
-    addNotification(
-      createNotificationObject(message, 'success', timeout, secondaryAction),
-    );
+    addNotification(createNotificationObject(message, 'success', timeout, secondaryAction));
   };
 
   const addWarning = (
@@ -105,12 +99,10 @@ export const NotificationHandler = (): NotificationHandlerType => {
     secondaryAction?: NotificationSecondaryActionType,
   ) => {
     console.warn('WARNING', message);
-    addNotification(
-      createNotificationObject(message, 'warning', timeout, secondaryAction),
-    );
+    addNotification(createNotificationObject(message, 'warning', timeout, secondaryAction));
   };
 
-  const removeNotification = (id: string) => {
+  const removeNotification = () => {
     // console.log('REMOVE NOTIFICATION', id);
   };
 

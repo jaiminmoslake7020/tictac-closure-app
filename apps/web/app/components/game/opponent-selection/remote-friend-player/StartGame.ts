@@ -1,8 +1,4 @@
-import {
-  FirebaseGameType,
-  RoomReadyResponseType,
-  UserType,
-} from '@types-dir/index';
+import { FirebaseGameType, UserType } from '@types-dir/index';
 import {
   getGameDocumentPath,
   getRandomMove,
@@ -15,12 +11,7 @@ import {
   useContextUserSession,
   UseCurrentMoveHookType,
 } from '@contexts/index';
-import {
-  createGame,
-  getAllGameMoves,
-  getGame,
-  onGameCreated,
-} from '@firebase-dir/game';
+import { createGame, getAllGameMoves, getGame, onGameCreated } from '@firebase-dir/game';
 import { addToRoot, createEL } from '@utils/index';
 import { Layout } from '@components/layouts/layout/Layout';
 import { Loader } from '@components/base';
@@ -39,15 +30,13 @@ export const StartGame = (
   gameActions: GameActionCallbacksType,
   onLevelSelected: () => void,
 ) => {
-  const { setCurrentMove } = useContextCurrentMove(
-    contextsData,
-  ) as UseCurrentMoveHookType;
+  const { setCurrentMove } = useContextCurrentMove(contextsData) as UseCurrentMoveHookType;
 
   const { getUser } = useContextUserSession(contextsData);
 
   const { addNewTurn } = useContextTurnStorage(contextsData);
 
-  const { setGameId, getGameId, hasGameId } = useContextGameId(contextsData);
+  const { setGameId, hasGameId } = useContextGameId(contextsData);
 
   const { getRoomCodeId } = useContextRoomCodeId(contextsData);
 
@@ -57,10 +46,7 @@ export const StartGame = (
 
   const addGameAvailableSubscriber = async () => {
     // console.log('addGameAvailableSubscriber');
-    const { isGameAvailableSubscriber } = IsGameAvailableSubscriber(
-      contextsData,
-      gameActions,
-    );
+    const { isGameAvailableSubscriber } = IsGameAvailableSubscriber(contextsData, gameActions);
     await isGameAvailableSubscriber();
   };
 
@@ -137,10 +123,7 @@ export const StartGame = (
 
   const joinGame = async () => {
     // console.log('joinGame');
-    const { isGameAvailable } = IsGameAvailableSubscriber(
-      contextsData,
-      gameActions,
-    );
+    const { isGameAvailable } = IsGameAvailableSubscriber(contextsData, gameActions);
     const isItAvailable = await isGameAvailable();
     // console.log('isItAvailable', isItAvailable);
     if (isItAvailable) {
@@ -168,10 +151,7 @@ export const StartGame = (
           onLevelSelected();
         } else {
           AddErrorWithAction('Game is not available at Firebase.', () => {
-            const gA = GameActions(
-              contextsData,
-              gameActions,
-            ) as GameActionsType;
+            const gA = GameActions(contextsData, gameActions) as GameActionsType;
             gA.exitRoom();
           });
         }
@@ -181,7 +161,6 @@ export const StartGame = (
           gA.exitRoom();
         });
       }
-    } else {
     }
   };
 

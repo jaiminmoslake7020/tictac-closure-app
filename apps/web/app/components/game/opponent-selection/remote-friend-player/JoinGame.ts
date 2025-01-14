@@ -1,13 +1,5 @@
-import { InitializeContextsFunctionType } from '@contexts/index';
-import { GameActionsType } from '@components/game/GameActions';
-
-export const JoinGame = (
-  contextsData: InitializeContextsFunctionType,
-  onLevelSelected: () => void,
-  gameActionsCallback: GameActionsType,
-) => {
+export const JoinGame = () => {
   const checkGameIsAvailable = async () => {};
-
   return {
     checkGameIsAvailable,
   };

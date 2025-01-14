@@ -14,7 +14,6 @@ export const TicTacTable = (
   contextData: InitializeContextsFunctionType,
 ): TicTacTableType => {
   let ticTacTable: undefined | HTMLDivElement;
-  let ticTacTableBody: undefined | HTMLDivElement;
 
   const getTicTacTable = (): HTMLDivElement => {
     if (!ticTacTable) {
@@ -25,17 +24,6 @@ export const TicTacTable = (
 
   const setTicTacTable = (item: HTMLDivElement) => {
     ticTacTable = item;
-  };
-
-  const getTicTacTableBody = (): HTMLDivElement => {
-    if (!ticTacTableBody) {
-      setTicTacTableBody(createEL('div') as HTMLDivElement);
-    }
-    return ticTacTableBody as HTMLDivElement;
-  };
-
-  const setTicTacTableBody = (item: HTMLDivElement) => {
-    ticTacTableBody = item;
   };
 
   const trArray = [] as TicTacCellRowFunctionType[];
@@ -52,14 +40,13 @@ export const TicTacTable = (
 
   const render = () => {
     setTicTacTable(createEL('div') as HTMLDivElement);
-    setTicTacTableBody(createEL('div') as HTMLDivElement);
     for (let i = 0; i < 3; i++) {
       const tr = TicTacCellRow(i + 1, handleChangeTurn, contextData);
       getTicTacTable().append(tr.render());
       trArray.push(tr);
     }
     getTicTacTable().classList.add('tic-tac-table');
-    getTicTacTable().addEventListener('click', (e) => {
+    getTicTacTable().addEventListener('click', () => {
       // console.log('e', e);
     });
     return getTicTacTable();

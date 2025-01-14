@@ -1,12 +1,7 @@
 import { updateUser } from '@firebase-dir/index';
-import {
-  InitializeContextsFunctionType,
-  useContextUserSession,
-} from '@contexts/index';
+import { InitializeContextsFunctionType, useContextUserSession } from '@contexts/index';
 
-export const keepSessionAlive = async (
-  contextsData: InitializeContextsFunctionType,
-) => {
+export const keepSessionAlive = async (contextsData: InitializeContextsFunctionType) => {
   const { getUser } = useContextUserSession(contextsData);
   const u = getUser();
   if (u && u.id) {
@@ -14,9 +9,7 @@ export const keepSessionAlive = async (
   }
 };
 
-export const keepSessionAliveInterval = async (
-  contextsData: InitializeContextsFunctionType,
-) => {
+export const keepSessionAliveInterval = async (contextsData: InitializeContextsFunctionType) => {
   await keepSessionAlive(contextsData);
   setInterval(await keepSessionAlive, 15000);
 };

@@ -1,4 +1,4 @@
-import { H2, P, useButton, useDiv } from '@components/base';
+import { H2, P, useDiv } from '@components/base';
 import { IconButton } from '@components/base/html/Button';
 import { NotificationSecondaryActionType } from '@components/base/ux/notification/NotificationSecondaryAction';
 
@@ -18,42 +18,18 @@ export type NotificationElementType = {
   remove: () => void;
 };
 
-export const Notification = (
-  notification: NotificationType,
-): NotificationElementType => {
+export const Notification = (notification: NotificationType): NotificationElementType => {
   const { setDiv, getDiv, removeDiv } = useDiv();
 
-  const {
-    setDiv: setDivOne,
-    getDiv: getDivOne,
-    removeDiv: removeDivOne,
-  } = useDiv();
+  const { setDiv: setDivOne, getDiv: getDivOne, removeDiv: removeDivOne } = useDiv();
 
-  const {
-    setDiv: setDivTwo,
-    getDiv: getDivTwo,
-    removeDiv: removeDivTwo,
-  } = useDiv();
+  const { setDiv: setDivTwo, getDiv: getDivTwo, removeDiv: removeDivTwo } = useDiv();
 
-  const {
-    setDiv: setDivThree,
-    getDiv: getDivThree,
-    removeDiv: removeDivThree,
-  } = useDiv();
+  const { setDiv: setDivThree, getDiv: getDivThree } = useDiv();
 
-  const {
-    setDiv: setDivFour,
-    getDiv: getDivFour,
-    removeDiv: removeDivFour,
-  } = useDiv();
+  const { setDiv: setDivFour, getDiv: getDivFour } = useDiv();
 
-  const {
-    setDiv: setDivFive,
-    getDiv: getDivFive,
-    removeDiv: removeDivFive,
-  } = useDiv();
-
-  const { setButton, getButton, removeButton } = useButton();
+  const { setDiv: setDivFive, getDiv: getDivFive } = useDiv();
 
   const addTitle = () => {
     setDivThree('notification-title');

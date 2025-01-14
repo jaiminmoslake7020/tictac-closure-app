@@ -3,32 +3,10 @@ export type AppLevelType = 'easy' | 'medium' | 'hard';
 export type TurnType = 'X' | 'O' | string;
 export type WinnerType = TurnType | null | 'NONE' | string;
 
-export type MovePositionType =
-  | '11'
-  | '12'
-  | '13'
-  | '21'
-  | '22'
-  | '23'
-  | '31'
-  | '32'
-  | '33';
-export type ColumnIdType =
-  | '1-1'
-  | '1-2'
-  | '1-3'
-  | '2-1'
-  | '2-2'
-  | '2-3'
-  | '3-1'
-  | '3-2'
-  | '3-3';
+export type MovePositionType = '11' | '12' | '13' | '21' | '22' | '23' | '31' | '32' | '33';
+export type ColumnIdType = '1-1' | '1-2' | '1-3' | '2-1' | '2-2' | '2-3' | '3-1' | '3-2' | '3-3';
 export type MovePositionTypeWithNull = MovePositionType | null;
-export type WiningSequenceType = [
-  MovePositionType,
-  MovePositionType,
-  MovePositionType,
-];
+export type WiningSequenceType = [MovePositionType, MovePositionType, MovePositionType];
 export type WiningSequenceTypeWithNull =
   | [MovePositionType, MovePositionType, MovePositionType]
   | null;
@@ -39,9 +17,7 @@ export type TurnStorageType = Record<TurnType, MovePositionType[]>;
 
 export type ChangeFunctionType = (i: MovePositionType) => Promise<void>;
 export type TicTacCellRowRenderFunctionType = () => HTMLDivElement;
-export type TicTacCellRowUpdateFunctionType = (
-  newChangeTurn: ChangeFunctionType,
-) => void;
+export type TicTacCellRowUpdateFunctionType = (newChangeTurn: ChangeFunctionType) => void;
 
 export type TicTacCellRowFunctionType = {
   render: TicTacCellRowRenderFunctionType;
@@ -50,9 +26,7 @@ export type TicTacCellRowFunctionType = {
 };
 
 export type TicTacCellRenderFunctionType = () => HTMLDivElement;
-export type TicTacCellUpdateFunctionType = (
-  newChangeTurn: ChangeFunctionType,
-) => void;
+export type TicTacCellUpdateFunctionType = (newChangeTurn: ChangeFunctionType) => void;
 
 export type TicTacCellFunctionType = {
   render: TicTacCellRenderFunctionType;

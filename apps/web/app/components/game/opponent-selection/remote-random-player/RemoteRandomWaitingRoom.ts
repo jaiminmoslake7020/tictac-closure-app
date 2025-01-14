@@ -7,10 +7,7 @@ import {
   useContextRoomCodeId,
   useContextUserSession,
 } from '@contexts/index';
-import {
-  GameActionCallbacksType,
-  GameActions,
-} from '@components/game/GameActions';
+import { GameActionCallbacksType, GameActions } from '@components/game/GameActions';
 import { H2, Loader, useButton, useDiv } from '@components/base';
 import {
   checkRoom,
@@ -35,7 +32,7 @@ export const RemoteRandomWaitingRoom = (
   const { showLoader, addText, updateText, stopLoader } = Loader();
 
   let startTime = 0;
-  let limitTime = 120;
+  const limitTime = 120;
 
   const { getDiv, setDiv } = useDiv();
 
@@ -101,8 +98,7 @@ export const RemoteRandomWaitingRoom = (
               getGame(gameDocumentPath).then((gameData) => {
                 if (gameData) {
                   const { currentMove } = gameData;
-                  const { setCurrentMove } =
-                    useContextCurrentMove(contextsData);
+                  const { setCurrentMove } = useContextCurrentMove(contextsData);
                   setCurrentMove(currentMove);
                   stopLoader();
                   clearInterval(interval);

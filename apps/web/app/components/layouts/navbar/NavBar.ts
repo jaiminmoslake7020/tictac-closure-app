@@ -1,11 +1,6 @@
 import { useDiv } from '@components/base';
 import { NavLink } from '@components/base/ux/NavLink';
-import {
-  getGameId,
-  getOpponentType,
-  getRoomCodeId,
-  getUser,
-} from '@session/index';
+import { getOpponentType, getRoomCodeId, getUser } from '@session/index';
 import { GameActionsType } from '@components/game/GameActions';
 import { opponentTypesObject } from '@data/index';
 
@@ -19,7 +14,6 @@ export const NavBar = (gameActions: GameActionsType) => {
 
     const user = getUser();
     const roomCodeId = getRoomCodeId();
-    const gameId = getGameId();
     const opponentType = getOpponentType();
 
     if (opponentType) {
@@ -33,20 +27,12 @@ export const NavBar = (gameActions: GameActionsType) => {
     }
 
     if (roomCodeId && gameActions.exitRoom) {
-      const navLink = NavLink(
-        'Exit Room',
-        'fa-solid fa-door-open',
-        gameActions.exitRoom,
-      );
+      const navLink = NavLink('Exit Room', 'fa-solid fa-door-open', gameActions.exitRoom);
       getDivOne().append(navLink.render());
     }
 
     if (user && gameActions.logout) {
-      const navLink = NavLink(
-        'Logout',
-        'fa-solid fa-power-off',
-        gameActions.logout,
-      );
+      const navLink = NavLink('Logout', 'fa-solid fa-power-off', gameActions.logout);
       getDivOne().append(navLink.render());
     }
 

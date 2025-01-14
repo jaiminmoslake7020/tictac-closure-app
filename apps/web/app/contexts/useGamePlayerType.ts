@@ -3,6 +3,7 @@ import { GamePlayerType } from '@types-dir/index';
 export type UseGamePlayerTypeHookType = {
   setPlayerType: (item: GamePlayerType) => void;
   getPlayerType: () => GamePlayerType;
+  removePlayerType: () => void;
 };
 
 export const useGamePlayerTypeHook = (): UseGamePlayerTypeHookType => {
@@ -19,5 +20,6 @@ export const useGamePlayerTypeHook = (): UseGamePlayerTypeHookType => {
   return {
     setPlayerType,
     getPlayerType,
+    removePlayerType,
   };
 };

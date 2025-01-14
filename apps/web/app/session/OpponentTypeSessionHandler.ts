@@ -34,7 +34,6 @@ const OpponentTypeSessionHandler = () => {
   };
 };
 
-const { getOpponentType, setOpponentType, removeOpponentType } =
-  OpponentTypeSessionHandler();
+const { getOpponentType, setOpponentType, removeOpponentType } = OpponentTypeSessionHandler();
 
 export { getOpponentType, setOpponentType, removeOpponentType };

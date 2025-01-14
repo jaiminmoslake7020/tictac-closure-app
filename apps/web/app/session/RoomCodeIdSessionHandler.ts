@@ -35,7 +35,6 @@ const RoomCodeIdSessionHandler = () => {
   };
 };
 
-const { getRoomCodeId, setRoomCodeId, removeRoomCodeId } =
-  RoomCodeIdSessionHandler();
+const { getRoomCodeId, setRoomCodeId, removeRoomCodeId } = RoomCodeIdSessionHandler();
 
 export { getRoomCodeId, setRoomCodeId, removeRoomCodeId };

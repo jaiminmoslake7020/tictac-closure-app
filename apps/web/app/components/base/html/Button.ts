@@ -25,11 +25,7 @@ export const IconButton = (
   icon: string,
   onClick: EventListenerOrEventListenerObject,
 ): HTMLButtonElement => {
-  let button = Button(
-    '',
-    btnClassList + ' btn-icon ',
-    onClick,
-  ) as HTMLButtonElement;
+  const button = Button('', btnClassList + ' btn-icon ', onClick) as HTMLButtonElement;
 
   const { getSpan, setSpan } = useSpan();
   setSpan('');

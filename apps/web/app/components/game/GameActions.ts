@@ -32,9 +32,7 @@ export const GameActions = (
     contextsData,
   ) as UseRoomCodeIdHookType;
   const { removeGameId } = useContextGameId(contextsData) as UseGameIdHookType;
-  const { logoutUser, getUser } = useContextUserSession(
-    contextsData,
-  ) as UserSessionHookType;
+  const { logoutUser, getUser } = useContextUserSession(contextsData) as UserSessionHookType;
   const { removeOpponentType } = useContextOpponentType(contextsData);
 
   const { onExitRoom, onLogout, onGameTypeChanged } = gameActionCallbacks;
@@ -43,7 +41,7 @@ export const GameActions = (
     if (isItRemoteGame(contextsData)) {
       const room = getRoomCodeId();
       const u = getUser();
-      await exitRoomFirebase(room, u.id);
+      await exitRoomFirebase(room);
       removeGameId();
       removeRoomCodeId();
     }
@@ -55,7 +53,7 @@ export const GameActions = (
     document.querySelector('.main')?.remove();
     const room = getRoomCodeId();
     const u = getUser();
-    await exitRoomFirebase(room, u.id);
+    await exitRoomFirebase(room);
     removeGameId();
     removeOpponentType(); // it makes sense to ask the user to select a new opponent
     removeRoomCodeId();

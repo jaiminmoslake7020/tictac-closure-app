@@ -1,8 +1,4 @@
-import {
-  MovePositionType,
-  MovePositionTypeWithNull,
-  WinnerType,
-} from '@types-dir/index';
+import { MovePositionType, MovePositionTypeWithNull, WinnerType } from '@types-dir/index';
 import { turnData, winnerData } from '@data/index';
 import { FindAnotherMedium } from './FindAnotherMedium';
 import {

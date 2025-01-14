@@ -4,11 +4,7 @@ import {
   insertNewDocumentWithId,
   updateDocument,
 } from '@firebase-dir/core';
-import {
-  FirebaseRoomType,
-  UserType,
-  WaitingRoomDbItemType,
-} from '@types-dir/index';
+import { UserType, WaitingRoomDbItemType } from '@types-dir/index';
 
 export const joinWaitingRoom = async (user: UserType) => {
   try {

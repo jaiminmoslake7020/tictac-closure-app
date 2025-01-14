@@ -1,9 +1,6 @@
 import { Button, Dropdown, DropdownContainer } from '@components/base';
 import { AskForAppLevelType } from './AskForAppLevelType';
-import {
-  InitializeContextsFunctionType,
-  useContextAppLevelType,
-} from '@contexts/index';
+import { InitializeContextsFunctionType, useContextAppLevelType } from '@contexts/index';
 
 export const AppLevelTypeDropdown = (
   contextsData: InitializeContextsFunctionType,
@@ -52,18 +49,12 @@ export const AppLevelTypeDropdown = (
   };
 
   const render = () => {
-    const dropdownContainer = DropdownContainer(
-      'dropdown-container-app-level-selector-box',
-    );
+    const dropdownContainer = DropdownContainer('dropdown-container-app-level-selector-box');
 
     const b = Button(getAppLevelType(), 'btn', (e) => {
       const btn = e.target as HTMLButtonElement;
       const dropdownDiv = Dropdown('dropdown-app-level-selector-box');
-      const a = AskForAppLevelType(
-        onLevelSelected.bind(null, btn),
-        true,
-        contextsData,
-      );
+      const a = AskForAppLevelType(onLevelSelected.bind(null, btn), true, contextsData);
       const d = a.render();
       setDropdownDivHTML(dropdownDiv);
       document.addEventListener('click', clickFunction);

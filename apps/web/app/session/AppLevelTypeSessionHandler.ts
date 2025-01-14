@@ -34,7 +34,6 @@ const AppLevelTypeSessionHandler = () => {
   };
 };
 
-const { getAppLevelType, setAppLevelType, removeAppLevelType } =
-  AppLevelTypeSessionHandler();
+const { getAppLevelType, setAppLevelType, removeAppLevelType } = AppLevelTypeSessionHandler();
 
 export { getAppLevelType, setAppLevelType, removeAppLevelType };

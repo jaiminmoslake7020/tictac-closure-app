@@ -1,8 +1,4 @@
-import {
-  MovePositionType,
-  MovePositionTypeWithNull,
-  WinnerType,
-} from '@types-dir/index';
+import { MovePositionType, MovePositionTypeWithNull, WinnerType } from '@types-dir/index';
 import { turnData, winnerData } from '@data/index';
 import { WhenOneInSequence } from './WhenOneInSequence';
 import { FindAnotherEasy } from './FindAnotherEasy';
@@ -71,11 +67,7 @@ export const FindAnotherMedium = (
     let startAt = 0;
     while (startAt < winnerData.length) {
       const seq = winnerData[startAt];
-      foundAnotherMove = WhenOneInSequence(
-        seq,
-        currentValues,
-        anotherCurrentValues,
-      );
+      foundAnotherMove = WhenOneInSequence(seq, currentValues, anotherCurrentValues);
       if (foundAnotherMove !== null) {
         break;
       }

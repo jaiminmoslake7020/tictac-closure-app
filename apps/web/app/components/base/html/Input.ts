@@ -24,34 +24,19 @@ export const Input = (
   return input;
 };
 
-export const TextInput = (
-  name: string,
-  value: string,
-  id: string,
-  classList?: string,
-) => {
+export const TextInput = (name: string, value: string, id: string, classList?: string) => {
   const input = Input(name, value, id, classList);
   input.setAttribute('type', 'text');
   return input;
 };
 
-export const CheckboxInput = (
-  name: string,
-  value: string,
-  id: string,
-  classList?: string,
-) => {
+export const CheckboxInput = (name: string, value: string, id: string, classList?: string) => {
   const input = Input(name, value, id, classList);
   input.setAttribute('type', 'checkbox');
   return input;
 };
 
-export const RadioInput = (
-  name: string,
-  value: string,
-  id: string,
-  classList?: string,
-) => {
+export const RadioInput = (name: string, value: string, id: string, classList?: string) => {
   const input = Input(name, value, id, classList);
   input.setAttribute('type', 'radio');
   return input;
@@ -59,12 +44,7 @@ export const RadioInput = (
 
 export type useTextInputType = {
   getInput: () => HTMLInputElement;
-  setInput: (
-    name: string,
-    value: string,
-    id: string,
-    classList?: string,
-  ) => void;
+  setInput: (name: string, value: string, id: string, classList?: string) => void;
   removeInput: () => void;
 };
 
@@ -75,12 +55,7 @@ export const useTextInput = (): useTextInputType => {
     return input as HTMLInputElement;
   };
 
-  const setInput = (
-    name: string,
-    value: string,
-    id: string,
-    classList?: string,
-  ) => {
+  const setInput = (name: string, value: string, id: string, classList?: string) => {
     input = TextInput(name, value, id, classList);
   };
 
@@ -100,11 +75,7 @@ export const useTextInput = (): useTextInputType => {
 
 export type useFormType = {
   getForm: () => HTMLFormElement;
-  setForm: (
-    name: string,
-    onSubmit: (e: any) => void,
-    classList?: string,
-  ) => void;
+  setForm: (name: string, onSubmit: (e: any) => void, classList?: string) => void;
   removeForm: () => void;
 };
 
@@ -115,11 +86,7 @@ export const useForm = (): useFormType => {
     return form as HTMLFormElement;
   };
 
-  const setForm = (
-    name: string,
-    onSubmit: (e: any) => void,
-    classList?: string,
-  ) => {
+  const setForm = (name: string, onSubmit: (e: any) => void, classList?: string) => {
     let f = createEL('form') as HTMLFormElement;
     if (classList) {
       f = applyClassList(f, classList) as HTMLFormElement;

@@ -6,20 +6,11 @@ import {
   setClicked,
   renderValue,
   disableCell,
-  tdClassList,
   addFn,
   enableCell,
 } from '@tic-tac/tic-tac-cell/common';
-import {
-  ChangeFunctionType,
-  ColumnIdType,
-  MovePositionType,
-  TurnType,
-} from '@types-dir/index';
-import {
-  InitializeContextsFunctionType,
-  useContextTurnHookType,
-} from '@contexts/index';
+import { ChangeFunctionType, ColumnIdType, MovePositionType, TurnType } from '@types-dir/index';
+import { InitializeContextsFunctionType, useContextTurnHookType } from '@contexts/index';
 
 export const removeClickListener = (columnId: ColumnIdType) => {
   if (hasFn(columnId)) {

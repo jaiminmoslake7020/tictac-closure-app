@@ -1,15 +1,8 @@
-import { OpponentType, OpponentFormButtonType } from '@types-dir/index';
+import { OpponentType } from '@types-dir/index';
 import { useDiv, useForm } from '@components/base';
 import { History } from '@utils/index';
-import {
-  OpponentSelectionItem,
-  type OpponentSelectionItemType,
-} from './OpponentSelectionItem';
-import {
-  opponentFormButtonTypeList,
-  opponentTypes,
-  opponentTypesObject,
-} from '@data/index';
+import { OpponentSelectionItem, type OpponentSelectionItemType } from './OpponentSelectionItem';
+import { opponentFormButtonTypeList } from '@data/index';
 
 export type OpponentSelectionFormType = {
   render: () => HTMLDivElement;

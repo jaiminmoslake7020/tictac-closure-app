@@ -53,14 +53,10 @@ export const RestartGameButton = (
 
   const render = () => {
     setButtonEnabled(true);
-    setButton(
-      'Reload - ' + reloadTime + 's',
-      ' btn btn-reload btn-animate ',
-      () => {
-        setButtonEnabled(false);
-        reload();
-      },
-    );
+    setButton('Reload - ' + reloadTime + 's', ' btn btn-reload btn-animate ', () => {
+      setButtonEnabled(false);
+      reload();
+    });
     setTimeout(changeRestartButtonText, 1000, reload, reloadTime - 1);
     return getButton();
   };

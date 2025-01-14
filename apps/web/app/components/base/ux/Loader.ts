@@ -9,11 +9,7 @@ export type LoaderType = {
 
 export const Loader = () => {
   const { getDiv, setDiv, removeDiv } = useDiv();
-  const {
-    getDiv: getDivOne,
-    setDiv: setDivOne,
-    removeDiv: removeDivOne,
-  } = useDiv();
+  const { getDiv: getDivOne, setDiv: setDivOne, removeDiv: removeDivOne } = useDiv();
   const { getSpan, setSpan, removeSpan } = useSpan();
   const { set: setVarOne, get: getVarOne } = useState();
 

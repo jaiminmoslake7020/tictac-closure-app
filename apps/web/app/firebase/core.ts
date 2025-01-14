@@ -155,10 +155,7 @@ export const insertNewDocumentWithId = async (
   }
 };
 
-export const insertNewDocumentWithoutId = async (
-  path: string,
-  docData: any,
-) => {
+export const insertNewDocumentWithoutId = async (path: string, docData: any) => {
   try {
     const f = getFirestoreObject();
     const docRef = doc(f, path);
@@ -168,10 +165,7 @@ export const insertNewDocumentWithoutId = async (
   }
 };
 
-export const addDocument = async (
-  collectionPath: string,
-  docData: any,
-): Promise<any> => {
+export const addDocument = async (collectionPath: string, docData: any): Promise<any> => {
   try {
     const f = getFirestoreObject();
     const collectionRef = collection(f, collectionPath);

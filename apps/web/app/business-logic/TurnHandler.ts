@@ -1,9 +1,4 @@
-import {
-  MovePositionType,
-  TurnHandlerType,
-  TurnType,
-  WinnerType,
-} from '@types-dir/index';
+import { MovePositionType, TurnHandlerType, TurnType, WinnerType } from '@types-dir/index';
 import { CheckWinner } from './CheckWinner';
 import {
   checkGameCompleted,
@@ -40,12 +35,12 @@ export const setWinnerAtFirebase = (
   const { removeGameId } = useContextGameId(contextsData);
   if (gameDocumentPath) {
     if (foundWinner === turnData.turn) {
-      setWinnerFirebase(gameDocumentPath, getUser().username).then((r) =>
+      setWinnerFirebase(gameDocumentPath, getUser().username).then(() =>
         console.log('set-winner-at-firebase'),
       );
     } else {
-      setWinnerFirebase(gameDocumentPath, getAnotherPlayer().username).then(
-        (r) => console.log('set-winner-at-firebase'),
+      setWinnerFirebase(gameDocumentPath, getAnotherPlayer().username).then(() =>
+        console.log('set-winner-at-firebase'),
       );
     }
   } else {
@@ -56,13 +51,11 @@ export const setWinnerAtFirebase = (
   }, 3000);
 };
 
-export const setGameCompletedAtFirebase = (
-  contextsData: InitializeContextsFunctionType,
-) => {
+export const setGameCompletedAtFirebase = (contextsData: InitializeContextsFunctionType) => {
   const gameDocumentPath = getGameDocumentPath(contextsData);
   const { removeGameId } = useContextGameId(contextsData);
   if (gameDocumentPath) {
-    setGameCompletedWithoutWinner(gameDocumentPath).then((r) =>
+    setGameCompletedWithoutWinner(gameDocumentPath).then(() =>
       console.log('set-game-completed-at-firebase'),
     );
   } else {
@@ -73,9 +66,7 @@ export const setGameCompletedAtFirebase = (
   }, 3000);
 };
 
-export const checkGameCompletedInner = (
-  contextsData: InitializeContextsFunctionType,
-) => {
+export const checkGameCompletedInner = (contextsData: InitializeContextsFunctionType) => {
   const isCompleted = checkGameCompleted(contextsData);
   if (isCompleted) {
     setGameCompletedAtFirebase(contextsData);
@@ -88,9 +79,7 @@ export const TurnHandler = (
   contextsData: InitializeContextsFunctionType,
   anotherPersonMadeMove: (v: MovePositionType) => Promise<void>,
 ): TurnHandlerType => {
-  const { setCurrentMove } = useContextCurrentMove(
-    contextsData,
-  ) as UseCurrentMoveHookType;
+  const { setCurrentMove } = useContextCurrentMove(contextsData) as UseCurrentMoveHookType;
 
   const { getOpponentType } = useContextOpponentType(contextsData);
 
@@ -108,16 +97,9 @@ export const TurnHandler = (
     if (isItRemoteGame(contextsData)) {
       const gameDocumentPath = getGameDocumentPath(contextsData);
       const turnStorageCollectionPath = `${gameDocumentPath}/turnStorage`;
-      await addNewTurnFirebase(
-        turnStorageCollectionPath,
-        getUser().id as string,
-        v,
-      );
+      await addNewTurnFirebase(turnStorageCollectionPath, getUser().id as string, v);
       if (gameDocumentPath) {
-        await updateGameWithCurrentMove(
-          gameDocumentPath,
-          getAnotherPlayer().id,
-        );
+        await updateGameWithCurrentMove(gameDocumentPath, getAnotherPlayer().id);
       } else {
         console.error('gameDocumentPath is not available');
       }

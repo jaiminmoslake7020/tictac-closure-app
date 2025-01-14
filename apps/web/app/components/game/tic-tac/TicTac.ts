@@ -2,7 +2,6 @@ import { InfoTab, InfoTabType } from '@components/game/info-tab/InfoTab';
 import { TurnHandler } from '@business-logic/TurnHandler';
 import {
   FirebaseGameType,
-  GamePlayerType,
   MovePositionType,
   TicTacTableType,
   TurnHandlerType,
@@ -93,8 +92,7 @@ export const TicTac = (
       getInfoTabDiv().updateRoomInfo();
 
       const { getCurrentMove } = useContextCurrentMove(contextsData);
-      const { setUserTurn, setAnotherUserTurn } =
-        useContextTurnHookType(contextsData);
+      const { setUserTurn, setAnotherUserTurn } = useContextTurnHookType(contextsData);
       if (getCurrentMove() === getUser().id) {
         setUserTurn();
       } else {
@@ -171,9 +169,7 @@ export const TicTac = (
 
   const addRestartGameListener = () => {
     // console.log('addRestartGameListener');
-    const { getRoomCodeId } = useContextRoomCodeId(
-      contextsData,
-    ) as UseRoomCodeIdHookType;
+    const { getRoomCodeId } = useContextRoomCodeId(contextsData) as UseRoomCodeIdHookType;
     const { getGameId, setGameId } = useContextGameId(contextsData);
     const { setCurrentMove } = useContextCurrentMove(contextsData);
     const { getUser } = useContextUserSession(contextsData);

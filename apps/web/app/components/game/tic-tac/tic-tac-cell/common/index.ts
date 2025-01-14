@@ -33,11 +33,7 @@ const { addTd, hasTd, getTd } = TdCollection();
 
 const { addTdCell, hasTdCell, getTdCell } = TdCellCollection();
 
-export {
-  getStopAnimateMoveSuccess,
-  incrementStopAnimateMoveSuccess,
-  resetStopAnimateMoveSuccess,
-};
+export { getStopAnimateMoveSuccess, incrementStopAnimateMoveSuccess, resetStopAnimateMoveSuccess };
 
 const { setUnClicked, setClicked, getClicked } = clickedHelper();
 

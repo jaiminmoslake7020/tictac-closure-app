@@ -1,5 +1,5 @@
 import { TurnType, WiningSequenceType, WinnerType } from '@types-dir/index';
-import { turnData, winnerData } from '@data/index';
+import { winnerData } from '@data/index';
 import {
   checkGameCompleted,
   InitializeContextsFunctionType,

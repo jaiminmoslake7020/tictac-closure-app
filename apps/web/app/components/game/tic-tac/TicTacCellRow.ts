@@ -1,10 +1,6 @@
 import { createEL } from '@utils/index';
 import { TicTacCell } from '@tic-tac/tic-tac-cell/TicTacCell';
-import {
-  ChangeFunctionType,
-  ColumnIdType,
-  TicTacCellFunctionType,
-} from '@types-dir/index';
+import { ChangeFunctionType, ColumnIdType, TicTacCellFunctionType } from '@types-dir/index';
 import { InitializeContextsFunctionType } from '@contexts/index';
 
 export const TicTacCellRow = (

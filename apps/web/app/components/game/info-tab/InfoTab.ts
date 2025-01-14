@@ -151,9 +151,7 @@ export const InfoTab = (
   };
 
   const addRestartGameButton = (reload: Function) => {
-    setRestartGameButton(
-      RestartGameButton(onGameRestart.bind(null, reload), getPlayerType()),
-    );
+    setRestartGameButton(RestartGameButton(onGameRestart.bind(null, reload), getPlayerType()));
     getDiv().append((getRestartGameButton() as RestartGameButtonType).render());
   };
 

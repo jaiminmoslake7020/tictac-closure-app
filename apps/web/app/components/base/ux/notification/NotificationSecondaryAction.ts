@@ -10,11 +10,7 @@ export const NotificationSecondaryAction = (
 ): NotificationSecondaryActionType => {
   const { setDiv, getDiv, removeDiv } = useDiv();
 
-  const {
-    setDiv: setDivOne,
-    getDiv: getDivOne,
-    removeDiv: removeDivOne,
-  } = useDiv();
+  const { setDiv: setDivOne, getDiv: getDivOne, removeDiv: removeDivOne } = useDiv();
 
   const render = () => {
     setDiv('notification-secondary-action-wrapper');

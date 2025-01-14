@@ -27,16 +27,10 @@ export const UpdateLastActiveTimeSubscriber = (
     } else {
       // console.log('Game path is incorrect.', gamePath);
       if (errorAdded) {
-        const gA = GameActions(
-          contextsData,
-          gameActionsCallback,
-        ) as GameActionsType;
+        const gA = GameActions(contextsData, gameActionsCallback) as GameActionsType;
         gA.exitRoom();
       } else {
-        const gA = GameActions(
-          contextsData,
-          gameActionsCallback,
-        ) as GameActionsType;
+        const gA = GameActions(contextsData, gameActionsCallback) as GameActionsType;
         AddErrorWithAction('Game path is incorrect.', gA.exitRoom);
         errorAdded = true;
       }

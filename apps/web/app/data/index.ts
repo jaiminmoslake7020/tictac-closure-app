@@ -20,17 +20,7 @@ export const winnerData = [
   ['13', '23', '33'],
 ] as WiningSequenceType[];
 
-export const allData = [
-  '11',
-  '12',
-  '13',
-  '21',
-  '22',
-  '23',
-  '31',
-  '32',
-  '33',
-] as MovePositionType[];
+export const allData = ['11', '12', '13', '21', '22', '23', '31', '32', '33'] as MovePositionType[];
 
 export const turnData = {
   turn: 'O' as TurnType,
@@ -59,9 +49,7 @@ export const opponentTypes = [
   sameDevicePlay,
 ] as OpponentType[];
 
-export const opponentFormButtonTypeList = opponentTypes.map(
-  (k: OpponentType) => ({
-    label: opponentTypesObject[k],
-    value: k,
-  }),
-) as OpponentFormButtonType[];
+export const opponentFormButtonTypeList = opponentTypes.map((k: OpponentType) => ({
+  label: opponentTypesObject[k],
+  value: k,
+})) as OpponentFormButtonType[];

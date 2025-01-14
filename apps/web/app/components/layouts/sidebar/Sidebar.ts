@@ -22,18 +22,8 @@ export const Sidebar = (gameActions: GameActionsType) => {
     setDivOne('sidebar');
 
     setDivTwo('cls-btn-wrapper');
-    const n1 = IconButton(
-      '',
-      'close-sidebar-btn cls-btn btn ',
-      'fa-solid fa-times',
-      hideSidebar,
-    );
-    const n2 = IconButton(
-      '',
-      'show-sidebar-btn cls-btn btn ',
-      'fa-solid fa-bars',
-      showSidebar,
-    );
+    const n1 = IconButton('', 'close-sidebar-btn cls-btn btn ', 'fa-solid fa-times', hideSidebar);
+    const n2 = IconButton('', 'show-sidebar-btn cls-btn btn ', 'fa-solid fa-bars', showSidebar);
     getDivTwo().append(n1);
     getDivTwo().append(n2);
 

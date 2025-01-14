@@ -19,10 +19,7 @@ import { RoomSelection } from './room-selection/RoomSelection';
 import { addToRoot } from '@utils/index';
 import { Layout } from '@components/layouts/layout/Layout';
 import { isRoomReady } from '@utils/room';
-import {
-  GameActionCallbacksType,
-  GameActions,
-} from '@components/game/GameActions';
+import { GameActionCallbacksType, GameActions } from '@components/game/GameActions';
 import { StartGame } from '@components/game/opponent-selection/remote-friend-player/StartGame';
 import { RoomActiveSubscriber } from '@components/game/opponent-selection/remote-friend-player/RoomActiveSubscriber';
 import { Loader } from '@components/base';
@@ -36,9 +33,7 @@ export const CheckRoomSelected = (
   onLevelSelected: () => void,
   gameActions: GameActionCallbacksType,
 ): CheckRoomSelectedType => {
-  const { setAnotherPlayer } = useContextAnotherPlayer(
-    contextsData,
-  ) as UseAnotherPlayerHookType;
+  const { setAnotherPlayer } = useContextAnotherPlayer(contextsData) as UseAnotherPlayerHookType;
   const { setRoomCodeId, removeRoomCodeId } = useContextRoomCodeId(
     contextsData,
   ) as UseRoomCodeIdHookType;
@@ -49,11 +44,7 @@ export const CheckRoomSelected = (
   const { stopLoader, showLoader } = Loader();
 
   const startGameProcess = async () => {
-    const { startProcess } = StartGame(
-      contextsData,
-      gameActions,
-      onLevelSelected,
-    );
+    const { startProcess } = StartGame(contextsData, gameActions, onLevelSelected);
     await startProcess();
   };
 
@@ -87,15 +78,11 @@ export const CheckRoomSelected = (
     }
   };
 
-  const roomDataPresentProcess = async (
-    roomCode: string,
-    roomData: FirebaseRoomType,
-  ) => {
+  const roomDataPresentProcess = async (roomCode: string, roomData: FirebaseRoomType) => {
     if (isRoomReady(roomData)) {
       // console.log("Room with data in session is at Firebase");
       const userId = getUser().id;
-      const playerType: GamePlayerType =
-        userId === roomData['creator'].id ? 'creator' : 'joiner';
+      const playerType: GamePlayerType = userId === roomData['creator'].id ? 'creator' : 'joiner';
       const anotherPlayer =
         playerType === 'creator'
           ? (roomData['joiner'] as UserType)

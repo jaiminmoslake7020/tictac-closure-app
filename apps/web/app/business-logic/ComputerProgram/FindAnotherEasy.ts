@@ -1,13 +1,8 @@
 import { MovePositionType, TurnType } from '@types-dir/index';
 import { allData } from '@data/index';
-import {
-  InitializeContextsFunctionType,
-  useContextTurnStorage,
-} from '@contexts/index';
+import { InitializeContextsFunctionType, useContextTurnStorage } from '@contexts/index';
 
-export const FindAnotherEasy = (
-  contextsData: InitializeContextsFunctionType,
-): MovePositionType => {
+export const FindAnotherEasy = (contextsData: InitializeContextsFunctionType): MovePositionType => {
   const { getTurnStorage } = useContextTurnStorage(contextsData);
   const turnStorage = getTurnStorage();
   const keys = Object.keys(turnStorage);
@@ -21,7 +16,5 @@ export const FindAnotherEasy = (
   const remainingMoves = allData.filter((v) => !totalValues.includes(v));
   // console.log('remainingMoves', remainingMoves, allData, totalValues);
   //  console.log('foundAnotherMove V1 Random ');
-  return remainingMoves[
-    Math.floor(Math.random() * (remainingMoves.length - 1))
-  ];
+  return remainingMoves[Math.floor(Math.random() * (remainingMoves.length - 1))];
 };

@@ -3,10 +3,7 @@ import { createEL } from '@utils/index';
 import { appLevelList } from '@helpers/index';
 import { RadioButton } from '@components/base';
 import { Div } from '@components/base';
-import {
-  InitializeContextsFunctionType,
-  useContextAppLevelType,
-} from '@contexts/index';
+import { InitializeContextsFunctionType, useContextAppLevelType } from '@contexts/index';
 
 export const AskForAppLevelType = (
   onLevelSelected: () => void,
@@ -15,8 +12,7 @@ export const AskForAppLevelType = (
 ) => {
   const f = createEL('form');
 
-  const { getAppLevelType, setAppLevelType } =
-    useContextAppLevelType(contextsData);
+  const { getAppLevelType, setAppLevelType } = useContextAppLevelType(contextsData);
 
   const addLevelButton = (labelText: AppLevelType) => {
     const radioButton = RadioButton(labelText, (e: Event) => {

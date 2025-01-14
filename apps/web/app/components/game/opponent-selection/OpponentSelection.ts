@@ -13,10 +13,7 @@ import {
   UseOpponentTypeHookType,
 } from '@contexts/index';
 import { useState } from '@components/base';
-import {
-  GameActionCallbacksType,
-  GameActions,
-} from '@components/game/GameActions';
+import { GameActionCallbacksType, GameActions } from '@components/game/GameActions';
 import { RemoteRandomWaitingRoom } from '@components/game/opponent-selection/remote-random-player/RemoteRandomWaitingRoom';
 import {
   computerProgram,
@@ -37,8 +34,9 @@ export const OpponentSelection = (
 ): OpponentSelectionType => {
   const { get: getVarOne, set: setVarOne } = useState();
 
-  const { setOpponentType, hasOpponentType, getOpponentType } =
-    useContextOpponentType(contextsData) as UseOpponentTypeHookType;
+  const { setOpponentType, hasOpponentType, getOpponentType } = useContextOpponentType(
+    contextsData,
+  ) as UseOpponentTypeHookType;
   const { removeGameId } = useContextGameId(contextsData);
   const { removeRoomCodeId } = useContextRoomCodeId(contextsData);
 

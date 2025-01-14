@@ -9,11 +9,7 @@ export const WaitingRoom = (
 ) => {
   const { getDiv, setDiv, removeDiv } = useDiv();
 
-  const {
-    getDiv: getDivOne,
-    setDiv: setDivOne,
-    removeDiv: removeDivOne,
-  } = useDiv();
+  const { getDiv: getDivOne, setDiv: setDivOne, removeDiv: removeDivOne } = useDiv();
 
   const { get, set, remove: removeState } = useState();
 
@@ -22,9 +18,7 @@ export const WaitingRoom = (
   const render = () => {
     setDiv('loading-room');
     setDivOne('loading-room-icon');
-    const h2 = H2(
-      'Waiting for your friend to join room! Room code is copied and ready to share!',
-    );
+    const h2 = H2('Waiting for your friend to join room! Room code is copied and ready to share!');
     set(h2);
     const span = Span('', 'fas fa-cog fa-spin');
     set2(span);

@@ -3,16 +3,9 @@ import { LoadTicTacApp } from '@tic-tac/LoadTicTacApp';
 import { InitializeContextsFunctionType } from '@contexts/index';
 import { OpponentSelection } from './opponent-selection/OpponentSelection';
 import { Layout } from '@components/layouts/layout/Layout';
-import {
-  GameActionCallbacksType,
-  GameActions,
-  GameActionsType,
-} from './GameActions';
+import { GameActionCallbacksType, GameActions, GameActionsType } from './GameActions';
 
-export const Game = (
-  contextsData: InitializeContextsFunctionType,
-  onLogout: () => void,
-) => {
+export const Game = (contextsData: InitializeContextsFunctionType, onLogout: () => void) => {
   const getGameActionsObject = (): GameActionCallbacksType => {
     return {
       onExitRoom: init,
@@ -27,10 +20,7 @@ export const Game = (
 
   const onLevelSelected = () => {
     addToRoot(
-      Layout(
-        LoadTicTacApp(contextsData, getGameActionsObject()).render(),
-        getGameActions(),
-      ),
+      Layout(LoadTicTacApp(contextsData, getGameActionsObject()).render(), getGameActions()),
     );
   };
 
@@ -40,11 +30,7 @@ export const Game = (
       onLogout,
       onGameTypeChanged: init,
     };
-    const t = OpponentSelection(
-      contextsData,
-      onLevelSelected,
-      gameActionsCallback,
-    );
+    const t = OpponentSelection(contextsData, onLevelSelected, gameActionsCallback);
     t.render();
   };
 

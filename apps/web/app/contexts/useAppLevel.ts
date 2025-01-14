@@ -22,10 +22,7 @@ export const useAppLevel = (): UseAppLevelHookType => {
 
   const getAppLevelType = (): AppLevelType => {
     const appLevelTypeStorage = getAppLevelTypeSession();
-    if (
-      appLevelTypeStorage &&
-      Object.keys(appLevelList).includes(appLevelTypeStorage)
-    ) {
+    if (appLevelTypeStorage && Object.keys(appLevelList).includes(appLevelTypeStorage)) {
       setAppLevelType(appLevelTypeStorage as AppLevelType);
     } else {
       removeAppLevelTypeSession();

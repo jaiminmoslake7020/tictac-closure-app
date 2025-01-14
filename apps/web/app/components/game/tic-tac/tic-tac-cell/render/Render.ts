@@ -5,11 +5,7 @@ import {
   isUsedTurn,
   useContextTurnStorage,
 } from '@contexts/index';
-import {
-  ChangeFunctionType,
-  ColumnIdType,
-  MovePositionType,
-} from '@types-dir/index';
+import { ChangeFunctionType, ColumnIdType, MovePositionType } from '@types-dir/index';
 import { TicTacCellIdentifier } from '@tic-tac/tic-tac-cell/TicTacCellIdentifier';
 import {
   addTd,
@@ -31,10 +27,7 @@ export const CheckPreviouslyStoredMoves = (
     const moveType = columnId.replace('-', '') as MovePositionType;
     if (turns[turnData.turn] && turns[turnData.turn].includes(moveType)) {
       userMove(columnId);
-    } else if (
-      turns[turnData.anotherTurn] &&
-      turns[turnData.anotherTurn].includes(moveType)
-    ) {
+    } else if (turns[turnData.anotherTurn] && turns[turnData.anotherTurn].includes(moveType)) {
       anotherPersonMove(columnId);
     }
   }

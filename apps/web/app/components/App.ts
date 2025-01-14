@@ -2,7 +2,7 @@ import { addToRoot } from '@utils/index';
 import { Game } from './game/Game';
 import { User } from './user/User';
 import { initializeContexts, useContextUserSession } from '@contexts/index';
-import { unliveUser, upsertUser } from '@firebase-dir/user';
+import { unliveUser } from '@firebase-dir/user';
 
 export const App = () => {
   const contextsData = initializeContexts();
@@ -18,7 +18,7 @@ export const App = () => {
     // console.log('Window is about to close!');
   };
 
-  const unloadEvent = async (event: BeforeUnloadEvent) => {
+  const unloadEvent = async () => {
     if (isTabClosed) {
       // console.log('Tab is being closed!');
       // Perform tab-specific cleanup actions here
@@ -27,12 +27,14 @@ export const App = () => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const addCloseWindow = () => {
     // console.log('addCloseWindow');
     window.addEventListener('beforeunload', beforeUnloadEvent);
     window.addEventListener('unload', unloadEvent);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const removeCloseWindow = () => {
     // console.log('removeCloseWindow');
     window.removeEventListener('beforeunload', beforeUnloadEvent);

@@ -1,18 +1,11 @@
-import {
-  RoomObjectType,
-  RoomReadyResponseType,
-  UserType,
-} from '@types-dir/index';
+import { RoomObjectType, RoomReadyResponseType, UserType } from '@types-dir/index';
 import { useDiv } from '@components/base';
 import { useForm } from '@components/base';
 import { History } from '@utils/index';
 import { RoomSelectionItem, RoomSelectionItemType } from './RoomSelectionItem';
 import { Loader } from '@components/base';
 import { createRoom as createRoomFirebase } from '@firebase-dir/index';
-import {
-  InitializeContextsFunctionType,
-  useContextUserSession,
-} from '@contexts/index';
+import { InitializeContextsFunctionType, useContextUserSession } from '@contexts/index';
 import { WaitingRoom } from './WaitingRoom';
 import { JoinRoomInput } from './JoinRoomInput';
 import { JoinRoomCopyButton } from './JoinRoomCopyButton';
@@ -81,10 +74,7 @@ export const RoomSelection = (
     const user = getUser() as UserType;
     const roomCode = await createRoomFirebase(user);
     if (roomCode) {
-      const j = JoinRoomCopyButton(
-        roomCode,
-        onRoomCodeCopied.bind(null, roomCode),
-      );
+      const j = JoinRoomCopyButton(roomCode, onRoomCodeCopied.bind(null, roomCode));
       getDiv().append(j.render());
     } else {
       // TODO: add addError function which will call a toast
