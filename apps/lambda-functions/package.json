@@ -6,7 +6,8 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "prettier:check": "npx prettier ./src/ --check",
-    "prettier:fix": "npx prettier ./src/ --write"
+    "prettier:fix": "npx prettier ./src/ --write",
+    "upsert-aws-layer": "./scripts/upsert-aws-layer.sh"
   },
   "dependencies": {
     "firebase-admin": "^13.0.2"

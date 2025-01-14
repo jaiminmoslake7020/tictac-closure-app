@@ -15,8 +15,7 @@
     "status-rule": "./scripts/aws-status-rule.sh",
     "enable-rule": "./scripts/aws-enable-rule.sh",
     "disable-rule": "./scripts/aws-disable-rule.sh",
-    "prettier-check": "npx prettier ./src/ --check",
-    "prettier-fix": "npx prettier ./src/ --write"
+    "check-aws-lambda": "./scripts/list-aws-functions.sh"
   },
   "keywords": [],
   "author": "",

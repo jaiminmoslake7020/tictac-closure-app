@@ -1,0 +1,55 @@
+# This workflow will build and deploy a static webapp to Netlify
+name: DEV Build and Deploy Lambda Layer
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches-ignore: ["main",'release-*'] # Skip if branch is main or release-webapp-*
+    paths:
+      - 'apps/lambda-functions/**'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  id-token: write
+
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "dev-lambda"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18 ] # Test on multiple Node.js versions
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - name: Remove apps/web directory
+        run: rm -rf apps/web
+      - name: Install dependencies
+        run: yarn install --production
+      - name: Create layer/nodejs directory
+        run: mkdir -p layer/nodejs
+      - name: Copy node_modules to layer/nodejs directory
+        run: cp -r node_modules layer/nodejs
+      - name: Zip layer/nodejs directory
+        run: zip -r my-layer.zip layer/
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact
+          path: ./my-layer.zip
