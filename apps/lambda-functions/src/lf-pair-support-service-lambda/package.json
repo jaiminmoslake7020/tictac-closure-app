@@ -15,7 +15,8 @@
     "status-rule": "./scripts/aws-status-rule.sh",
     "enable-rule": "./scripts/aws-enable-rule.sh",
     "disable-rule": "./scripts/aws-disable-rule.sh",
-    "check-aws-lambda": "./scripts/list-aws-functions.sh"
+    "check-aws-lambda": "./scripts/list-aws-functions.sh",
+    "upsert-aws-lambda": "./scripts/upsert-aws-lambda-function.sh"
   },
   "keywords": [],
   "author": "",
