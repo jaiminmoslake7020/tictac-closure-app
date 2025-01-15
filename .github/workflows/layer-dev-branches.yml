@@ -59,6 +59,10 @@ jobs:
         run: cp -r node_modules layer/nodejs
       - name: Zip layer/nodejs directory
         run: zip -r my-layer.zip layer
+      - name: Verify zip file
+        run: ls -al
+      - name: copy zip file
+        run: cp my-layer.zip apps/lambda-functions
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
