@@ -47,9 +47,16 @@ jobs:
       - name: Copy node_modules to layer/nodejs directory
         run: cp -r node_modules layer/nodejs
       - name: Zip layer/nodejs directory
-        run: zip -r my-layer.zip layer/
+        run: zip -r my-layer.zip layer
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: my-artifact
+          name: my-layer
           path: ./my-layer.zip
+      - name: Upsert AWS layer
+        run: yarn run lambda:layer:publish
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          LAYER_NAME: ${{ secrets.LAYER_NAME }}
+

@@ -1,6 +1,8 @@
 #!/bin/bash
 # This script creates an AWS Lambda function
 
+echo "Updating AWS Lambda Function..."
+
 FILE_TO_SOURCE="./scripts/setup_env.sh"
 # Check if the file exists and is readable
 if [ -r "$FILE_TO_SOURCE" ]; then
@@ -9,7 +11,6 @@ if [ -r "$FILE_TO_SOURCE" ]; then
     echo "File sourced successfully."
 else
     echo "Error: File '$FILE_TO_SOURCE' does not exist or is not readable."
-    exit 1
 fi
 
 # Check if the required environment variables are set

@@ -1,9 +1,5 @@
 #!/bin/bash
 
-echo "Zipping Lambda function..."
-rm -f "$ZIP_FILE"
-
-# Load environment variables from env_vars.sh
 FILE_TO_SOURCE="./scripts/setup_env.sh"
 # Check if the file exists and is readable
 if [ -r "$FILE_TO_SOURCE" ]; then
@@ -15,10 +11,15 @@ else
 fi
 
 # Check if the required environment variables are set
-if [ -z "$BUNDLE_FILE" ] || [ -z "$ZIP_FILE" ]; then
+if [ -z "$LAYER_NAME" ]; then
   echo "Error: Missing required environment variables."
-  echo "Please set BUNDLE_FILE, ZIP_FILE."
+  echo "Please set LAYER_NAME."
   exit 1
 fi
 
-zip -r "$ZIP_FILE" "$BUNDLE_FILE"
+
+aws lambda publish-layer-version \
+    --layer-name $LAYER_NAME \
+    --description "Layer to support node_modules" \
+    --zip-file fileb://my-layer.zip \
+    --compatible-runtimes nodejs18.x
