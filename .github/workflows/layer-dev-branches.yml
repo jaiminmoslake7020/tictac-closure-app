@@ -7,6 +7,7 @@ on:
     branches-ignore: ["main",'release-*'] # Skip if branch is main or release-webapp-*
     paths:
       - 'apps/lambda-functions/**'
+      - '.github/workflows/layer-dev-branches.yml'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
