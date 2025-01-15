@@ -46,6 +46,8 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Verify AWS CLI installation
         run: aws --version
+      - name: Verify AWS CLI installation
+        run: aws --version
       - name: Remove apps/web directory
         run: rm -rf apps/web
       - name: Install dependencies
