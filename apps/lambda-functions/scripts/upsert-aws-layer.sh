@@ -1,5 +1,6 @@
 #!/bin/bash
 
+pwd
 
 FILE_TO_SOURCE="./scripts/setup_env.sh"
 # Check if the file exists and is readable
