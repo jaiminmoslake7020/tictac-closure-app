@@ -9,4 +9,4 @@ zip -r "$ZIP_FILE" "$BUNDLE_FILE"
 
 echo "Lambda function zipped successfully."
 
-ls -la
+

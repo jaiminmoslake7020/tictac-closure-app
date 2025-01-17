@@ -5,7 +5,6 @@ echo "Updating AWS Lambda Function..."
 aws lambda update-function-code \
   --function-name "$FUNCTION_NAME" \
   --zip-file fileb://"$ZIP_FILE" \
-  --layers "arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:layer:$LAYER_NAME:$VERSION_NUMBER" \
 
 aws lambda update-function-configuration \
     --function-name "$FUNCTION_NAME" \
