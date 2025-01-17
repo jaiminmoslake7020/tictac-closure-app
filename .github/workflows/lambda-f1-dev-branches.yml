@@ -6,7 +6,7 @@ on:
   push:
     branches-ignore: ["main",'release-*'] # Skip if branch is main or release-webapp-*
     paths:
-      - 'apps/lambda-functions/src/lf-pair-support-service-lambda/src/**'
+      - 'apps/lambda-functions/src/lf-pair-support-service-lambda/**'
       - '.github/workflows/lambda-f1-dev-branches.yml'
 
   # Allows you to run this workflow manually from the Actions tab
@@ -51,7 +51,7 @@ jobs:
         run: rm -rf apps/web
       - name: Install dependencies
         run: yarn install
-      - name: Upsert AWS layer
+      - name: Upsert AWS lambda
         run: yarn run lambda:fn1:publish
         env:
           FUNCTION_NAME: ${{ secrets.FUNCTION_NAME_DEV_1 }}
