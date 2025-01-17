@@ -33,3 +33,23 @@ aws lambda publish-layer-version \
     --description "Layer to support node_modules" \
     --zip-file fileb://my-layer.zip \
     --compatible-runtimes nodejs18.x
+
+VERSION_NUMBER=$(aws lambda list-layer-versions --layer-name $LAYER_NAME --query 'LayerVersions[0].Version' --output text)
+echo "New version VERSION_NUMBER:$VERSION_NUMBER"
+
+
+for item in $FUNCTION_NAME_LOCAL $FUNCTION_NAME_DEV $FUNCTION_NAME_PROD
+do
+echo "Checking function $item"
+FN1=$(aws lambda list-functions --query 'Functions[?FunctionName==`'$item'`].FunctionName' --output text)
+
+if [ "$FN1" == "$item" ]; then
+  echo "Found function updating layer."
+  aws lambda update-function-configuration \
+      --function-name "$FUNCTION_NAME" \
+      --layers "arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:layer:$LAYER_NAME:$VERSION_NUMBER" \
+
+fi
+done
+
+

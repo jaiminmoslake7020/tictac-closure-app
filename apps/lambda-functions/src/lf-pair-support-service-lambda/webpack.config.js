@@ -1,9 +1,6 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 
-const p = nodeExternals;
-console.log('nodeExternals:', p);
-
 module.exports = (env) => ({
   target: 'node', // Ensure Webpack targets Node.js
   entry: './src/index.ts', // Your app's entry point
