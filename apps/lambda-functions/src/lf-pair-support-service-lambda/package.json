@@ -9,14 +9,10 @@
     "build": "../../node_modules/.bin/webpack --mode production",
     "dev": "node app.js ./dist/bundle.js .env",
     "zip": "./scripts/zip-lambda.sh",
-    "create-aws-lambda": "./scripts/create-aws-lambda-function.sh",
-    "update-aws-lambda": "./scripts/update-aws-lambda-function.sh",
-    "update-aws-lambda-env": "./scripts/update-env-to-aws-lambda.sh",
     "status-rule": "./scripts/aws-status-rule.sh",
     "enable-rule": "./scripts/aws-enable-rule.sh",
     "disable-rule": "./scripts/aws-disable-rule.sh",
-    "check-aws-lambda": "./scripts/list-aws-functions.sh",
-    "upsert-aws-lambda": "./scripts/upsert-aws-lambda-function.sh"
+    "publish-aws-lambda": "./scripts/publish-awa-lambda-function.sh"
   },
   "keywords": [],
   "author": "",

@@ -20,6 +20,14 @@ if [ -z "$LAYER_NAME" ]; then
   exit 1
 fi
 
+VERSION_NUMBER=$(aws lambda list-layer-versions --layer-name $LAYER_NAME --query 'LayerVersions[0].Version' --output text)
+
+if [ -z "$VERSION_NUMBER" ]; then
+  echo "No version found for layer $LAYER_NAME"
+else
+  aws lambda delete-layer-version --layer-name $LAYER_NAME --version-number $VERSION_NUMBER
+fi
+
 aws lambda publish-layer-version \
     --layer-name $LAYER_NAME \
     --description "Layer to support node_modules" \

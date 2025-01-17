@@ -1,0 +1,78 @@
+# This workflow will build and deploy a static webapp to Netlify
+name: DEV Build and Deploy Lambda Function 1 pair support service dev
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches-ignore: ["main",'release-*'] # Skip if branch is main or release-webapp-*
+    paths:
+      - 'apps/lambda-functions/src/lf-pair-support-service-lambda/src/**'
+      - '.github/workflows/lambda-f1-dev-branches.yml'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  id-token: write
+
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "dev-lambda-fn1"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18 ] # Test on multiple Node.js versions
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - name: Configure AWS CLI
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Verify AWS CLI installation
+        run: aws --version
+      - name: Remove apps/web directory
+        run: rm -rf apps/web
+      - name: Install dependencies
+        run: yarn install
+      - name: Upsert AWS layer
+        run: yarn run lambda:fn1:publish
+        env:
+          FUNCTION_NAME: ${{ secrets.FUNCTION_NAME_DEV_1 }}
+          ZIP_FILE: "lambda.zip"
+          BUNDLE_FILE: "dist/bundle.js"
+          HANDLER: "handler"
+          ENV_VAR1: ${{ secrets.ENV_VAR1_DEV }}
+          ENV_VAR2: ${{ secrets.ENV_VAR2_DEV }}
+          ENV_VAR3: ${{ secrets.ENV_VAR3_DEV }}
+          LAYER_NAME: ${{ secrets.LAYER_NAME }}
+          ROLE_ARN: ${{ secrets.ROLE_ARN }}
+          RULE_NAME: ${{ secrets.RULE_NAME_DEV }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+
+
+
+
+
+
+

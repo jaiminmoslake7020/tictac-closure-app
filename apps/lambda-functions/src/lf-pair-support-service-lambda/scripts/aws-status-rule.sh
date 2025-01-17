@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Checking AWS Rule status..."
+
 FILE_TO_SOURCE="./scripts/setup_env.sh"
 # Check if the file exists and is readable
 if [ -r "$FILE_TO_SOURCE" ]; then
@@ -7,19 +9,14 @@ if [ -r "$FILE_TO_SOURCE" ]; then
     . "$FILE_TO_SOURCE"
     echo "File sourced successfully."
 else
-    echo "Error: File '$FILE_TO_SOURCE' does not exist or is not readable."
+    echo "File '$FILE_TO_SOURCE' does not exist or is not readable."
 fi
 
 # Check if the required environment variables are set
-if [ -z "$LAYER_NAME" ]; then
+if [ -z "$RULE_NAME" ]; then
   echo "Error: Missing required environment variables."
-  echo "Please set LAYER_NAME."
+  echo "Please set RULE_NAME."
   exit 1
 fi
 
-
-aws lambda publish-layer-version \
-    --layer-name $LAYER_NAME \
-    --description "Layer to support node_modules" \
-    --zip-file fileb://my-layer.zip \
-    --compatible-runtimes nodejs18.x
+aws events describe-rule --name $RULE_NAME

@@ -3,23 +3,6 @@
 
 echo "Creating AWS Lambda FUNCTION_NAME: $FUNCTION_NAME"
 
-FILE_TO_SOURCE="./scripts/setup_env.sh"
-# Check if the file exists and is readable
-if [ -r "$FILE_TO_SOURCE" ]; then
-    # Source the file
-    . "$FILE_TO_SOURCE"
-    echo "File sourced successfully."
-else
-    echo "Error: File '$FILE_TO_SOURCE' does not exist or is not readable."
-fi
-
-# Check if the required environment variables are set
-if [ -z "$FUNCTION_NAME" ] || [ -z "$ROLE_ARN" ] || [ -z "$HANDLER" ] || [ -z "$ZIP_FILE" ]; then
-  echo "Error: Missing required environment variables."
-  echo "Please set FUNCTION_NAME, HANDLER, ROLE_ARN and ZIP_FILE."
-  exit 1
-fi
-
 # Create the Lambda function
 aws lambda create-function \
   --function-name "$FUNCTION_NAME" \
@@ -29,5 +12,23 @@ aws lambda create-function \
   --role "$ROLE_ARN" \
   --timeout 15 \
   --memory-size 512 \
+  --environment "Variables={FIREBASE_PROJECT_ID=$ENV_VAR1,FIREBASE_CLIENT_EMAIL=$ENV_VAR2,FIREBASE_PRIVATE_KEY_BASE64=$ENV_VAR3}" \
+  --layers "arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:layer:$LAYER_NAME:$VERSION_NUMBER" \
 
 echo "Lambda function $FUNCTION_NAME created successfully."
+
+aws events put-rule \
+    --name $RULE_NAME \
+    --schedule-expression "rate(1 minute)" \
+    --state ENABLED \
+
+aws events put-targets \
+    --rule $RULE_NAME \
+    --targets "Id"="1","Arn"="arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$FUNCTION_NAME" \
+
+aws lambda add-permission \
+    --function-name $FUNCTION_NAME \
+    --statement-id "run-this-at-each-minute" \
+    --action 'lambda:InvokeFunction' \
+    --principal events.amazonaws.com \
+    --source-arn "arn:aws:events:$AWS_REGION:$AWS_ACCOUNT_ID:rule/$RULE_NAME"

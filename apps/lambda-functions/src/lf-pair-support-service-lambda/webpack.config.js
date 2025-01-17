@@ -1,27 +1,5 @@
 const path = require('path');
-const dotenv = require('dotenv');
 const nodeExternals = require('webpack-node-externals');
-const webpack = require('webpack');
-
-// Load environment variables
-const env = dotenv.config().parsed;
-// Convert environment variables to stringified format for DefinePlugin
-const envKeys = !process.env.FIREBASE_PROJECT_ID
-  ? Object.keys(env).reduce((prev, next) => {
-      prev[`process.env.${next}`] = JSON.stringify(env[next]);
-      return prev;
-    }, {})
-  : {
-      'process.env.FIREBASE_PROJECT_ID': JSON.stringify(
-        process.env.FIREBASE_PROJECT_ID,
-      ),
-      'process.env.FIREBASE_CLIENT_EMAIL': JSON.stringify(
-        process.env.FIREBASE_CLIENT_EMAIL,
-      ),
-      'process.env.FIREBASE_PRIVATE_KEY_BASE64': JSON.stringify(
-        process.env.FIREBASE_PRIVATE_KEY_BASE64,
-      ),
-    };
 
 module.exports = (env) => ({
   target: 'node', // Ensure Webpack targets Node.js
@@ -45,7 +23,4 @@ module.exports = (env) => ({
       },
     ],
   },
-  plugins: [
-    new webpack.DefinePlugin(envKeys), // Pass environment
-  ],
 });

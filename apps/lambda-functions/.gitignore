@@ -13,3 +13,5 @@ config
 
 
 **/.env
+/scripts/test.sh
+/src/lf-pair-support-service-lambda/.env.donotuse

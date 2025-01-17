@@ -1,24 +1,10 @@
 #!/bin/bash
+# Zip the Lambda function
 
 echo "Zipping Lambda function..."
+
 rm -f "$ZIP_FILE"
 
-# Load environment variables from env_vars.sh
-FILE_TO_SOURCE="./scripts/setup_env.sh"
-# Check if the file exists and is readable
-if [ -r "$FILE_TO_SOURCE" ]; then
-    # Source the file
-    . "$FILE_TO_SOURCE"
-    echo "File sourced successfully."
-else
-    echo "Error: File '$FILE_TO_SOURCE' does not exist or is not readable."
-fi
-
-# Check if the required environment variables are set
-if [ -z "$BUNDLE_FILE" ] || [ -z "$ZIP_FILE" ]; then
-  echo "Error: Missing required environment variables."
-  echo "Please set BUNDLE_FILE, ZIP_FILE."
-  exit 1
-fi
-
 zip -r "$ZIP_FILE" "$BUNDLE_FILE"
+
+echo "Lambda function zipped successfully."
