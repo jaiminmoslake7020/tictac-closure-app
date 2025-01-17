@@ -57,7 +57,7 @@ jobs:
           FUNCTION_NAME: ${{ secrets.FUNCTION_NAME_DEV_1 }}
           ZIP_FILE: "lambda.zip"
           BUNDLE_FILE: "dist/bundle.js"
-          HANDLER: "handler"
+          HANDLER: "dist/bundle.handler"
           ENV_VAR1: ${{ secrets.ENV_VAR1_DEV }}
           ENV_VAR2: ${{ secrets.ENV_VAR2_DEV }}
           ENV_VAR3: ${{ secrets.ENV_VAR3_DEV }}
