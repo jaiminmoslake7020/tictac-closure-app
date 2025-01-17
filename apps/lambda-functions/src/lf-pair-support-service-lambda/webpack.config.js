@@ -22,10 +22,8 @@ module.exports = (env) => ({
         test: /\.ts$/,
         use: ['babel-loader', 'ts-loader'], // Use Babel and TypeScript loaders
         exclude: [
-          path.resolve(__dirname, 'node_modules'), // Local node_modules
-          path.resolve(__dirname, '../../node_modules'), // Parent node_modules
-          path.resolve(__dirname, '../../../../node_modules'), // Parent node_modules
-        ], // Exclude dependencies from bundling
+          '/node_modules/', // Exclude dependencies from bundling
+        ],
       },
     ],
   },
