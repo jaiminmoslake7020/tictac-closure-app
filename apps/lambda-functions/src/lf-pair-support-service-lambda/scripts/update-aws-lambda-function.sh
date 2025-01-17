@@ -6,6 +6,8 @@ aws lambda update-function-code \
   --function-name "$FUNCTION_NAME" \
   --zip-file fileb://"$ZIP_FILE" \
 
+sleep 10
+
 aws lambda update-function-configuration \
     --function-name "$FUNCTION_NAME" \
     --layers "arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:layer:$LAYER_NAME:$VERSION_NUMBER" \
