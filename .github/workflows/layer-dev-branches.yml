@@ -75,3 +75,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           LAYER_NAME: ${{ secrets.LAYER_NAME }}
+          FUNCTION_NAME_LOCAL: ${{ vars.FUNCTION_NAME_LOCAL_1 }}
+          FUNCTION_NAME_DEV: ${{ vars.FUNCTION_NAME_DEV_1 }}
+          FUNCTION_NAME_PROD: ${{ vars.FUNCTION_NAME_PROD_1 }}

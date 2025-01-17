@@ -40,15 +40,16 @@ echo "New version VERSION_NUMBER:$VERSION_NUMBER"
 
 for item in $FUNCTION_NAME_LOCAL $FUNCTION_NAME_DEV $FUNCTION_NAME_PROD
 do
-echo "Checking function 1 $item"
-FN1=$(aws lambda list-functions --query 'Functions[?FunctionName==`'$item'`].FunctionName' --output text)
-echo "Checking function 2 $FN1"
-if [ "$FN1" == "$item" ]; then
-  echo "Found function updating layer for $item"
-  aws lambda update-function-configuration \
-      --function-name "$item" \
-      --layers "arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:layer:$LAYER_NAME:$VERSION_NUMBER" \
+  echo "Checking function 1 $item"
+  FN1=$(aws lambda list-functions --query 'Functions[?FunctionName==`'$item'`].FunctionName' --output text)
+  echo "Checking function 2 $FN1"
+  if [ "$FN1" == "$item" ]; then
+    echo "Found function updating layer for $item"
+    aws lambda update-function-configuration \
+        --function-name "$item" \
+        --layers "arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:layer:$LAYER_NAME:$VERSION_NUMBER" \
 
-fi
+  fi
 done
+
 echo "Lambda layer $LAYER_NAME updated successfully."
