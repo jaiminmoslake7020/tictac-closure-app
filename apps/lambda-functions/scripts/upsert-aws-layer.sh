@@ -38,7 +38,8 @@ VERSION_NUMBER=$(aws lambda list-layer-versions --layer-name $LAYER_NAME --query
 echo "New version VERSION_NUMBER:$VERSION_NUMBER"
 
 
-for item in $FUNCTION_NAME_LOCAL $FUNCTION_NAME_DEV $FUNCTION_NAME_PROD
+# Update the Lambda functions with the new layer do it only to local and development layer
+for item in $FUNCTION_NAME_LOCAL $FUNCTION_NAME_DEV
 do
   echo "Checking function 1 $item"
   FN1=$(aws lambda list-functions --query 'Functions[?FunctionName==`'$item'`].FunctionName' --output text)
