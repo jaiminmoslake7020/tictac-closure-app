@@ -1,6 +1,9 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 
+const p = nodeExternals;
+console.log('nodeExternals:', p);
+
 module.exports = (env) => ({
   target: 'node', // Ensure Webpack targets Node.js
   entry: './src/index.ts', // Your app's entry point
@@ -10,7 +13,9 @@ module.exports = (env) => ({
     filename: 'bundle.js',
     libraryTarget: 'commonjs2', // Required for Node.js modules
   },
-  externals: [nodeExternals()], // Exclude `node_modules` from the bundle
+  externals: [nodeExternals({
+    modulesDir: path.resolve(__dirname, '../../../../node_modules'),
+  })], // Exclude `node_modules` from the bundle
   resolve: {
     extensions: ['.ts', '.js'], // Resolve both .ts and .js files
   },
@@ -19,7 +24,11 @@ module.exports = (env) => ({
       {
         test: /\.ts$/,
         use: ['babel-loader', 'ts-loader'], // Use Babel and TypeScript loaders
-        exclude: /node_modules/, // Exclude dependencies from bundling
+        exclude: [
+          path.resolve(__dirname, 'node_modules'), // Local node_modules
+          path.resolve(__dirname, '../../node_modules'), // Parent node_modules
+          path.resolve(__dirname, '../../../../node_modules'), // Parent node_modules
+        ], // Exclude dependencies from bundling
       },
     ],
   },

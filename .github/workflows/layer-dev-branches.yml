@@ -53,12 +53,12 @@ jobs:
         run: rm -rf apps/web
       - name: Install dependencies
         run: yarn install --production
-      - name: Create layer/nodejs directory
-        run: mkdir -p layer/nodejs
-      - name: Copy node_modules to layer/nodejs directory
-        run: cp -r node_modules layer/nodejs
-      - name: Zip layer/nodejs directory
-        run: zip -r my-layer.zip layer
+      - name: Create nodejs directory
+        run: mkdir -p nodejs
+      - name: Copy node_modules to nodejs directory
+        run: cp -r node_modules nodejs
+      - name: Zip nodejs directory
+        run: zip -r my-layer.zip nodejs
       - name: Verify zip file
         run: ls -al
       - name: copy zip file
@@ -74,4 +74,3 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           LAYER_NAME: ${{ secrets.LAYER_NAME }}
-
