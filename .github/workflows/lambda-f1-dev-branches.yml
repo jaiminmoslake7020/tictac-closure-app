@@ -40,7 +40,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
       - name: Configure AWS CLI
-        uses: aws-actions/configure-aws-credentials@v3
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -54,20 +54,22 @@ jobs:
       - name: Upsert AWS lambda
         run: yarn run lambda:fn1:publish
         env:
-          FUNCTION_NAME: ${{ secrets.FUNCTION_NAME_DEV_1 }}
-          ZIP_FILE: "lambda.zip"
-          BUNDLE_FILE: "dist/bundle.js"
-          HANDLER: "dist/bundle.handler"
-          ENV_VAR1: ${{ secrets.ENV_VAR1_DEV }}
           ENV_VAR2: ${{ secrets.ENV_VAR2_DEV }}
-          ENV_VAR3: ${{ secrets.ENV_VAR3_DEV }}
-          LAYER_NAME: ${{ secrets.LAYER_NAME }}
-          ROLE_ARN: ${{ secrets.ROLE_ARN }}
-          RULE_NAME: ${{ secrets.RULE_NAME_DEV }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          FUNCTION_NAME: ${{ vars.FUNCTION_NAME_DEV_1 }}
+          RULE_NAME: ${{ vars.RULE_NAME_DEV }}
+          LAYER_NAME: ${{ vars.LAYER_NAME_DEV }}
+          ROLE_NAME: ${{ vars.ROLE_NAME }}
+          SECRET_NAME: ${{ vars.SECRET_NAME }}
+          ENV_VAR3: ${{ vars.ENV_VAR3_DEV }}
+          ENV_VAR1: ${{ vars.FIREBASE_PROJECT_ID_DEV }}
+          ZIP_FILE: "lambda.zip"
+          BUNDLE_FILE: "dist/bundle.js"
+          HANDLER: "dist/bundle.handler"
+
 
 
 

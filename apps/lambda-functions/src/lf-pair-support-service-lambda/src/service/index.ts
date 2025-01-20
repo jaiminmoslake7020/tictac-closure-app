@@ -58,6 +58,6 @@ export const makePairs = async () => {
   )) as WaitingRoomDbItemType[];
   console.log('data', data);
   const aliveUsers = filterAliveUsers(data);
-  console.log('data', data);
+  console.log('aliveUsers', aliveUsers);
   await processPairs(aliveUsers);
 };

@@ -3,6 +3,8 @@
 
 echo "Creating AWS Lambda FUNCTION_NAME: $FUNCTION_NAME"
 
+ROLE_ARN="arn:aws:iam::$AWS_ACCOUNT_ID:role/$ROLE_NAME"
+
 # Create the Lambda function
 aws lambda create-function \
   --function-name "$FUNCTION_NAME" \

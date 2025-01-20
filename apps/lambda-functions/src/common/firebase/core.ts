@@ -1,12 +1,17 @@
 import * as admin from 'firebase-admin';
+import {getSecret} from '../aws/get-secret';
 
 let app: admin.app.App | undefined = undefined;
-const getFirebaseApp = (): admin.app.App => {
+const getFirebaseApp = async (): Promise<admin.app.App> => {
   if (app) {
     return app;
   } else {
+    const secret = await getSecret();
+    const p = "FIREBASE_PRIVATE_KEY_BASE64_"+process.env.FIREBASE_PRIVATE_KEY_BASE64;
+    const q = secret[p];
+
     const firebasePrivateKey = Buffer.from(
-      process.env.FIREBASE_PRIVATE_KEY_BASE64 as string,
+      q as string,
       'base64',
     ).toString('utf-8');
 
@@ -21,13 +26,13 @@ const getFirebaseApp = (): admin.app.App => {
   }
 };
 
-const getFirestoreObject = () => {
-  return getFirebaseApp().firestore();
+const getFirestoreObject = async () => {
+  return (await getFirebaseApp()).firestore();
 };
 
 export const fetchAllDocuments = async (collectionName: string) => {
   try {
-    const f = getFirestoreObject();
+    const f = await getFirestoreObject();
     const collectionRef = f.collection(collectionName);
     const querySnapshot = await collectionRef.listDocuments();
     // console.log('Documents:', documents);
@@ -49,7 +54,7 @@ export const addDocument = async (
   docData: any,
 ): Promise<any> => {
   try {
-    const f = getFirestoreObject();
+    const f = await getFirestoreObject();
     const collectionRef = f.collection(collectionPath);
     return await collectionRef.add(docData);
   } catch (e) {
@@ -59,7 +64,7 @@ export const addDocument = async (
 
 export const updateDocument = async (path: string, updatedDocData: any) => {
   try {
-    const f = getFirestoreObject();
+    const f = await getFirestoreObject();
     const docRef = f.doc(path);
     await docRef.update(updatedDocData);
   } catch (e) {

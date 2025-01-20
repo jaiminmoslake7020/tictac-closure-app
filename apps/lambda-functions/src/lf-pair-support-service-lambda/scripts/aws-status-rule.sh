@@ -6,6 +6,7 @@ FILE_TO_SOURCE="./scripts/setup_env.sh"
 # Check if the file exists and is readable
 if [ -r "$FILE_TO_SOURCE" ]; then
     # Source the file
+    # shellcheck disable=SC1090
     . "$FILE_TO_SOURCE"
     echo "File sourced successfully."
 else

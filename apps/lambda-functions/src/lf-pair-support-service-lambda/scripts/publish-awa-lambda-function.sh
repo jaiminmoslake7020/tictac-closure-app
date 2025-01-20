@@ -8,6 +8,7 @@ FILE_TO_SOURCE="./scripts/setup_env.sh"
 # Check if the file exists and is readable
 if [ -r "$FILE_TO_SOURCE" ]; then
     # Source the file
+    # shellcheck disable=SC1090
     . "$FILE_TO_SOURCE"
     echo "File sourced successfully."
 else
@@ -37,10 +38,10 @@ if [ -z "$RULE_NAME" ]; then
 fi
 
 # Check if the required environment variables are set
-if [ -z "$ROLE_ARN" ]; then
+if [ -z "$ROLE_NAME" ]; then
   echo "Error: Missing required environment variables."
-  echo "Please set ROLE_ARN."
-  echo "current value:$ROLE_ARN"
+  echo "Please set ROLE_NAME."
+  echo "current value:$ROLE_NAME"
   VALIDATION_FAILED="true"
 fi
 
