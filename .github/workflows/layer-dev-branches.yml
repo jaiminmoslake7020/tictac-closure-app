@@ -6,7 +6,7 @@ on:
   push:
     branches-ignore: ["main",'release-*'] # Skip if branch is main or release-webapp-*
     paths:
-      - 'apps/lambda-functions/src/lf-pair-support-service-lambda/package.json'
+      - 'apps/lambda-functions/package.json'
       - 'apps/lambda-functions/scripts/upsert-aws-layer.sh'
       - '.github/workflows/layer-dev-branches.yml'
 
@@ -41,15 +41,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
       - name: Configure AWS CLI
-        uses: aws-actions/configure-aws-credentials@v3
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      - name: Verify AWS CLI installation
-        run: aws --version
-      - name: Verify AWS CLI installation
-        run: aws --version
       - name: Remove apps/web directory
         run: rm -rf apps/web
       - name: Install dependencies
@@ -76,7 +72,5 @@ jobs:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          LAYER_NAME: ${{ secrets.LAYER_NAME }}
-          FUNCTION_NAME_LOCAL: ${{ vars.FUNCTION_NAME_LOCAL_1 }}
-          FUNCTION_NAME_DEV: ${{ vars.FUNCTION_NAME_DEV_1 }}
-          FUNCTION_NAME_PROD: ${{ vars.FUNCTION_NAME_PROD_1 }}
+          LAYER_NAME: ${{ vars.LAYER_NAME_DEV }}
+          FUNCTION_NAME: ${{ vars.FUNCTION_NAME_DEV_1 }}
