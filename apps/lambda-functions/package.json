@@ -10,7 +10,8 @@
     "upsert-aws-layer": "./scripts/upsert-aws-layer.sh"
   },
   "dependencies": {
-    "firebase-admin": "^13.0.2"
+    "firebase-admin": "^13.0.2",
+    "@aws-sdk/client-secrets-manager": "^3.731.0"
   },
   "devDependencies": {
     "aws-sdk": "^2.1692.0",

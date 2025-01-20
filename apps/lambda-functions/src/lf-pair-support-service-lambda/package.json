@@ -5,7 +5,7 @@
   "main": "./src/index.ts",
   "type": "commonjs",
   "scripts": {
-    "build:dev": "../../node_modules/.bin/webpack --mode development --devtool true --watch",
+    "build:dev": "../../node_modules/.bin/webpack --mode development --watch",
     "build": "../../node_modules/.bin/webpack --mode production --devtool false",
     "dev": "node app.js ./dist/bundle.js .env",
     "zip": "./scripts/zip-lambda.sh",
