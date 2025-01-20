@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import {getSecret} from '../aws/get-secret';
+import { getSecret } from '../aws/get-secret';
 
 let app: admin.app.App | undefined = undefined;
 const getFirebaseApp = async (): Promise<admin.app.App> => {
@@ -7,13 +7,13 @@ const getFirebaseApp = async (): Promise<admin.app.App> => {
     return app;
   } else {
     const secret = await getSecret();
-    const p = "FIREBASE_PRIVATE_KEY_BASE64_"+process.env.FIREBASE_PRIVATE_KEY_BASE64;
+    const p =
+      'FIREBASE_PRIVATE_KEY_BASE64_' + process.env.FIREBASE_PRIVATE_KEY_BASE64;
     const q = secret[p];
 
-    const firebasePrivateKey = Buffer.from(
-      q as string,
-      'base64',
-    ).toString('utf-8');
+    const firebasePrivateKey = Buffer.from(q as string, 'base64').toString(
+      'utf-8',
+    );
 
     app = admin.initializeApp({
       credential: admin.credential.cert({

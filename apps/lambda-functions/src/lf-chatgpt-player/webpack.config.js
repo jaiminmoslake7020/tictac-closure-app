@@ -10,9 +10,11 @@ module.exports = (env) => ({
     filename: 'bundle.js',
     libraryTarget: 'commonjs2', // Required for Node.js modules
   },
-  externals: [nodeExternals({
-    modulesDir: path.resolve(__dirname, '../../../../node_modules'),
-  })], // Exclude `node_modules` from the bundle
+  externals: [
+    nodeExternals({
+      modulesDir: path.resolve(__dirname, '../../../../node_modules'),
+    }),
+  ], // Exclude `node_modules` from the bundle
   resolve: {
     extensions: ['.ts', '.js'], // Resolve both .ts and .js files
   },

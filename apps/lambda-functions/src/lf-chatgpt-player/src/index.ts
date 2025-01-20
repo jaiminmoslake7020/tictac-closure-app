@@ -1,8 +1,1 @@
-
-
-export const handler = async (
-  roomCode: string,
-  gameId: string
-) => {
-
-};
+export const handler = async (roomCode: string, gameId: string) => {};

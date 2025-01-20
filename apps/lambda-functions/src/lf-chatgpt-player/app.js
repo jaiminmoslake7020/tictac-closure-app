@@ -1,5 +1,17 @@
 const dotenv = require('dotenv');
-const http = require('http');
+const express = require('express');
+const cors = require('cors');
+
+const app = express();
+const port = 5000;
+// Middleware to parse JSON bodies
+app.use(express.json());
+// Enable CORS for localhost:3000
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+  }),
+);
 
 const run = async () => {
   dotenv.config().parsed;
@@ -30,14 +42,12 @@ const run = async () => {
   }
 };
 
-
-const PORT = 3000; // Define your port
-const server = http.createServer(async (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  await run();
-  res.end('Hello, Node.js!');
+// Define a route to handle GET requests
+app.get('/', (req, res) => {
+  res.send('Hello World!');
 });
 
-server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });
