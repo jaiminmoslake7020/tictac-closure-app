@@ -45,12 +45,12 @@ jobs:
       - name: Run build script with environment variables from GitHub Secrets
         env:
           FIREBASE_CONFIG_API_KEY: ${{ secrets.FIREBASE_CONFIG_API_KEY_DEV }}
-          FIREBASE_CONFIG_AUTH_DOMAIN: ${{ secrets.FIREBASE_CONFIG_AUTH_DOMAIN_DEV }}
-          FIREBASE_CONFIG_PROJECT_ID: ${{ secrets.FIREBASE_CONFIG_PROJECT_ID_DEV }}
           FIREBASE_CONFIG_STORAGE_BUCKET: ${{ secrets.FIREBASE_CONFIG_STORAGE_BUCKET_DEV }}
-          FIREBASE_CONFIG_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_CONFIG_MESSAGING_SENDER_ID_DEV }}
           FIREBASE_CONFIG_APP_ID: ${{ secrets.FIREBASE_CONFIG_APP_ID_DEV }}
-          FIREBASE_CONFIG_MEASUREMENT_ID: ${{ secrets.FIREBASE_CONFIG_MEASUREMENT_ID_DEV }}
+          FIREBASE_CONFIG_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID_DEV }}
+          FIREBASE_CONFIG_AUTH_DOMAIN: ${{ vars.FIREBASE_CONFIG_AUTH_DOMAIN_DEV }}
+          FIREBASE_CONFIG_MESSAGING_SENDER_ID: ${{ vars.FIREBASE_CONFIG_MESSAGING_SENDER_ID_DEV }}
+          FIREBASE_CONFIG_MEASUREMENT_ID: ${{ vars.FIREBASE_CONFIG_MEASUREMENT_ID_DEV }}
         run: yarn run webapp:build
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4

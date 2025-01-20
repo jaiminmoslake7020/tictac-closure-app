@@ -7,6 +7,7 @@ on:
     branches: ["main"]
     paths:
       - 'apps/web/**'
+      - '.github/workflows/webapp-qa-branches.yml'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -41,13 +42,13 @@ jobs:
         run: yarn install
       - name: Run build script with environment variables from GitHub Secrets
         env:
-          FIREBASE_CONFIG_API_KEY: ${{ secrets.FIREBASE_CONFIG_API_KEY }}
-          FIREBASE_CONFIG_AUTH_DOMAIN: ${{ secrets.FIREBASE_CONFIG_AUTH_DOMAIN }}
-          FIREBASE_CONFIG_PROJECT_ID: ${{ secrets.FIREBASE_CONFIG_PROJECT_ID }}
-          FIREBASE_CONFIG_STORAGE_BUCKET: ${{ secrets.FIREBASE_CONFIG_STORAGE_BUCKET }}
-          FIREBASE_CONFIG_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_CONFIG_MESSAGING_SENDER_ID }}
-          FIREBASE_CONFIG_APP_ID: ${{ secrets.FIREBASE_CONFIG_APP_ID }}
-          FIREBASE_CONFIG_MEASUREMENT_ID: ${{ secrets.FIREBASE_CONFIG_MEASUREMENT_ID }}
+          FIREBASE_CONFIG_API_KEY: ${{ secrets.FIREBASE_CONFIG_API_KEY_QA }}
+          FIREBASE_CONFIG_APP_ID: ${{ secrets.FIREBASE_CONFIG_APP_ID_QA }}
+          FIREBASE_CONFIG_STORAGE_BUCKET: ${{ secrets.FIREBASE_CONFIG_STORAGE_BUCKET_QA }}
+          FIREBASE_CONFIG_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID_QA }}
+          FIREBASE_CONFIG_AUTH_DOMAIN: ${{ vars.FIREBASE_CONFIG_AUTH_DOMAIN_QA }}
+          FIREBASE_CONFIG_MESSAGING_SENDER_ID: ${{ vars.FIREBASE_CONFIG_MESSAGING_SENDER_ID_QA }}
+          FIREBASE_CONFIG_MEASUREMENT_ID: ${{ vars.FIREBASE_CONFIG_MEASUREMENT_ID_QA }}
         run: yarn run webapp:build
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
