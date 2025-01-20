@@ -1,0 +1,12 @@
+.idea
+
+node_modules
+dist
+config
+
+.env
+/scripts/setup_env.sh
+/lambda.zip
+
+**/.env
+

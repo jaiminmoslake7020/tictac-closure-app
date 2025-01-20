@@ -1,0 +1,20 @@
+{
+  "name": "pair-support-service-lambda",
+  "version": "1.0.0",
+  "description": "pair-support-service-lambda",
+  "main": "./src/index.ts",
+  "type": "commonjs",
+  "scripts": {
+    "build:dev": "../../node_modules/.bin/webpack --mode development --devtool true --watch",
+    "build": "../../node_modules/.bin/webpack --mode production --devtool false",
+    "dev": "node app.js ./dist/bundle.js .env",
+    "zip": "./scripts/zip-lambda.sh",
+    "status-rule": "./scripts/aws-status-rule.sh",
+    "enable-rule": "./scripts/aws-enable-rule.sh",
+    "disable-rule": "./scripts/aws-disable-rule.sh",
+    "publish-aws-lambda": "./scripts/publish-awa-lambda-function.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
