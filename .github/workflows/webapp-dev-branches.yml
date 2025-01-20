@@ -4,7 +4,7 @@ name: DEV Build and Deploy Tic-Tac-Toe Game to https://tic-tac-toe-dev-app.netli
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches-ignore: ["main",'release-*'] # Skip if branch is main or release-webapp-*
+    branches-ignore: ["main",'release-*', 'chatgpt-support'] # Skip if branch is main or release-webapp-*
     paths:
       - 'apps/web/**'
       - '.github/workflows/webapp-dev-branches.yml'

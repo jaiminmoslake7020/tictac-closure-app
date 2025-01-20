@@ -4,7 +4,7 @@ name: DEV Build and Deploy Lambda Layer
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches-ignore: ["main",'release-*'] # Skip if branch is main or release-webapp-*
+    branches-ignore: ["main",'release-*', 'chatgpt-support'] # Skip if branch is main or release-webapp-*
     paths:
       - 'apps/lambda-functions/package.json'
       - 'apps/lambda-functions/scripts/upsert-aws-layer.sh'

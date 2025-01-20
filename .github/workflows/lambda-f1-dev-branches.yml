@@ -4,7 +4,7 @@ name: DEV Build and Deploy Lambda Function 1 pair support service dev
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches-ignore: ["main",'release-*'] # Skip if branch is main or release-webapp-*
+    branches-ignore: ["main",'release-*','chatgpt-support'] # Skip if branch is main or release-webapp-*
     paths:
       - 'apps/lambda-functions/src/lf-pair-support-service-lambda/**'
       - '.github/workflows/lambda-f1-dev-branches.yml'
