@@ -1,0 +1,76 @@
+# This workflow will build and deploy a static webapp to Netlify
+name: QA Build and Deploy Lambda Layer
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"] # Skip if branch is main or release-webapp-*
+    paths:
+      - 'apps/lambda-functions/package.json'
+      - 'apps/lambda-functions/scripts/upsert-aws-layer.sh'
+      - '.github/workflows/layer-main-branch.yml'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  id-token: write
+
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "main-lambda"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18 ] # Test on multiple Node.js versions
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - name: Configure AWS CLI
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Remove apps/web directory
+        run: rm -rf apps/web
+      - name: Install dependencies
+        run: yarn install --production
+      - name: Create nodejs directory
+        run: mkdir -p nodejs
+      - name: Copy node_modules to nodejs directory
+        run: cp -r node_modules nodejs
+      - name: Zip nodejs directory
+        run: zip -r my-layer.zip nodejs
+      - name: Verify zip file
+        run: ls -al
+      - name: copy zip file
+        run: cp my-layer.zip apps/lambda-functions
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-layer
+          path: ./my-layer.zip
+      - name: Upsert AWS layer
+        run: yarn run lambda:layer:publish
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          LAYER_NAME: ${{ vars.LAYER_NAME_QA }}
+          FUNCTION_NAME: ${{ vars.FUNCTION_NAME_QA_1 }}

@@ -1,0 +1,4 @@
+scripts/setup-env.sh
+.env
+dist
+build

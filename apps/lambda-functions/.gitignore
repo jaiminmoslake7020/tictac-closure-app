@@ -1,0 +1,17 @@
+.idea
+
+node_modules
+dist
+config
+
+.env
+/scripts/setup_env.sh
+/scripts/aws-enable-rule.sh
+/scripts/aws-status-rule.sh
+/scripts/update-env-to-aws-lambda.sh
+/lambda.zip
+
+
+**/.env
+/scripts/test.sh
+/src/lf-pair-support-service-lambda/.env.donotuse

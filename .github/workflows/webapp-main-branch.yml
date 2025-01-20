@@ -5,6 +5,9 @@ on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
+    paths:
+      - 'apps/web/**'
+      - '.github/workflows/webapp-qa-branches.yml'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -12,13 +15,12 @@ on:
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
-  pages: write
   id-token: write
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-  group: "pages"
+  group: "qa-webapp"
   cancel-in-progress: false
 
 jobs:
@@ -35,24 +37,24 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: 'yarn'
       - name: Install dependencies
-        run: npm install
+        run: yarn install
       - name: Run build script with environment variables from GitHub Secrets
         env:
-          FIREBASE_CONFIG_API_KEY: ${{ secrets.FIREBASE_CONFIG_API_KEY }}
-          FIREBASE_CONFIG_AUTH_DOMAIN: ${{ secrets.FIREBASE_CONFIG_AUTH_DOMAIN }}
-          FIREBASE_CONFIG_PROJECT_ID: ${{ secrets.FIREBASE_CONFIG_PROJECT_ID }}
-          FIREBASE_CONFIG_STORAGE_BUCKET: ${{ secrets.FIREBASE_CONFIG_STORAGE_BUCKET }}
-          FIREBASE_CONFIG_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_CONFIG_MESSAGING_SENDER_ID }}
-          FIREBASE_CONFIG_APP_ID: ${{ secrets.FIREBASE_CONFIG_APP_ID }}
-          FIREBASE_CONFIG_MEASUREMENT_ID: ${{ secrets.FIREBASE_CONFIG_MEASUREMENT_ID }}
-        run: npm run build
+          FIREBASE_CONFIG_API_KEY: ${{ secrets.FIREBASE_CONFIG_API_KEY_QA }}
+          FIREBASE_CONFIG_APP_ID: ${{ secrets.FIREBASE_CONFIG_APP_ID_QA }}
+          FIREBASE_CONFIG_STORAGE_BUCKET: ${{ secrets.FIREBASE_CONFIG_STORAGE_BUCKET_QA }}
+          FIREBASE_CONFIG_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID_QA }}
+          FIREBASE_CONFIG_AUTH_DOMAIN: ${{ vars.FIREBASE_CONFIG_AUTH_DOMAIN_QA }}
+          FIREBASE_CONFIG_MESSAGING_SENDER_ID: ${{ vars.FIREBASE_CONFIG_MESSAGING_SENDER_ID_QA }}
+          FIREBASE_CONFIG_MEASUREMENT_ID: ${{ vars.FIREBASE_CONFIG_MEASUREMENT_ID_QA }}
+        run: yarn run webapp:build
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: my-artifact
-          path: ./build/
+          path: ./apps/web/build/
 
 
 #  Deployment job
@@ -69,19 +71,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm install -g netlify-cli
-      - name: List files
-        run: ls -lah
+          cache: 'yarn'
+      - name: Install Netlify CLI
+        run: yarn global add netlify-cli
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: my-artifact
-          path: ./build
+          path: ./apps/web/build
       - name: Deploy to Netlify
-        run: ./scripts/netlify-deploy.sh
+        run: yarn run webapp:publish
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_QA }}
-          BUILD_DIR: ./build
+          BUILD_DIR: ./apps/web/build

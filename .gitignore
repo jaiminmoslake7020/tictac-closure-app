@@ -6,8 +6,12 @@ dist
 build
 .cache
 .idea
-
+.netlify
 
 .env
 https
 /scripts/setup-env.sh
+
+
+.env
+**/.env
