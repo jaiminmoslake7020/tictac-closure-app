@@ -6,7 +6,7 @@ aws lambda update-function-code \
   --function-name "$FUNCTION_NAME" \
   --zip-file fileb://"$ZIP_FILE" \
 
-sleep 10
+sleep 5
 
 aws lambda update-function-configuration \
     --function-name "$FUNCTION_NAME" \

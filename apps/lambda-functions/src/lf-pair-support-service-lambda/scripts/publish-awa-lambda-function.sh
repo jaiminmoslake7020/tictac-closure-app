@@ -158,6 +158,7 @@ if [ -z "$VERSION_NUMBER" ]; then
   exit 1
 fi
 
+sleep 1
 
 # Upsert the AWS Lambda function
 ./scripts/upsert-aws-lambda-function.sh
