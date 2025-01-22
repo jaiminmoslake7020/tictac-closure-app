@@ -9,9 +9,6 @@
     "build": "../../node_modules/.bin/webpack --mode production --devtool false",
     "dev": "node app.js ./dist/bundle.js .env",
     "zip": "./scripts/zip-lambda.sh",
-    "status-rule": "./scripts/aws-status-rule.sh",
-    "enable-rule": "./scripts/aws-enable-rule.sh",
-    "disable-rule": "./scripts/aws-disable-rule.sh",
     "publish-aws-lambda": "./scripts/publish-awa-lambda-function.sh"
   },
   "keywords": [],
