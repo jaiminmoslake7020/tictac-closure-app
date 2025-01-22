@@ -21,6 +21,9 @@ import {
   remoteRandomPlayer,
   sameDevicePlay,
 } from '@data/index';
+import {
+  RemoteRandomRestartDisplay
+} from '@components/game/opponent-selection/remote-random-player/RemoteRandomRestartDisplay';
 
 export type OpponentSelectionType = {
   render: () => void | Promise<void>;
@@ -96,10 +99,23 @@ export const OpponentSelection = (
     addToRoot(Layout(getVarOne().render(), gA));
   };
 
+  const showRestartButton = () => {
+    const c = RemoteRandomRestartDisplay( async () => {
+      c.remove();
+      await onPlayerSelected(getOpponentType())
+    });
+    const gA = GameActions(contextsData, gameActions);
+    addToRoot(Layout(c.render(), gA));
+  }
+
   const render = async () => {
     if (hasOpponentType()) {
       // console.log('OpponentType Exists', getOpponentType());
-      await onPlayerSelected(getOpponentType());
+      if (getOpponentType() === remoteRandomPlayer) {
+        showRestartButton();
+      } else {
+        await onPlayerSelected(getOpponentType());
+      }
     } else {
       showForm();
     }
