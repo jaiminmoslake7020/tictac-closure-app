@@ -49,7 +49,12 @@ module.exports = env  => ({
     rules: [
       {
         test: /\.scss$/, // Handle CSS files
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+        use: env.production ? [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'] : ['style-loader', {
+          loader: 'css-loader',
+          options: {
+            sourceMap: true, // Enable source maps for CSS
+          },
+        }, 'postcss-loader', 'sass-loader'],
       },
       {
         test: /\.ts?$/,

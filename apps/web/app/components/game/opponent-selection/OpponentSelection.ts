@@ -100,11 +100,14 @@ export const OpponentSelection = (
   };
 
   const showRestartButton = () => {
+    const gA = GameActions(contextsData, gameActions);
     const c = RemoteRandomRestartDisplay( async () => {
       c.remove();
       await onPlayerSelected(getOpponentType())
+    }, () => {
+      c.remove();
+      gA.changeGameType();
     });
-    const gA = GameActions(contextsData, gameActions);
     addToRoot(Layout(c.render(), gA));
   }
 

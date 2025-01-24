@@ -1,58 +1,54 @@
-import {
-  getGameDocumentPath,
-  InitializeContextsFunctionType,
-  useContextGamePlayerType,
-} from '@contexts/index';
-import {
-  GameActionCallbacksType,
-  GameActions,
-  GameActionsType,
-} from '@components/game/GameActions';
-import { AddErrorWithAction } from '@components/base/ux/notification/AddErrorWithAction';
-import { updateLastActive } from '@firebase-dir/game';
+import {getGameDocumentPath, InitializeContextsFunctionType, useContextGamePlayerType,} from '@contexts/index';
+import {GameActionCallbacksType,} from '@components/game/GameActions';
+import {updateLastActive} from '@firebase-dir/game';
+import {ShowErrorMessageWrapper} from '@components/game/opponent-selection/remote-friend-player/ShowErrorMessageWrapper';
 
 export const UpdateLastActiveTimeSubscriber = (
   contextsData: InitializeContextsFunctionType,
   gameActionsCallback: GameActionCallbacksType,
+  subscriberFrom: string
 ) => {
-  let errorAdded = false;
+  let interval: NodeJS.Timeout;
 
-  const updateGameIsActive = async () => {
+  const {
+    showErrorMessage
+  } = ShowErrorMessageWrapper(contextsData, gameActionsCallback);
+
+  const updateGameIsActive = async (gamePath: string | undefined) => {
     // console.log('updateGameIsActive');
-    const gamePath = getGameDocumentPath(contextsData);
     if (gamePath) {
       // console.log('Game path correct.', gamePath, 'correct path');
       const { getPlayerType } = useContextGamePlayerType(contextsData);
       await updateLastActive(gamePath, getPlayerType());
     } else {
-      // console.log('Game path is incorrect.', gamePath);
-      if (errorAdded) {
-        const gA = GameActions(contextsData, gameActionsCallback) as GameActionsType;
-        gA.exitRoom();
-      } else {
-        const gA = GameActions(contextsData, gameActionsCallback) as GameActionsType;
-        AddErrorWithAction('Game path is incorrect.', gA.exitRoom);
-        errorAdded = true;
-      }
+      showErrorMessage('Game path is incorrect. - 3');
     }
   };
 
   const updateGameIsActiveSubscriber = async () => {
     // console.log('updateGameIsActiveSubscriber');
-    await updateGameIsActive();
-    const interval = setInterval(async () => {
+    const gamePathFirst = getGameDocumentPath(contextsData);
+    await updateGameIsActive( gamePathFirst );
+    interval = setInterval(async () => {
       const gamePath = getGameDocumentPath(contextsData);
       if (gamePath) {
-        await updateGameIsActive();
+        // console.log('subscriberFrom', subscriberFrom);
+        await updateGameIsActive( gamePath );
       } else {
-        // console.log('closing interval updateGameIsActiveSubscriber');
+        console.log('closing interval updateGameIsActiveSubscriber BY setInterval');
         clearInterval(interval);
       }
     }, 3000);
   };
 
+  const removeUpdateGameIsActiveSubscriber = () => {
+    // console.log('removeUpdateGameIsActiveSubscriber BY CALLER');
+    clearInterval(interval);
+  }
+
   return {
     updateGameIsActive,
     updateGameIsActiveSubscriber,
+    removeUpdateGameIsActiveSubscriber
   };
 };

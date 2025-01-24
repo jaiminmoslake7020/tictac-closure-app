@@ -11,6 +11,7 @@ import {
 } from '@contexts/index';
 import { exitRoom as exitRoomFirebase } from '@firebase-dir/room';
 import { unliveUser } from '@firebase-dir/user';
+import {stopSubscribers} from '@components/game/firebase-subscriber/FirebaseSubscriber';
 
 export type GameActionCallbacksType = {
   onExitRoom: () => void;
@@ -39,9 +40,11 @@ export const GameActions = (
 
   const changeGameType = async () => {
     if (isItRemoteGame(contextsData)) {
+      await stopSubscribers();
       const room = getRoomCodeId();
-      const u = getUser();
-      await exitRoomFirebase(room);
+      if (room) {
+        await exitRoomFirebase(room);
+      }
       removeGameId();
       removeRoomCodeId();
     }
@@ -51,9 +54,11 @@ export const GameActions = (
 
   const exitRoom = async () => {
     document.querySelector('.main')?.remove();
+    await stopSubscribers();
     const room = getRoomCodeId();
-    const u = getUser();
-    await exitRoomFirebase(room);
+    if (room) {
+      await exitRoomFirebase(room);
+    }
     removeGameId();
     removeOpponentType(); // it makes sense to ask the user to select a new opponent
     removeRoomCodeId();
@@ -64,10 +69,17 @@ export const GameActions = (
     document.querySelector('.main')?.remove();
     await unliveUser(getUser().id);
 
-    removeGameId();
-    removeOpponentType(); // it makes sense to ask the user to select a new opponent
-    removeRoomCodeId();
+    if (isItRemoteGame(contextsData)) {
+      await stopSubscribers();
+      const room = getRoomCodeId();
+      if (room) {
+        await exitRoomFirebase(room);
+      }
+      removeGameId();
+      removeRoomCodeId();
+    }
 
+    removeOpponentType(); // it makes sense to ask the user to select a new opponent
     logoutUser();
     onLogout();
   };

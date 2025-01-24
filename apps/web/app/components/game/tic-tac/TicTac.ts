@@ -28,6 +28,7 @@ import { createGame, onGameCreated } from '@firebase-dir/game';
 import { IsGameAvailableSubscriber } from '@components/game/opponent-selection/remote-friend-player/IsGameAvailableSubscriber';
 import { UpdateLastActiveTimeSubscriber } from '@components/game/opponent-selection/remote-friend-player/UpdateLastActiveTimeSubscriber';
 import { GameActionCallbacksType } from '@components/game/GameActions';
+import {startSubscribers} from '@components/game/firebase-subscriber/FirebaseSubscriber';
 
 export type TicTacType = {
   render: () => HTMLDivElement;
@@ -120,8 +121,7 @@ export const TicTac = (
       // console.log('Game started', g.id);
       setGameId(g.id);
       setCurrentMove(currentMove);
-      await addGameAvailableSubscriber();
-      await updateGameSubscriber();
+      await startSubscribers(contextsData, gameActionsObject);
       resetGame();
     } else {
       // TODO: Show error message
@@ -140,18 +140,20 @@ export const TicTac = (
 
   const addGameAvailableSubscriber = async () => {
     // console.log('addGameAvailableSubscriber');
-    const { isGameAvailableSubscriber } = IsGameAvailableSubscriber(
+    const { isGameAvailableSubscriber , removeGameAvailableSubscriber } = IsGameAvailableSubscriber(
       contextsData,
       gameActionsObject,
+      'TicTac',
     );
     await isGameAvailableSubscriber();
   };
 
   const updateGameSubscriber = async () => {
     // console.log('updateGameSubscriber');
-    const { updateGameIsActiveSubscriber } = UpdateLastActiveTimeSubscriber(
+    const { updateGameIsActiveSubscriber, removeUpdateGameIsActiveSubscriber } = UpdateLastActiveTimeSubscriber(
       contextsData,
       gameActionsObject,
+      'TicTac',
     );
     await updateGameIsActiveSubscriber();
   };
@@ -180,8 +182,7 @@ export const TicTac = (
           // console.log('TICTAC 2 NEW GAME', gameId);
           setGameId(gameId);
           setCurrentMove(d.currentMove);
-          await addGameAvailableSubscriber();
-          await updateGameSubscriber();
+          await startSubscribers(contextsData, gameActionsObject);
           resetGameJoiner();
           resetGame();
         } else {

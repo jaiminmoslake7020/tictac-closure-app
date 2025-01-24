@@ -100,7 +100,7 @@
 
           .nav-link {
             .btn.btn-icon {
-              @apply w-44;
+              @apply w-64 md:w-48;
               @apply flex justify-center gap-2 items-center;
               @apply bg-bkg text-content;
             }
@@ -115,7 +115,7 @@
   @apply fixed top-0 right-0 w-full h-fit z-50 p-4;
 }
 .notification {
-  @apply flex flex-col items-end justify-center;
+  @apply flex flex-col items-end justify-center gap-4;
 }
 
 .notification-item-wrapper {

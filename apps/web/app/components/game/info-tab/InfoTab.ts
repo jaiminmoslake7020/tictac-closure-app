@@ -13,6 +13,7 @@ import {
 } from './ChangeAppLevelInfoTabButton';
 import { useDiv, useState } from '@components/base';
 import { RestartGameButton, RestartGameButtonType } from './RestartGameButton';
+import {stopSubscribers} from '@components/game/firebase-subscriber/FirebaseSubscriber';
 
 export type InfoTabType = {
   render: () => HTMLDivElement;
@@ -171,10 +172,11 @@ export const InfoTab = (
     }
   };
 
-  const updateInfo = (reload: () => void) => {
+  const updateInfo =  (reload: () => void) => {
     const { getWinner } = useContextWinner(contextsData);
     updateRoomInfo();
     if (getWinner() !== null) {
+      stopSubscribers().then(() => { console.log('stopSubscribers') });
       addWinner();
       addRestartGameButton(reload);
     } else {

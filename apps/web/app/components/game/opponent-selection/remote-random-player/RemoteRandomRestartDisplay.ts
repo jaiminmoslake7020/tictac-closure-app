@@ -31,7 +31,8 @@ export const ButtonItem = (
 }
 
 export const RemoteRandomRestartDisplay = (
-  onClick: EventListenerOrEventListenerObject
+  onClick: EventListenerOrEventListenerObject,
+  changeGameType: EventListenerOrEventListenerObject
 ) => {
 
   const {
@@ -60,9 +61,11 @@ export const RemoteRandomRestartDisplay = (
     setDivOne('buttons-wrapper');
 
     const b1 = ButtonItem('Restart Game With Remote Player', 'btn btn-primary', onClick);
+    const b2 = ButtonItem('Change Game Type', 'btn btn-primary', changeGameType);
 
     getDivOne().append( b1.render() );
-    set([b1]);
+    getDivOne().append( b2.render() );
+    set([b1, b2]);
 
     getDiv().append( getDivOne() );
     return getDiv();

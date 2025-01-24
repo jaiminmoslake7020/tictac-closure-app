@@ -1,35 +1,23 @@
-import { getGameDocumentPath, InitializeContextsFunctionType } from '@contexts/index';
-import {
-  GameActionCallbacksType,
-  GameActions,
-  GameActionsType,
-} from '@components/game/GameActions';
-import { getGame } from '@firebase-dir/game';
-import { AddErrorWithAction } from '@components/base/ux/notification/AddErrorWithAction';
-import { addToRoot, createEL, getCurrentTime } from '@utils/index';
-import { Layout } from '@components/layouts/layout/Layout';
+import {getGameDocumentPath, InitializeContextsFunctionType} from '@contexts/index';
+import {GameActionCallbacksType,} from '@components/game/GameActions';
+import {getGame} from '@firebase-dir/game';
+import {getCurrentTime} from '@utils/index';
+import {ShowErrorMessageWrapper} from '@components/game/opponent-selection/remote-friend-player/ShowErrorMessageWrapper';
 
 export const IsGameAvailableSubscriber = (
   contextsData: InitializeContextsFunctionType,
   gameActionsCallback: GameActionCallbacksType,
+  subscriberFrom: string
 ) => {
   let errorAdded = false;
 
-  const showErrorMessage = (message: string) => {
-    if (errorAdded) {
-      const gA = GameActions(contextsData, gameActionsCallback) as GameActionsType;
-      gA.exitRoom();
-    } else {
-      const gA = GameActions(contextsData, gameActionsCallback) as GameActionsType;
-      addToRoot(Layout(createEL('div') as HTMLDivElement, gA));
-      AddErrorWithAction(message, gA.exitRoom);
-      errorAdded = true;
-    }
-  };
+  let interval : NodeJS.Timeout;
 
-  const isGameAvailable = async (): Promise<boolean> => {
-    // console.log('isGameAvailable');
-    const gamePath = getGameDocumentPath(contextsData);
+  const {
+    showErrorMessage
+  } = ShowErrorMessageWrapper(contextsData, gameActionsCallback);
+
+  const isGameAvailable = async ( gamePath: string | undefined ): Promise<boolean> => {
     if (gamePath) {
       const gameData = await getGame(gamePath);
       if (gameData) {
@@ -39,7 +27,7 @@ export const IsGameAvailableSubscriber = (
         // checking one of them has closed browser
         if (isJoinerActive || isCreatorActive) {
           // console.log('Game is expired.', getCurrentTime(), joiner_last_active_time, creator_last_active_time);
-          showErrorMessage('Game is expired.');
+          showErrorMessage('Another player left game.');
           return false;
         }
         return true;
@@ -48,28 +36,35 @@ export const IsGameAvailableSubscriber = (
         return false;
       }
     } else {
-      // console.log('Game path is incorrect.', gamePath);
-      showErrorMessage('Game path is incorrect.');
+      showErrorMessage('Game path is incorrect. - 1');
     }
     return false;
   };
 
   const isGameAvailableSubscriber = async () => {
     // console.log('isGameAvailableSubscriber');
-    await isGameAvailable();
-    const interval = setInterval(async () => {
+    const gamePathFirst = getGameDocumentPath(contextsData);
+    await isGameAvailable( gamePathFirst );
+    interval = setInterval(async () => {
       const gamePath = getGameDocumentPath(contextsData);
       if (gamePath) {
-        await isGameAvailable();
+        // console.log('subscriberFrom', subscriberFrom);
+        await isGameAvailable( gamePath );
       } else {
-        // console.log('closing interval isGameAvailableSubscriber');
+        console.log('closing interval isGameAvailableSubscriber BY setInterval');
         clearInterval(interval);
       }
     }, 5000);
   };
 
+  const removeGameAvailableSubscriber = () => {
+    // console.log('removeGameAvailableSubscriber BY CALLER');
+    clearInterval(interval);
+  }
+
   return {
     isGameAvailableSubscriber,
     isGameAvailable,
+    removeGameAvailableSubscriber,
   };
 };
