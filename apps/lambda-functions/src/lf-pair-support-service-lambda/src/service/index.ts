@@ -57,7 +57,12 @@ export const makePairs = async () => {
     'waiting-room',
   )) as WaitingRoomDbItemType[];
   console.log('data', data);
-  const aliveUsers = filterAliveUsers(data);
-  console.log('aliveUsers', aliveUsers);
-  await processPairs(aliveUsers);
+  if (Array.isArray(data) && data.length > 0) {
+    const aliveUsers = filterAliveUsers(data);
+    console.log('aliveUsers', aliveUsers);
+    await processPairs(aliveUsers);
+  } else {
+    console.log('No data found');
+    return;
+  }
 };

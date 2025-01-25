@@ -14,25 +14,25 @@ aws lambda create-function \
   --role "$ROLE_ARN" \
   --timeout 15 \
   --memory-size 512 \
-  --environment "Variables={FIREBASE_PROJECT_ID=$ENV_VAR1,FIREBASE_CLIENT_EMAIL=$ENV_VAR2,FIREBASE_PRIVATE_KEY_BASE64=$ENV_VAR3}" \
+  --environment "Variables={FIREBASE_PROJECT_ID=$ENV_VAR1,FIREBASE_CLIENT_EMAIL=$ENV_VAR2,FIREBASE_PRIVATE_KEY_BASE64=$ENV_VAR3,SECRET_NAME=$SECRET_NAME}" \
   --layers "arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:layer:$LAYER_NAME:$VERSION_NUMBER" \
 
 echo "Lambda function $FUNCTION_NAME created successfully."
 
-sleep 3
+sleep 10
 
 aws events put-rule \
     --name $RULE_NAME \
     --schedule-expression "rate(1 minute)" \
     --state ENABLED \
 
-sleep 3
+sleep 20
 
 aws events put-targets \
     --rule $RULE_NAME \
     --targets "Id"="1","Arn"="arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$FUNCTION_NAME" \
 
-sleep 3
+sleep 10
 
 aws lambda add-permission \
     --function-name $FUNCTION_NAME \
@@ -40,3 +40,5 @@ aws lambda add-permission \
     --action 'lambda:InvokeFunction' \
     --principal events.amazonaws.com \
     --source-arn "arn:aws:events:$AWS_REGION:$AWS_ACCOUNT_ID:rule/$RULE_NAME"
+
+echo "Lambda function $FUNCTION_NAME scheduled successfully."

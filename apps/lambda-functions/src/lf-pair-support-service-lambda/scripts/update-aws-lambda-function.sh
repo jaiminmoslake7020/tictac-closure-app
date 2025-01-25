@@ -6,11 +6,14 @@ aws lambda update-function-code \
   --function-name "$FUNCTION_NAME" \
   --zip-file fileb://"$ZIP_FILE" \
 
-sleep 5
+sleep 20
 
 aws lambda update-function-configuration \
     --function-name "$FUNCTION_NAME" \
     --layers "arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:layer:$LAYER_NAME:$VERSION_NUMBER" \
-    --environment "Variables={FIREBASE_PROJECT_ID=$ENV_VAR1,FIREBASE_CLIENT_EMAIL=$ENV_VAR2,FIREBASE_PRIVATE_KEY_BASE64=$ENV_VAR3}" \
+    --environment "Variables={FIREBASE_PROJECT_ID=$ENV_VAR1,FIREBASE_CLIENT_EMAIL=$ENV_VAR2,FIREBASE_PRIVATE_KEY_BASE64=$ENV_VAR3,SECRET_NAME=$SECRET_NAME}" \
 
 echo "Lambda function $FUNCTION_NAME updated successfully."
+
+
+
