@@ -15,26 +15,5 @@ aws lambda update-function-configuration \
 
 echo "Lambda function $FUNCTION_NAME updated successfully."
 
-sleep 10
 
 
-# Define the policy document in a variable
-POLICY_DOCUMENT=$(cat <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "secretsmanager:GetSecretValue",
-      "Resource": "arn:aws:secretsmanager:$AWS_REGION:$AWS_ACCOUNT_ID:secret:*"
-    }
-  ]
-}
-EOF
-)
-
-
-aws iam put-role-policy \
-  --role-name $ROLE_NAME \
-  --policy-name LambdaSecretsManagerPolicy \
-  --policy-document "$POLICY_DOCUMENT"

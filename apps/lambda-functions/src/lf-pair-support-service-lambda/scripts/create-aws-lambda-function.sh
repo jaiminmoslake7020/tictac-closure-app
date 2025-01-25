@@ -41,24 +41,4 @@ aws lambda add-permission \
     --principal events.amazonaws.com \
     --source-arn "arn:aws:events:$AWS_REGION:$AWS_ACCOUNT_ID:rule/$RULE_NAME"
 
-sleep 10
-
-# Define the policy document in a variable
-POLICY_DOCUMENT=$(cat <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "secretsmanager:GetSecretValue",
-      "Resource": "arn:aws:secretsmanager:$AWS_REGION:$AWS_ACCOUNT_ID:secret:$SECRET_NAME"
-    }
-  ]
-}
-EOF
-)
-
-aws iam put-role-policy \
-  --role-name $ROLE_NAME \
-  --policy-name LambdaSecretsManagerPolicy \
-  --policy-document "$POLICY_DOCUMENT"
+echo "Lambda function $FUNCTION_NAME scheduled successfully."
