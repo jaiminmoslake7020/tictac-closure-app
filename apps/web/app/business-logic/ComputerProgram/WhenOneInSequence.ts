@@ -3,7 +3,7 @@ import { MovePositionType, WiningSequenceType } from '@types-dir/index';
 export const WhenOneInSequence = (
   seq: WiningSequenceType,
   currentValues: MovePositionType[],
-  anotherCurrentValues: MovePositionType[],
+  anotherCurrentValues: MovePositionType[]
 ) => {
   let foundAnotherMove = null;
   if (

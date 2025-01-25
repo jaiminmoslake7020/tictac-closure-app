@@ -10,7 +10,7 @@ export type ChangeAppLevelInfoTabButtonType = {
 
 export const ChangeAppLevelInfoTabButton = (
   contextsData: InitializeContextsFunctionType,
-  onLevelChange: () => void,
+  onLevelChange: () => void
 ): ChangeAppLevelInfoTabButtonType => {
   let div: undefined | HTMLDivElement;
 

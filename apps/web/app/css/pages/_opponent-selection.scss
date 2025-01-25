@@ -6,14 +6,13 @@
   @apply items-center;
 }
 
-
 .remote-random-restart-display {
   @apply flex justify-center items-center;
 
   .buttons-wrapper {
-    @apply flex flex-col gap-4 ;
+    @apply flex flex-col gap-4;
 
-    button{
+    button {
       @apply text-center justify-center;
     }
   }

@@ -20,9 +20,27 @@ import {
   useFormType,
 } from './Input';
 import { RadioButton } from './RadioButton';
-import { Text, P, Span, H1, H2, H3, H4, H5, H6, useSpanType, useSpan } from './Text';
+import {
+  Text,
+  P,
+  Span,
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  useSpanType,
+  useSpan,
+} from './Text';
 
-export type { useButtonType, useDivType, useSpanType, useTextInputType, useFormType };
+export type {
+  useButtonType,
+  useDivType,
+  useSpanType,
+  useTextInputType,
+  useFormType,
+};
 
 export {
   Button,

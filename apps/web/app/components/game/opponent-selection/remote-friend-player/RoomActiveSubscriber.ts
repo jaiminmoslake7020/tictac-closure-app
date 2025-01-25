@@ -1,12 +1,20 @@
-import {RoomReadyResponseType} from '@types-dir/index';
-import {getRoomData, setCreatorIsInRoom, setJoinerIsInRoom} from '@firebase-dir/room';
-import {isRoomReady} from '@utils/room';
-import {GameActionCallbacksType, GameActions,} from '@components/game/GameActions';
-import {InitializeContextsFunctionType, useContextGamePlayerType, useContextRoomCodeId,} from '@contexts/index';
+import { RoomReadyResponseType } from '@types-dir/index';
 import {
-  ShowErrorMessageWrapper
-} from '@components/game/opponent-selection/remote-friend-player/ShowErrorMessageWrapper';
-
+  getRoomData,
+  setCreatorIsInRoom,
+  setJoinerIsInRoom,
+} from '@firebase-dir/room';
+import { isRoomReady } from '@utils/room';
+import {
+  GameActionCallbacksType,
+  GameActions,
+} from '@components/game/GameActions';
+import {
+  InitializeContextsFunctionType,
+  useContextGamePlayerType,
+  useContextRoomCodeId,
+} from '@contexts/index';
+import { ShowErrorMessageWrapper } from '@components/game/opponent-selection/remote-friend-player/ShowErrorMessageWrapper';
 
 export type AddRoomSubscriberType = {
   checkRoomActive: (roomReadyResponse: RoomReadyResponseType) => void;
@@ -14,12 +22,12 @@ export type AddRoomSubscriberType = {
 
 export const RoomActiveSubscriber = (
   contextsData: InitializeContextsFunctionType,
-  gameActions: GameActionCallbacksType,
+  gameActions: GameActionCallbacksType
 ): AddRoomSubscriberType => {
-
-  const {
-    showErrorMessage
-  } = ShowErrorMessageWrapper(contextsData, gameActions);
+  const { showErrorMessage } = ShowErrorMessageWrapper(
+    contextsData,
+    gameActions
+  );
 
   const informServerAboutRoomPresence = async (roomCode: string) => {
     const { getPlayerType } = useContextGamePlayerType(contextsData);

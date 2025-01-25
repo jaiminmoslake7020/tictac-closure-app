@@ -8,7 +8,7 @@ export type RoomSelectionItemType = {
 
 export const RoomSelectionItem = (
   label: string,
-  onChange: (e: any) => void,
+  onChange: (e: any) => void
 ): RoomSelectionItemType => {
   const { getDiv, setDiv, removeDiv } = useDiv();
 

@@ -3,11 +3,10 @@ import { TurnHandler } from '@business-logic/TurnHandler';
 import {
   FirebaseGameType,
   MovePositionType,
-  TicTacTableType,
   TurnHandlerType,
   UserType,
 } from '@types-dir/index';
-import { TicTacTable } from './TicTacTable';
+import { TicTacTable, TicTacTableType } from './TicTacTable';
 import {
   InitializeContextsFunctionType,
   isItRemoteGame,
@@ -25,18 +24,17 @@ import {
 } from '@contexts/index';
 import { useDiv } from '@components/base';
 import { createGame, onGameCreated } from '@firebase-dir/game';
-import { IsGameAvailableSubscriber } from '@components/game/opponent-selection/remote-friend-player/IsGameAvailableSubscriber';
-import { UpdateLastActiveTimeSubscriber } from '@components/game/opponent-selection/remote-friend-player/UpdateLastActiveTimeSubscriber';
 import { GameActionCallbacksType } from '@components/game/GameActions';
-import {startSubscribers} from '@components/game/firebase-subscriber/FirebaseSubscriber';
+import { startSubscribers } from '@components/game/firebase-subscriber/FirebaseSubscriber';
 
 export type TicTacType = {
   render: () => HTMLDivElement;
+  exitGame: () => void;
 };
 
 export const TicTac = (
   contextsData: InitializeContextsFunctionType,
-  gameActionsObject: GameActionCallbacksType,
+  gameActionsObject: GameActionCallbacksType
 ): TicTacType => {
   let infoTabDiv: InfoTabType | undefined;
   let turnHandler: TurnHandlerType | undefined;
@@ -93,7 +91,8 @@ export const TicTac = (
       getInfoTabDiv().updateRoomInfo();
 
       const { getCurrentMove } = useContextCurrentMove(contextsData);
-      const { setUserTurn, setAnotherUserTurn } = useContextTurnHookType(contextsData);
+      const { setUserTurn, setAnotherUserTurn } =
+        useContextTurnHookType(contextsData);
       if (getCurrentMove() === getUser().id) {
         setUserTurn();
       } else {
@@ -121,7 +120,7 @@ export const TicTac = (
       // console.log('Game started', g.id);
       setGameId(g.id);
       setCurrentMove(currentMove);
-      await startSubscribers(contextsData, gameActionsObject);
+      await startSubscribers(contextsData, { ...gameActionsObject, exitGame });
       resetGame();
     } else {
       // TODO: Show error message
@@ -138,26 +137,6 @@ export const TicTac = (
     }
   };
 
-  const addGameAvailableSubscriber = async () => {
-    // console.log('addGameAvailableSubscriber');
-    const { isGameAvailableSubscriber , removeGameAvailableSubscriber } = IsGameAvailableSubscriber(
-      contextsData,
-      gameActionsObject,
-      'TicTac',
-    );
-    await isGameAvailableSubscriber();
-  };
-
-  const updateGameSubscriber = async () => {
-    // console.log('updateGameSubscriber');
-    const { updateGameIsActiveSubscriber, removeUpdateGameIsActiveSubscriber } = UpdateLastActiveTimeSubscriber(
-      contextsData,
-      gameActionsObject,
-      'TicTac',
-    );
-    await updateGameIsActiveSubscriber();
-  };
-
   const getInfoTabDiv = (): InfoTabType => {
     if (!infoTabDiv) {
       setInfoTabDiv(InfoTab(reload, contextsData));
@@ -171,7 +150,9 @@ export const TicTac = (
 
   const addRestartGameListener = () => {
     // console.log('addRestartGameListener');
-    const { getRoomCodeId } = useContextRoomCodeId(contextsData) as UseRoomCodeIdHookType;
+    const { getRoomCodeId } = useContextRoomCodeId(
+      contextsData
+    ) as UseRoomCodeIdHookType;
     const { getGameId, setGameId } = useContextGameId(contextsData);
     const { setCurrentMove } = useContextCurrentMove(contextsData);
     const { getUser } = useContextUserSession(contextsData);
@@ -182,7 +163,10 @@ export const TicTac = (
           // console.log('TICTAC 2 NEW GAME', gameId);
           setGameId(gameId);
           setCurrentMove(d.currentMove);
-          await startSubscribers(contextsData, gameActionsObject);
+          await startSubscribers(contextsData, {
+            ...gameActionsObject,
+            exitGame,
+          });
           resetGameJoiner();
           resetGame();
         } else {
@@ -195,13 +179,14 @@ export const TicTac = (
       },
       () => {
         // console.log('Game started Game 2');
-      },
+      }
     );
   };
 
   const render = () => {
     setTurnHandlerType(TurnHandler(contextsData, anotherPersonMadeMove));
     setInfoTabDiv(InfoTab(reload, contextsData));
+
     setWrapperDiv('wrapper-div');
     getWrapperDiv().append(getInfoTabDiv().render());
     getInfoTabDiv().addTurn();
@@ -214,7 +199,14 @@ export const TicTac = (
     return getWrapperDiv();
   };
 
+  const exitGame = () => {
+    getInfoTabDiv().exitGame();
+    getTicTacTable().exitGame();
+    getWrapperDiv().remove();
+  };
+
   return {
     render,
+    exitGame,
   };
 };

@@ -18,12 +18,22 @@ export type NotificationElementType = {
   remove: () => void;
 };
 
-export const Notification = (notification: NotificationType): NotificationElementType => {
+export const Notification = (
+  notification: NotificationType
+): NotificationElementType => {
   const { setDiv, getDiv, removeDiv } = useDiv();
 
-  const { setDiv: setDivOne, getDiv: getDivOne, removeDiv: removeDivOne } = useDiv();
+  const {
+    setDiv: setDivOne,
+    getDiv: getDivOne,
+    removeDiv: removeDivOne,
+  } = useDiv();
 
-  const { setDiv: setDivTwo, getDiv: getDivTwo, removeDiv: removeDivTwo } = useDiv();
+  const {
+    setDiv: setDivTwo,
+    getDiv: getDivTwo,
+    removeDiv: removeDivTwo,
+  } = useDiv();
 
   const { setDiv: setDivThree, getDiv: getDivThree } = useDiv();
 

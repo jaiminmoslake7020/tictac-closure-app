@@ -5,11 +5,12 @@ import { GameActionCallbacksType } from '@components/game/GameActions';
 
 export type LoadTicTacAppType = {
   render: () => HTMLDivElement;
+  exitGame: () => void;
 };
 
 export const LoadTicTacApp = (
   contextsData: InitializeContextsFunctionType,
-  gameActionsObject: GameActionCallbacksType,
+  gameActionsObject: GameActionCallbacksType
 ): LoadTicTacAppType => {
   const { getDiv, setDiv } = useDiv();
   const { getDiv: getDivOne, setDiv: setDivOne } = useDiv();
@@ -32,7 +33,12 @@ export const LoadTicTacApp = (
     return getDiv();
   };
 
+  const exitGame = () => {
+    get().exitGame();
+  };
+
   return {
     render,
+    exitGame,
   };
 };

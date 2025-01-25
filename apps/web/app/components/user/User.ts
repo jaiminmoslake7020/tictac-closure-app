@@ -1,10 +1,16 @@
-import { InitializeContextsFunctionType, useContextUserSession } from '@contexts/index';
+import {
+  InitializeContextsFunctionType,
+  useContextUserSession,
+} from '@contexts/index';
 import { Loader, useDiv, useState } from '@components/base';
 import { ButtonGroup } from './ButtonGroup';
 import { User as Usertype } from '@firebase/auth';
 import { upsertUser } from '@firebase-dir/user';
 
-export const User = (contextsData: InitializeContextsFunctionType, initGame: () => void) => {
+export const User = (
+  contextsData: InitializeContextsFunctionType,
+  initGame: () => void
+) => {
   const { setUser, checkUserExists } = useContextUserSession(contextsData);
 
   const { getDiv: getUserDiv, setDiv: setUserDiv, removeDiv } = useDiv();
@@ -23,7 +29,8 @@ export const User = (contextsData: InitializeContextsFunctionType, initGame: () 
     if (userDoc && userDoc.uid) {
       const t = {
         id: userDoc?.uid,
-        username: userDoc?.email?.split('@')[0] || userDoc?.displayName || 'Anonymous',
+        username:
+          userDoc?.email?.split('@')[0] || userDoc?.displayName || 'Anonymous',
       };
       setUser(t);
       remove();

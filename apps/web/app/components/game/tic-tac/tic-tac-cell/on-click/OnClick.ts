@@ -9,8 +9,16 @@ import {
   addFn,
   enableCell,
 } from '@tic-tac/tic-tac-cell/common';
-import { ChangeFunctionType, ColumnIdType, MovePositionType, TurnType } from '@types-dir/index';
-import { InitializeContextsFunctionType, useContextTurnHookType } from '@contexts/index';
+import {
+  ChangeFunctionType,
+  ColumnIdType,
+  MovePositionType,
+  TurnType,
+} from '@types-dir/index';
+import {
+  InitializeContextsFunctionType,
+  useContextTurnHookType,
+} from '@contexts/index';
 
 export const removeClickListener = (columnId: ColumnIdType) => {
   if (hasFn(columnId)) {
@@ -21,7 +29,7 @@ export const removeClickListener = (columnId: ColumnIdType) => {
 export const addClickListener = (
   contextData: InitializeContextsFunctionType,
   columnId: ColumnIdType,
-  newChangeTurn: ChangeFunctionType,
+  newChangeTurn: ChangeFunctionType
 ) => {
   // INFO: we need this when game get's restarted we do not rerender the cell, but we remove the listener, and add new listener
   // and enable the cell
@@ -37,7 +45,7 @@ export const addClickListener = (
 export const OnClick = async (
   appliedTurn: TurnType,
   appliedChangeTurn: ChangeFunctionType,
-  columnId: ColumnIdType,
+  columnId: ColumnIdType
 ) => {
   const moveType = columnId.replace('-', '') as MovePositionType;
   const clicked = getClicked(columnId);

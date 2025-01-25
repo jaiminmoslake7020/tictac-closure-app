@@ -1,4 +1,8 @@
-import { MovePositionType, MovePositionTypeWithNull, WinnerType } from '@types-dir/index';
+import {
+  MovePositionType,
+  MovePositionTypeWithNull,
+  WinnerType,
+} from '@types-dir/index';
 import { turnData, winnerData } from '@data/index';
 import { FindAnotherMedium } from './FindAnotherMedium';
 import {
@@ -10,7 +14,7 @@ import {
 } from '@contexts/index';
 
 export const FindAnotherHard = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): MovePositionType | undefined => {
   const { turn, anotherTurn } = turnData;
   const { getTurnStorage } = useContextTurnStorage(contextsData);

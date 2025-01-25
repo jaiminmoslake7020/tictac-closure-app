@@ -1,4 +1,9 @@
-import { addDocument, getDocument, listenToDocument, updateDocument } from '@firebase-dir/core';
+import {
+  addDocument,
+  getDocument,
+  listenToDocument,
+  updateDocument,
+} from '@firebase-dir/core';
 import {
   FirebaseRoomType,
   RoomExitedResponseType,
@@ -8,7 +13,9 @@ import {
 import { getCurrentTime } from '@utils/index';
 import { isRoomReady } from '@utils/room';
 
-export const getRoomData = async (roomCode: string): Promise<FirebaseRoomType | null> => {
+export const getRoomData = async (
+  roomCode: string
+): Promise<FirebaseRoomType | null> => {
   try {
     const docSnap = await getDocument(`rooms/${roomCode}`);
     if (docSnap?.exists()) {
@@ -31,7 +38,10 @@ export const roomExists = async (roomCode: string) => {
   }
 };
 
-export const joinRoom = async (roomCode: string, updatedDocData: any): Promise<void> => {
+export const joinRoom = async (
+  roomCode: string,
+  updatedDocData: any
+): Promise<void> => {
   try {
     await updateDocument(`rooms/${roomCode}`, updatedDocData);
   } catch (e) {
@@ -70,7 +80,9 @@ export const setJoinerIsInRoom = async (roomCode: string): Promise<void> => {
   }
 };
 
-export const createRoom = async (user: UserType): Promise<string | undefined> => {
+export const createRoom = async (
+  user: UserType
+): Promise<string | undefined> => {
   try {
     const roomDoc = await addDocument(`rooms`, {
       creator: user,
@@ -84,7 +96,7 @@ export const createRoom = async (user: UserType): Promise<string | undefined> =>
 
 export const onRoomGotReady = (
   roomCodeId: string,
-  onRoomReady: (v: Partial<RoomReadyResponseType>) => Promise<void>,
+  onRoomReady: (v: Partial<RoomReadyResponseType>) => Promise<void>
 ) => {
   const unsubscribe = listenToDocument('rooms', roomCodeId, async (d: any) => {
     isRoomReady(d);
@@ -100,7 +112,7 @@ export const onRoomGotReady = (
 
 export const onRoomExit = (
   roomCodeId: string,
-  onRoomReady: (v: RoomExitedResponseType) => Promise<void>,
+  onRoomReady: (v: RoomExitedResponseType) => Promise<void>
 ) => {
   const unsubscribe = listenToDocument('rooms', roomCodeId, async (d: any) => {
     if (d['exited']) {

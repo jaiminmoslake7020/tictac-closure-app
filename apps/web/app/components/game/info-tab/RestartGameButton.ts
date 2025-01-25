@@ -31,7 +31,7 @@ export type RestartGameButtonType = RestartGameButtonControllerType & {
 
 export const RestartGameButton = (
   reload: Function,
-  playerType: GamePlayerType,
+  playerType: GamePlayerType
 ): RestartGameButtonType => {
   const { getButton, setButton } = useButton();
 
@@ -40,6 +40,7 @@ export const RestartGameButton = (
   const timeOut = playerType === 'creator' ? 1000 : 1100;
 
   const changeRestartButtonText = (reload: Function, time: number) => {
+    // console.log('changeRestartButtonText is active', getButtonEnabled());
     if (getButtonEnabled()) {
       if (time === 0) {
         setButtonEnabled(false);
@@ -53,15 +54,20 @@ export const RestartGameButton = (
 
   const render = () => {
     setButtonEnabled(true);
-    setButton('Reload - ' + reloadTime + 's', ' btn btn-reload btn-animate ', () => {
-      setButtonEnabled(false);
-      reload();
-    });
-    setTimeout(changeRestartButtonText, 1000, reload, reloadTime - 1);
+    setButton(
+      'Reload - ' + reloadTime + 's',
+      ' btn btn-reload btn-animate ',
+      () => {
+        setButtonEnabled(false);
+        reload();
+      }
+    );
+    changeRestartButtonText(reload, reloadTime);
     return getButton();
   };
 
   const remove = () => {
+    setButtonEnabled(false);
     getButton().remove();
   };
 

@@ -1,4 +1,4 @@
-import {FirebaseGameType, UserType} from '@types-dir/index';
+import { FirebaseGameType, UserType } from '@types-dir/index';
 import {
   getGameDocumentPath,
   getRandomMove,
@@ -11,26 +11,33 @@ import {
   useContextUserSession,
   UseCurrentMoveHookType,
 } from '@contexts/index';
-import {createGame, getAllGameMoves, getGame, onGameCreated} from '@firebase-dir/game';
-import {addToRoot, createEL} from '@utils/index';
-import {Layout} from '@components/layouts/layout/Layout';
-import {Loader} from '@components/base';
-import {GameActionCallbacksType, GameActions, GameActionsType,} from '@components/game/GameActions';
 import {
-  IsGameAvailableSubscriber
-} from '@components/game/opponent-selection/remote-friend-player/IsGameAvailableSubscriber';
-import {turnData} from '@data/index';
-import {startSubscribers} from '@components/game/firebase-subscriber/FirebaseSubscriber';
+  createGame,
+  getAllGameMoves,
+  getGame,
+  onGameCreated,
+} from '@firebase-dir/game';
+import { addToRoot, createEL } from '@utils/index';
+import { Layout } from '@components/layouts/layout/Layout';
+import { Loader } from '@components/base';
 import {
-  ShowErrorMessageWrapper
-} from '@components/game/opponent-selection/remote-friend-player/ShowErrorMessageWrapper';
+  GameActionCallbacksType,
+  GameActions,
+  GameActionsType,
+} from '@components/game/GameActions';
+import { IsGameAvailableSubscriber } from '@components/game/opponent-selection/remote-friend-player/IsGameAvailableSubscriber';
+import { turnData } from '@data/index';
+import { startSubscribers } from '@components/game/firebase-subscriber/FirebaseSubscriber';
+import { ShowErrorMessageWrapper } from '@components/game/opponent-selection/remote-friend-player/ShowErrorMessageWrapper';
 
 export const StartGame = (
   contextsData: InitializeContextsFunctionType,
   gameActions: GameActionCallbacksType,
-  onLevelSelected: () => void,
+  onLevelSelected: () => void
 ) => {
-  const { setCurrentMove } = useContextCurrentMove(contextsData) as UseCurrentMoveHookType;
+  const { setCurrentMove } = useContextCurrentMove(
+    contextsData
+  ) as UseCurrentMoveHookType;
 
   const { getUser } = useContextUserSession(contextsData);
 
@@ -44,9 +51,10 @@ export const StartGame = (
 
   const { showLoader, stopLoader } = Loader();
 
-  const {
-    showJustErrorMessage
-  } = ShowErrorMessageWrapper(contextsData, gameActions);
+  const { showJustErrorMessage } = ShowErrorMessageWrapper(
+    contextsData,
+    gameActions
+  );
 
   const createGameForRoomJoiner = async () => {
     // console.log('createGameForRoomJoiner');
@@ -95,7 +103,7 @@ export const StartGame = (
       },
       () => {
         // console.log('onGameCreated Finished');
-      },
+      }
     );
   };
 
@@ -110,9 +118,12 @@ export const StartGame = (
 
   const joinGame = async () => {
     // console.log('joinGame');
-    const { isGameAvailable } = IsGameAvailableSubscriber(contextsData, gameActions,  'StartGame 1');
+    const { isGameAvailable } = IsGameAvailableSubscriber(
+      contextsData,
+      gameActions
+    );
     const gameDocumentPath = getGameDocumentPath(contextsData);
-    const isItAvailable = await isGameAvailable( gameDocumentPath );
+    const isItAvailable = await isGameAvailable(gameDocumentPath);
     // console.log('isItAvailable', isItAvailable);
     if (isItAvailable) {
       await startSubscribers(contextsData, gameActions);

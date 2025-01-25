@@ -20,19 +20,27 @@ export const NavBar = (gameActions: GameActionsType) => {
       const navLink = NavLink(
         opponentTypesObject[opponentType],
         'fa-solid fa-gamepad ',
-        gameActions.changeGameType,
+        gameActions.changeGameType
       );
       navLink.getBtn().setAttribute('title', 'Change Game Type');
       getDivOne().append(navLink.render());
     }
 
     if (roomCodeId && gameActions.exitRoom) {
-      const navLink = NavLink('Exit Room', 'fa-solid fa-door-open', gameActions.exitRoom);
+      const navLink = NavLink(
+        'Exit Room',
+        'fa-solid fa-door-open',
+        gameActions.exitRoom
+      );
       getDivOne().append(navLink.render());
     }
 
     if (user && gameActions.logout) {
-      const navLink = NavLink('Logout', 'fa-solid fa-power-off', gameActions.logout);
+      const navLink = NavLink(
+        'Logout',
+        'fa-solid fa-power-off',
+        gameActions.logout
+      );
       getDivOne().append(navLink.render());
     }
 

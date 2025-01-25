@@ -1,18 +1,26 @@
-import {getGameDocumentPath, InitializeContextsFunctionType, useContextGamePlayerType,} from '@contexts/index';
-import {GameActionCallbacksType,} from '@components/game/GameActions';
-import {updateLastActive} from '@firebase-dir/game';
-import {ShowErrorMessageWrapper} from '@components/game/opponent-selection/remote-friend-player/ShowErrorMessageWrapper';
+import {
+  getGameDocumentPath,
+  InitializeContextsFunctionType,
+  useContextGamePlayerType,
+} from '@contexts/index';
+import {
+  GameActionCallbacksType,
+  GameActions,
+  GameActionsType,
+} from '@components/game/GameActions';
+import { updateLastActive } from '@firebase-dir/game';
+import { ShowErrorMessageWrapper } from '@components/game/opponent-selection/remote-friend-player/ShowErrorMessageWrapper';
 
 export const UpdateLastActiveTimeSubscriber = (
   contextsData: InitializeContextsFunctionType,
-  gameActionsCallback: GameActionCallbacksType,
-  subscriberFrom: string
+  gameActionsCallback: GameActionCallbacksType
 ) => {
   let interval: NodeJS.Timeout;
 
-  const {
-    showErrorMessage
-  } = ShowErrorMessageWrapper(contextsData, gameActionsCallback);
+  const { showErrorMessage } = ShowErrorMessageWrapper(
+    contextsData,
+    gameActionsCallback
+  );
 
   const updateGameIsActive = async (gamePath: string | undefined) => {
     // console.log('updateGameIsActive');
@@ -28,15 +36,22 @@ export const UpdateLastActiveTimeSubscriber = (
   const updateGameIsActiveSubscriber = async () => {
     // console.log('updateGameIsActiveSubscriber');
     const gamePathFirst = getGameDocumentPath(contextsData);
-    await updateGameIsActive( gamePathFirst );
+    await updateGameIsActive(gamePathFirst);
     interval = setInterval(async () => {
       const gamePath = getGameDocumentPath(contextsData);
       if (gamePath) {
         // console.log('subscriberFrom', subscriberFrom);
-        await updateGameIsActive( gamePath );
+        await updateGameIsActive(gamePath);
       } else {
-        console.log('closing interval updateGameIsActiveSubscriber BY setInterval');
+        // console.log('closing interval updateGameIsActiveSubscriber BY setInterval');
         clearInterval(interval);
+
+        // console.log('exitRoom');
+        const gA = GameActions(
+          contextsData,
+          gameActionsCallback
+        ) as GameActionsType;
+        gA.exitRoom();
       }
     }, 3000);
   };
@@ -44,11 +59,11 @@ export const UpdateLastActiveTimeSubscriber = (
   const removeUpdateGameIsActiveSubscriber = () => {
     // console.log('removeUpdateGameIsActiveSubscriber BY CALLER');
     clearInterval(interval);
-  }
+  };
 
   return {
     updateGameIsActive,
     updateGameIsActiveSubscriber,
-    removeUpdateGameIsActiveSubscriber
+    removeUpdateGameIsActiveSubscriber,
   };
 };
