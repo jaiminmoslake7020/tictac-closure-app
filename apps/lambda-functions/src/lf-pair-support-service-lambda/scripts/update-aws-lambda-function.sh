@@ -25,8 +25,8 @@ POLICY_DOCUMENT=$(cat <<EOF
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": "iam:PutRolePolicy",
-      "Resource": "arn:aws:iam:$AWS_REGION:$AWS_ACCOUNT_ID:role/$ROLE_NAME"
+      "Action": "secretsmanager:GetSecretValue",
+      "Resource": "arn:aws:secretsmanager:$AWS_REGION:$AWS_ACCOUNT_ID:secret:$SECRET_NAME"
     }
   ]
 }
