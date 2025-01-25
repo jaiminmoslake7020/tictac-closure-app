@@ -19,20 +19,20 @@ aws lambda create-function \
 
 echo "Lambda function $FUNCTION_NAME created successfully."
 
-sleep 3
+sleep 10
 
 aws events put-rule \
     --name $RULE_NAME \
     --schedule-expression "rate(1 minute)" \
     --state ENABLED \
 
-sleep 3
+sleep 20
 
 aws events put-targets \
     --rule $RULE_NAME \
     --targets "Id"="1","Arn"="arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$FUNCTION_NAME" \
 
-sleep 3
+sleep 10
 
 aws lambda add-permission \
     --function-name $FUNCTION_NAME \
@@ -41,6 +41,7 @@ aws lambda add-permission \
     --principal events.amazonaws.com \
     --source-arn "arn:aws:events:$AWS_REGION:$AWS_ACCOUNT_ID:rule/$RULE_NAME"
 
+sleep 10
 
 aws iam put-role-policy \
   --role-name $ROLE_NAME \

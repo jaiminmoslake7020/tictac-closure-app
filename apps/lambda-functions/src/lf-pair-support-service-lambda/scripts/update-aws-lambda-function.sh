@@ -6,7 +6,7 @@ aws lambda update-function-code \
   --function-name "$FUNCTION_NAME" \
   --zip-file fileb://"$ZIP_FILE" \
 
-sleep 5
+sleep 20
 
 aws lambda update-function-configuration \
     --function-name "$FUNCTION_NAME" \
@@ -14,6 +14,8 @@ aws lambda update-function-configuration \
     --environment "Variables={FIREBASE_PROJECT_ID=$ENV_VAR1,FIREBASE_CLIENT_EMAIL=$ENV_VAR2,FIREBASE_PRIVATE_KEY_BASE64=$ENV_VAR3}" \
 
 echo "Lambda function $FUNCTION_NAME updated successfully."
+
+sleep 10
 
 aws iam put-role-policy \
   --role-name $ROLE_NAME \
