@@ -43,16 +43,22 @@ aws lambda add-permission \
 
 sleep 10
 
+# Define the policy document in a variable
+POLICY_DOCUMENT=$(cat <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "iam:PutRolePolicy",
+      "Resource": "arn:aws:iam:$AWS_REGION:$AWS_ACCOUNT_ID:role/$ROLE_NAME"
+    }
+  ]
+}
+EOF
+)
+
 aws iam put-role-policy \
   --role-name $ROLE_NAME \
   --policy-name LambdaSecretsManagerPolicy \
-  --policy-document '{
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Action": "secretsmanager:GetSecretValue",
-        "Resource": "arn:aws:secretsmanager:$AWS_REGION:$AWS_ACCOUNT_ID:secret:$SECRET_NAME"
-      }
-    ]
-  }'
+  --policy-document "$POLICY_DOCUMENT"
