@@ -14,3 +14,17 @@ aws lambda update-function-configuration \
     --environment "Variables={FIREBASE_PROJECT_ID=$ENV_VAR1,FIREBASE_CLIENT_EMAIL=$ENV_VAR2,FIREBASE_PRIVATE_KEY_BASE64=$ENV_VAR3}" \
 
 echo "Lambda function $FUNCTION_NAME updated successfully."
+
+aws iam put-role-policy \
+  --role-name $ROLE_NAME \
+  --policy-name LambdaSecretsManagerPolicy \
+  --policy-document '{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": "secretsmanager:GetSecretValue",
+        "Resource": "arn:aws:secretsmanager:$AWS_REGION:$AWS_ACCOUNT_ID:secret:$SECRET_NAME"
+      }
+    ]
+  }'

@@ -40,3 +40,18 @@ aws lambda add-permission \
     --action 'lambda:InvokeFunction' \
     --principal events.amazonaws.com \
     --source-arn "arn:aws:events:$AWS_REGION:$AWS_ACCOUNT_ID:rule/$RULE_NAME"
+
+
+aws iam put-role-policy \
+  --role-name $ROLE_NAME \
+  --policy-name LambdaSecretsManagerPolicy \
+  --policy-document '{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": "secretsmanager:GetSecretValue",
+        "Resource": "arn:aws:secretsmanager:$AWS_REGION:$AWS_ACCOUNT_ID:secret:$SECRET_NAME"
+      }
+    ]
+  }'
