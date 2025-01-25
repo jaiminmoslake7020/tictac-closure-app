@@ -63,6 +63,7 @@ jobs:
           LAYER_NAME: ${{ vars.LAYER_NAME_QA }}
           RULE_NAME: ${{ vars.RULE_NAME_QA }}
           ROLE_NAME: ${{ vars.ROLE_NAME }}
+          SECRET_NAME: ${{ vars.SECRET_NAME }}
           ENV_VAR3: ${{ vars.ENV_VAR3_QA }}
           ENV_VAR1: ${{ vars.FIREBASE_PROJECT_ID_QA }}
           ZIP_FILE: "lambda.zip"
