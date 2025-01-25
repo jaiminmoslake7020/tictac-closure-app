@@ -45,6 +45,7 @@ export const GameActions = (
 
   const exitGameChanges = async () => {
     if (exitGame) {
+      console.log("exitGame")
       exitGame();
     }
     removeGameContextsData(contextsData);

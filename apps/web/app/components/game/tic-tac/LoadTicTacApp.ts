@@ -2,6 +2,7 @@ import { TicTac, TicTacType } from './TicTac';
 import { InitializeContextsFunctionType } from '@contexts/index';
 import { useDiv, useState } from '@components/base';
 import { GameActionCallbacksType } from '@components/game/GameActions';
+import {RoomActiveSubscriber} from '@components/game/opponent-selection/remote-friend-player/RoomActiveSubscriber';
 
 export type LoadTicTacAppType = {
   render: () => HTMLDivElement;
@@ -20,6 +21,14 @@ export const LoadTicTacApp = (
     set: (item: TicTacType) => void;
   };
 
+  const addRoomActiveSubscriber = (ga:GameActionCallbacksType) => {
+    const { checkRoomActiveSubscriber } = RoomActiveSubscriber(
+      contextsData,
+      ga
+    );
+    checkRoomActiveSubscriber();
+  }
+
   const render = () => {
     set(TicTac(contextsData, gameActionsObject));
 
@@ -30,6 +39,8 @@ export const LoadTicTacApp = (
     getDiv().append(getDivOne());
 
     window.history.pushState(null, '', '#/app');
+
+    addRoomActiveSubscriber( {...gameActionsObject, exitGame: exitGame} );
     return getDiv();
   };
 

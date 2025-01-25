@@ -17,13 +17,17 @@ import {
 import { ShowErrorMessageWrapper } from '@components/game/opponent-selection/remote-friend-player/ShowErrorMessageWrapper';
 
 export type AddRoomSubscriberType = {
-  checkRoomActive: (roomReadyResponse: RoomReadyResponseType) => void;
+  checkRoomActive: () => void;
+  checkRoomActiveSubscriber: () => void;
 };
 
 export const RoomActiveSubscriber = (
   contextsData: InitializeContextsFunctionType,
   gameActions: GameActionCallbacksType
 ): AddRoomSubscriberType => {
+
+  let interval: NodeJS.Timeout;
+
   const { showErrorMessage } = ShowErrorMessageWrapper(
     contextsData,
     gameActions
@@ -41,12 +45,19 @@ export const RoomActiveSubscriber = (
   const checkRoomReady = async (roomCode: string) => {
     const roomData = await getRoomData(roomCode);
     if (roomData) {
-      if (!isRoomReady(roomData)) {
+      if (isRoomReady(roomData)) {
+        return true;
+      } else {
+        if (interval) {
+          clearInterval(interval);
+        }
+
         const g = GameActions(contextsData, gameActions);
         g.exitRoom();
         showErrorMessage('Room is left by another player.');
       }
     }
+    return false;
   };
 
   // TODO: change in some kind of subscription where we can remove the listener
@@ -56,16 +67,27 @@ export const RoomActiveSubscriber = (
     const roomCode = getRoomCodeId();
     if (roomCode) {
       await informServerAboutRoomPresence(roomCode);
-      await checkRoomReady(roomCode);
-      setTimeout(async () => {
-        await checkRoomActive();
+      return await checkRoomReady(roomCode);
+    }
+    return false;
+  };
+
+  // TODO: change in some kind of subscription where we can remove the listener
+  const checkRoomActiveSubscriber = async () => {
+    // console.log('checkRoomActiveSubscriber', gameActions.exitGame);
+    const roomActive = await checkRoomActive();
+    if (roomActive) {
+      interval = setInterval(async () => {
+        const roomActive = await checkRoomActive();
+        if (!roomActive) {
+          clearInterval(interval);
+        }
       }, 10000);
-    } else {
-      // console.log('roomCode empty');
     }
   };
 
   return {
     checkRoomActive,
+    checkRoomActiveSubscriber
   };
 };

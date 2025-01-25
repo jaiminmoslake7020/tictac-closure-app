@@ -65,9 +65,9 @@ export const CheckRoomSelected = (
     await joinGame();
   };
 
-  const addRoomSubscriber = async (v: RoomReadyResponseType) => {
+  const roomActiveCheck = async () => {
     const { checkRoomActive } = RoomActiveSubscriber(contextsData, gameActions);
-    await checkRoomActive(v);
+    await checkRoomActive();
   };
 
   const onRoomSelected = async (v: RoomReadyResponseType) => {
@@ -75,7 +75,7 @@ export const CheckRoomSelected = (
     setAnotherPlayer(v.anotherPlayer);
     setPlayerType(v.playerType);
     await startGameProcess();
-    await addRoomSubscriber(v);
+    await roomActiveCheck();
   };
 
   const askRoomSelection = () => {
@@ -100,17 +100,11 @@ export const CheckRoomSelected = (
         playerType === 'creator'
           ? (roomData['joiner'] as UserType)
           : (roomData['creator'] as UserType);
-      const roomReadyResponse = {
-        roomCode,
-        anotherPlayer,
-        playerType,
-      } as RoomReadyResponseType;
       setPlayerType(playerType);
       setAnotherPlayer(anotherPlayer);
       if (hasGameId() && getGameId()) {
         // console.log("Room with data in session has GameId ", roomCode, getGameId(), playerType);
         showLoader();
-        await addRoomSubscriber(roomReadyResponse);
         await joinGameProcess();
       } else {
         // console.log("Room with data in session does not have GameId", roomCode, playerType);
