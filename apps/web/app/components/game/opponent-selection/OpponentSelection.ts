@@ -5,10 +5,10 @@ import { addToRoot } from '@utils/index';
 import { Layout } from '@components/layouts/layout/Layout';
 import { CheckRoomSelected } from '@components/game/opponent-selection/remote-friend-player/CheckRoomSelected';
 import {
-  InitializeContextsFunctionType,
+  InitializeContextsFunctionType, useContextCurrentMove,
   useContextGameId,
   useContextOpponentType,
-  useContextRoomCodeId,
+  useContextRoomCodeId, useContextTurnHookType,
   useContextTurnStorage,
   UseOpponentTypeHookType,
 } from '@contexts/index';
@@ -81,8 +81,12 @@ export const OpponentSelection = (
 
     setOpponentType(value);
     if (value === computerProgram) {
+      const { setUserTurn } = useContextTurnHookType(contextsData);
+      setUserTurn();
       askAppLevelType();
     } else if (value === sameDevicePlay) {
+      const { setUserTurn } = useContextTurnHookType(contextsData);
+      setUserTurn();
       askAppLevelType();
     } else if (value === remoteFriendPlayer) {
       remoteFriendPlayerSelected();
