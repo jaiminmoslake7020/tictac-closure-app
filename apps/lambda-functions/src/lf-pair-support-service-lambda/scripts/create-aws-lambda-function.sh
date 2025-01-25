@@ -51,7 +51,7 @@ POLICY_DOCUMENT=$(cat <<EOF
     {
       "Effect": "Allow",
       "Action": "iam:PutRolePolicy",
-      "Resource": "arn:aws:iam:$AWS_REGION:$AWS_ACCOUNT_ID:role/$ROLE_NAME"
+      "Resource": "arn:aws:iam::$AWS_ACCOUNT_ID:role/$ROLE_NAME"
     }
   ]
 }
