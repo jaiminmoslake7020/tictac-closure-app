@@ -1,17 +1,20 @@
 import { RoomReadyResponseType } from '@types-dir/index';
-import { getRoomData, setCreatorIsInRoom, setJoinerIsInRoom } from '@firebase-dir/room';
+import {
+  getRoomData,
+  setCreatorIsInRoom,
+  setJoinerIsInRoom,
+} from '@firebase-dir/room';
 import { isRoomReady } from '@utils/room';
 import {
   GameActionCallbacksType,
   GameActions,
-  GameActionsType,
 } from '@components/game/GameActions';
 import {
   InitializeContextsFunctionType,
   useContextGamePlayerType,
   useContextRoomCodeId,
 } from '@contexts/index';
-import { AddErrorWithAction } from '@components/base/ux/notification/AddErrorWithAction';
+import { ShowErrorMessageWrapper } from '@components/game/opponent-selection/remote-friend-player/ShowErrorMessageWrapper';
 
 export type AddRoomSubscriberType = {
   checkRoomActive: (roomReadyResponse: RoomReadyResponseType) => void;
@@ -19,21 +22,12 @@ export type AddRoomSubscriberType = {
 
 export const RoomActiveSubscriber = (
   contextsData: InitializeContextsFunctionType,
-  gameActions: GameActionCallbacksType,
+  gameActions: GameActionCallbacksType
 ): AddRoomSubscriberType => {
-  let errorAdded = false;
-
-  const showAlertRoomLeft = () => {
-    // console.log('Room is left by another player');
-    if (!errorAdded) {
-      const gA = GameActions(contextsData, gameActions) as GameActionsType;
-      AddErrorWithAction('Room is left by another player.', gA.exitRoom);
-      errorAdded = true;
-    } else {
-      const gA = GameActions(contextsData, gameActions) as GameActionsType;
-      gA.exitRoom();
-    }
-  };
+  const { showErrorMessage } = ShowErrorMessageWrapper(
+    contextsData,
+    gameActions
+  );
 
   const informServerAboutRoomPresence = async (roomCode: string) => {
     const { getPlayerType } = useContextGamePlayerType(contextsData);
@@ -48,7 +42,9 @@ export const RoomActiveSubscriber = (
     const roomData = await getRoomData(roomCode);
     if (roomData) {
       if (!isRoomReady(roomData)) {
-        showAlertRoomLeft();
+        const g = GameActions(contextsData, gameActions);
+        g.exitRoom();
+        showErrorMessage('Room is left by another player.');
       }
     }
   };

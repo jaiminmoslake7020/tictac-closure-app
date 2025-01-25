@@ -1,7 +1,10 @@
 import { OpponentType } from '@types-dir/index';
 import { useDiv, useForm } from '@components/base';
 import { History } from '@utils/index';
-import { OpponentSelectionItem, type OpponentSelectionItemType } from './OpponentSelectionItem';
+import {
+  OpponentSelectionItem,
+  type OpponentSelectionItemType,
+} from './OpponentSelectionItem';
 import { opponentFormButtonTypeList } from '@data/index';
 
 export type OpponentSelectionFormType = {
@@ -10,7 +13,7 @@ export type OpponentSelectionFormType = {
 };
 
 export const OpponentSelectionForm = (
-  onPlayerSelected: (v: OpponentType) => Promise<void> | void,
+  onPlayerSelected: (v: OpponentType) => Promise<void> | void
 ): OpponentSelectionFormType => {
   const { getDiv, setDiv } = useDiv();
   const { getForm, setForm } = useForm();

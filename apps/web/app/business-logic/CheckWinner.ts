@@ -10,12 +10,12 @@ import {
 
 export type setAtFirebaseType = (
   contextsData: InitializeContextsFunctionType,
-  v: WinnerType,
+  v: WinnerType
 ) => void;
 
 export const CheckWinner = async (
   contextsData: InitializeContextsFunctionType,
-  setAtFirebase?: setAtFirebaseType,
+  setAtFirebase?: setAtFirebaseType
 ) => {
   const { setWinner, getWinner } = useContextWinner(contextsData);
   const winner = getWinner();

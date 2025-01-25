@@ -8,7 +8,11 @@ export type NotificationWrapperType = {
 export const NotificationWrapper = (): NotificationWrapperType => {
   const { setDiv, getDiv, removeDiv } = useDiv();
 
-  const { setDiv: setDivOne, getDiv: getDivOne, removeDiv: removeDivOne } = useDiv();
+  const {
+    setDiv: setDivOne,
+    getDiv: getDivOne,
+    removeDiv: removeDivOne,
+  } = useDiv();
 
   const render = () => {
     setDiv('notification-wrapper');

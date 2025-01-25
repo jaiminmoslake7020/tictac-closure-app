@@ -13,7 +13,10 @@ import {
   UseOpponentTypeHookType,
 } from '@contexts/index';
 import { useState } from '@components/base';
-import { GameActionCallbacksType, GameActions } from '@components/game/GameActions';
+import {
+  GameActionCallbacksType,
+  GameActions,
+} from '@components/game/GameActions';
 import { RemoteRandomWaitingRoom } from '@components/game/opponent-selection/remote-random-player/RemoteRandomWaitingRoom';
 import {
   computerProgram,
@@ -21,6 +24,7 @@ import {
   remoteRandomPlayer,
   sameDevicePlay,
 } from '@data/index';
+import { RemoteRandomRestartDisplay } from '@components/game/opponent-selection/remote-random-player/RemoteRandomRestartDisplay';
 
 export type OpponentSelectionType = {
   render: () => void | Promise<void>;
@@ -30,13 +34,12 @@ export type OpponentSelectionType = {
 export const OpponentSelection = (
   contextsData: InitializeContextsFunctionType,
   onLevelSelected: () => void,
-  gameActions: GameActionCallbacksType,
+  gameActions: GameActionCallbacksType
 ): OpponentSelectionType => {
   const { get: getVarOne, set: setVarOne } = useState();
 
-  const { setOpponentType, hasOpponentType, getOpponentType } = useContextOpponentType(
-    contextsData,
-  ) as UseOpponentTypeHookType;
+  const { setOpponentType, hasOpponentType, getOpponentType } =
+    useContextOpponentType(contextsData) as UseOpponentTypeHookType;
   const { removeGameId } = useContextGameId(contextsData);
   const { removeRoomCodeId } = useContextRoomCodeId(contextsData);
 
@@ -54,7 +57,7 @@ export const OpponentSelection = (
     const { startCheckRoomSelected } = CheckRoomSelected(
       contextsData,
       onLevelSelected,
-      gameActions,
+      gameActions
     );
     startCheckRoomSelected();
   };
@@ -67,7 +70,7 @@ export const OpponentSelection = (
         setOpponentType(remoteFriendPlayer);
         remoteFriendPlayerSelected();
       },
-      gameActions,
+      gameActions
     );
     render();
   };
@@ -96,10 +99,29 @@ export const OpponentSelection = (
     addToRoot(Layout(getVarOne().render(), gA));
   };
 
+  const showRestartButton = () => {
+    const gA = GameActions(contextsData, gameActions);
+    const c = RemoteRandomRestartDisplay(
+      async () => {
+        c.remove();
+        await onPlayerSelected(getOpponentType());
+      },
+      () => {
+        c.remove();
+        gA.changeGameType();
+      }
+    );
+    addToRoot(Layout(c.render(), gA));
+  };
+
   const render = async () => {
     if (hasOpponentType()) {
       // console.log('OpponentType Exists', getOpponentType());
-      await onPlayerSelected(getOpponentType());
+      if (getOpponentType() === remoteRandomPlayer) {
+        showRestartButton();
+      } else {
+        await onPlayerSelected(getOpponentType());
+      }
     } else {
       showForm();
     }

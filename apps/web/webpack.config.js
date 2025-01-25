@@ -34,7 +34,7 @@ module.exports = env  => ({
     alias: {
       '@business-logic': path.resolve(__dirname, 'app/business-logic'),
       '@components': path.resolve(__dirname, 'app/components'),
-      "@tic-tac": path.resolve(__dirname, "app/components/game/tic-tac"),
+      '@tic-tac': path.resolve(__dirname, 'app/components/game/tic-tac'),
       '@contexts': path.resolve(__dirname, 'app/contexts'),
       '@data': path.resolve(__dirname, 'app/data'),
       '@firebase-dir': path.resolve(__dirname, 'app/firebase'),
@@ -49,7 +49,13 @@ module.exports = env  => ({
     rules: [
       {
         test: /\.scss$/, // Handle CSS files
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+        use: [env.production ? MiniCssExtractPlugin.loader : 'style-loader',
+          env.production ? 'css-loader' : {
+            loader: 'css-loader', options: { sourceMap: true }
+          }, // Enable source maps for CSS
+            'postcss-loader',
+            'sass-loader',
+        ],
       },
       {
         test: /\.ts?$/,

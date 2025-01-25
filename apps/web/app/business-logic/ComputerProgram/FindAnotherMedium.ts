@@ -1,4 +1,8 @@
-import { MovePositionType, MovePositionTypeWithNull, WinnerType } from '@types-dir/index';
+import {
+  MovePositionType,
+  MovePositionTypeWithNull,
+  WinnerType,
+} from '@types-dir/index';
 import { turnData, winnerData } from '@data/index';
 import { WhenOneInSequence } from './WhenOneInSequence';
 import { FindAnotherEasy } from './FindAnotherEasy';
@@ -10,7 +14,7 @@ import {
 } from '@contexts/index';
 
 export const FindAnotherMedium = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): MovePositionType => {
   const { turn, anotherTurn } = turnData;
   const { getTurnStorage } = useContextTurnStorage(contextsData);
@@ -21,7 +25,7 @@ export const FindAnotherMedium = (
   let foundWinner = null as WinnerType;
   let foundAnotherMove = null as MovePositionTypeWithNull;
 
-  const currentValues = turnStorage[turn];
+  const currentValues = turnStorage[turn] || [];
   const anotherCurrentValues = turnStorage[anotherTurn] || [];
   if (currentValues.length > 1) {
     let startAt = 0;
@@ -67,7 +71,11 @@ export const FindAnotherMedium = (
     let startAt = 0;
     while (startAt < winnerData.length) {
       const seq = winnerData[startAt];
-      foundAnotherMove = WhenOneInSequence(seq, currentValues, anotherCurrentValues);
+      foundAnotherMove = WhenOneInSequence(
+        seq,
+        currentValues,
+        anotherCurrentValues
+      );
       if (foundAnotherMove !== null) {
         break;
       }

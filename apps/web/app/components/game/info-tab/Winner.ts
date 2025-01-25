@@ -17,7 +17,9 @@ export type WinnerFunctionType = {
   update: () => void;
 };
 
-export const Winner = (contextsData: InitializeContextsFunctionType): WinnerFunctionType => {
+export const Winner = (
+  contextsData: InitializeContextsFunctionType
+): WinnerFunctionType => {
   const { getWinner } = useContextWinner(contextsData);
 
   let p: undefined | HTMLParagraphElement;

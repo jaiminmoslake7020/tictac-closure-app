@@ -1,4 +1,8 @@
-import { getDocument, insertNewDocumentWithId, updateDocument } from '@firebase-dir/core';
+import {
+  getDocument,
+  insertNewDocumentWithId,
+  updateDocument,
+} from '@firebase-dir/core';
 import { User } from '@firebase/auth';
 
 export const addUser = async (user: User) => {

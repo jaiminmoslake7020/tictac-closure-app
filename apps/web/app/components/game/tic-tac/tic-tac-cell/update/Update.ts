@@ -5,8 +5,15 @@ import {
   useContextTurnStorage,
   useContextWinnerSeq,
 } from '@contexts/index';
-import { ChangeFunctionType, ColumnIdType, MovePositionType } from '@types-dir/index';
-import { addClickListener, removeClickListener } from '@tic-tac/tic-tac-cell/on-click/OnClick';
+import {
+  ChangeFunctionType,
+  ColumnIdType,
+  MovePositionType,
+} from '@types-dir/index';
+import {
+  addClickListener,
+  removeClickListener,
+} from '@tic-tac/tic-tac-cell/on-click/OnClick';
 import {
   anotherPersonMove,
   checkWinnerIsAvailable,
@@ -18,7 +25,7 @@ import {
 export const Update = (
   contextData: InitializeContextsFunctionType,
   columnId: ColumnIdType,
-  newChangeTurn: ChangeFunctionType,
+  newChangeTurn: ChangeFunctionType
 ) => {
   const { getAnotherPlayerTurns } = useContextTurnStorage(contextData);
   const { getWinnerSequence } = useContextWinnerSeq(contextData);

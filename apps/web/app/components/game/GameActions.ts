@@ -8,14 +8,17 @@ import {
   UseGameIdHookType,
   useContextOpponentType,
   isItRemoteGame,
+  removeGameContextsData,
 } from '@contexts/index';
 import { exitRoom as exitRoomFirebase } from '@firebase-dir/room';
 import { unliveUser } from '@firebase-dir/user';
+import { stopSubscribers } from '@components/game/firebase-subscriber/FirebaseSubscriber';
 
 export type GameActionCallbacksType = {
   onExitRoom: () => void;
   onLogout: () => void;
   onGameTypeChanged: () => void;
+  exitGame?: () => void;
 };
 
 export type GameActionsType = {
@@ -26,47 +29,56 @@ export type GameActionsType = {
 
 export const GameActions = (
   contextsData: InitializeContextsFunctionType,
-  gameActionCallbacks: GameActionCallbacksType,
+  gameActionCallbacks: GameActionCallbacksType
 ): GameActionsType => {
   const { removeRoomCodeId, getRoomCodeId } = useContextRoomCodeId(
-    contextsData,
+    contextsData
   ) as UseRoomCodeIdHookType;
   const { removeGameId } = useContextGameId(contextsData) as UseGameIdHookType;
-  const { logoutUser, getUser } = useContextUserSession(contextsData) as UserSessionHookType;
+  const { logoutUser, getUser } = useContextUserSession(
+    contextsData
+  ) as UserSessionHookType;
   const { removeOpponentType } = useContextOpponentType(contextsData);
 
-  const { onExitRoom, onLogout, onGameTypeChanged } = gameActionCallbacks;
+  const { onExitRoom, onLogout, onGameTypeChanged, exitGame } =
+    gameActionCallbacks;
 
-  const changeGameType = async () => {
+  const exitGameChanges = async () => {
+    if (exitGame) {
+      exitGame();
+    }
+    removeGameContextsData(contextsData);
     if (isItRemoteGame(contextsData)) {
+      await stopSubscribers();
       const room = getRoomCodeId();
-      const u = getUser();
-      await exitRoomFirebase(room);
+      if (room) {
+        await exitRoomFirebase(room);
+      }
       removeGameId();
       removeRoomCodeId();
     }
     removeOpponentType(); // it makes sense to ask the user to select a new opponent,
+  };
+
+  const changeGameType = async () => {
+    await exitGameChanges();
+
+    document.querySelector('.main')?.remove();
     onGameTypeChanged();
   };
 
   const exitRoom = async () => {
+    await exitGameChanges();
+
     document.querySelector('.main')?.remove();
-    const room = getRoomCodeId();
-    const u = getUser();
-    await exitRoomFirebase(room);
-    removeGameId();
-    removeOpponentType(); // it makes sense to ask the user to select a new opponent
-    removeRoomCodeId();
     onExitRoom();
   };
 
   const logout = async () => {
-    document.querySelector('.main')?.remove();
     await unliveUser(getUser().id);
 
-    removeGameId();
-    removeOpponentType(); // it makes sense to ask the user to select a new opponent
-    removeRoomCodeId();
+    await exitGameChanges();
+    document.querySelector('.main')?.remove();
 
     logoutUser();
     onLogout();

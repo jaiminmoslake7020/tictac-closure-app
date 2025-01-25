@@ -15,7 +15,10 @@ import {
 } from '@types-dir/index';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
 
-export const updateGameWithCurrentMove = async (gamePath: string, currentMove: string) => {
+export const updateGameWithCurrentMove = async (
+  gamePath: string,
+  currentMove: string
+) => {
   try {
     await updateDocument(gamePath, { currentMove });
   } catch (e) {
@@ -26,13 +29,17 @@ export const updateGameWithCurrentMove = async (gamePath: string, currentMove: s
 export const addNewTurnFirebase = async (
   turnStorageCollectionPath: string,
   userId: string,
-  position: MovePositionType,
+  position: MovePositionType
 ) => {
   try {
-    return await insertNewDocumentWithId(turnStorageCollectionPath, String(position), {
-      userId,
-      position,
-    });
+    return await insertNewDocumentWithId(
+      turnStorageCollectionPath,
+      String(position),
+      {
+        userId,
+        position,
+      }
+    );
   } catch (e) {
     console.error('Error addNewTurnFirebase: ', e);
   }
@@ -41,7 +48,7 @@ export const addNewTurnFirebase = async (
 export const createGame = async (
   roomCode: string,
   currentMove: string,
-  userId: string,
+  userId: string
 ): Promise<FirebaseGameTypeDocumentReference | undefined> => {
   try {
     return await addDocument(`rooms/${roomCode}/games`, {
@@ -56,7 +63,7 @@ export const createGame = async (
 
 export const updateLastActive = async (
   gamePath: string,
-  playerType: GamePlayerType,
+  playerType: GamePlayerType
 ): Promise<void> => {
   try {
     await updateDocument(gamePath, {
@@ -67,7 +74,9 @@ export const updateLastActive = async (
   }
 };
 
-export const getGame = async (gamePath: string): Promise<FirebaseGameType | undefined> => {
+export const getGame = async (
+  gamePath: string
+): Promise<FirebaseGameType | undefined> => {
   try {
     const gameDocument = await getDocument(gamePath);
     if (gameDocument && gameDocument.exists()) {
@@ -80,7 +89,7 @@ export const getGame = async (gamePath: string): Promise<FirebaseGameType | unde
 };
 
 export const getAllGameMoves = async (
-  gamePath: string,
+  gamePath: string
 ): Promise<FirebaseTurnStorageType[] | undefined> => {
   try {
     const gameDocuments = await fetchAllDocuments(gamePath + '/turnStorage');
@@ -112,7 +121,7 @@ export const setGameCompletedWithoutWinner = async (gamePath: string) => {
 export const onGameCreated = (
   roomCode: string,
   onGameReady: (d: FirebaseGameType, id: string) => void,
-  onFinished: () => void,
+  onFinished: () => void
 ) => {
   let start = 0;
   let didNotFound = true;
@@ -132,6 +141,6 @@ export const onGameCreated = (
       }
       start++;
     },
-    onFinished,
+    onFinished
   );
 };

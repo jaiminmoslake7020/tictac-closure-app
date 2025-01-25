@@ -3,10 +3,32 @@ export type AppLevelType = 'easy' | 'medium' | 'hard';
 export type TurnType = 'X' | 'O' | string;
 export type WinnerType = TurnType | null | 'NONE' | string;
 
-export type MovePositionType = '11' | '12' | '13' | '21' | '22' | '23' | '31' | '32' | '33';
-export type ColumnIdType = '1-1' | '1-2' | '1-3' | '2-1' | '2-2' | '2-3' | '3-1' | '3-2' | '3-3';
+export type MovePositionType =
+  | '11'
+  | '12'
+  | '13'
+  | '21'
+  | '22'
+  | '23'
+  | '31'
+  | '32'
+  | '33';
+export type ColumnIdType =
+  | '1-1'
+  | '1-2'
+  | '1-3'
+  | '2-1'
+  | '2-2'
+  | '2-3'
+  | '3-1'
+  | '3-2'
+  | '3-3';
 export type MovePositionTypeWithNull = MovePositionType | null;
-export type WiningSequenceType = [MovePositionType, MovePositionType, MovePositionType];
+export type WiningSequenceType = [
+  MovePositionType,
+  MovePositionType,
+  MovePositionType,
+];
 export type WiningSequenceTypeWithNull =
   | [MovePositionType, MovePositionType, MovePositionType]
   | null;
@@ -16,39 +38,12 @@ export type AnotherPersonMovePositionsTypeWithNull = MovePositionType[] | null;
 export type TurnStorageType = Record<TurnType, MovePositionType[]>;
 
 export type ChangeFunctionType = (i: MovePositionType) => Promise<void>;
-export type TicTacCellRowRenderFunctionType = () => HTMLDivElement;
-export type TicTacCellRowUpdateFunctionType = (newChangeTurn: ChangeFunctionType) => void;
-
-export type TicTacCellRowFunctionType = {
-  render: TicTacCellRowRenderFunctionType;
-  update: TicTacCellRowUpdateFunctionType;
-  reset: (newChangeTurn: ChangeFunctionType) => void;
-};
-
-export type TicTacCellRenderFunctionType = () => HTMLDivElement;
-export type TicTacCellUpdateFunctionType = (newChangeTurn: ChangeFunctionType) => void;
-
-export type TicTacCellFunctionType = {
-  render: TicTacCellRenderFunctionType;
-  update: TicTacCellUpdateFunctionType;
-  reset: (newChangeTurn: ChangeFunctionType) => void;
-};
 
 export type TurnHandlerType = {
   turn: TurnType;
   changeTurn: ChangeFunctionType;
   getTurn: () => TurnType;
   printData: () => void;
-};
-
-export type TicTacTableType = {
-  render: () => HTMLDivElement;
-  reset: () => void;
-  updateOtherPersonMove: (v: MovePositionType) => Promise<void>;
-};
-
-export type TicTacCellValueType = {
-  render: () => HTMLDivElement;
 };
 
 export type TDClassIdType =

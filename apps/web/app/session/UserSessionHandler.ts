@@ -22,7 +22,7 @@ export const UserSessionHandler = (): UserSessionHandlerType => {
         : {
             ...getSession(),
             user,
-          },
+          }
     );
   };
 
