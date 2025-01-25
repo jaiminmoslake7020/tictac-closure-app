@@ -1,4 +1,3 @@
-import { RoomReadyResponseType } from '@types-dir/index';
 import {
   getRoomData,
   setCreatorIsInRoom,
