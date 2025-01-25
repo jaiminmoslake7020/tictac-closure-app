@@ -139,7 +139,7 @@ fi
 
 if [ -z "$SECRET_NAME" ]; then
   echo "Error: Missing required environment variables."
-  echo "Please set AWS_SECRET_ACCESS_KEY."
+  echo "Please set SECRET_NAME."
   echo "current value:$SECRET_NAME"
   VALIDATION_FAILED="true"
 fi
