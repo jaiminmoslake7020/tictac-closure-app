@@ -14,7 +14,7 @@ app.use(
   }),
 );
 
-const run = async () => {
+const run = async (roomId, gameId) => {
   dotenv.config().parsed;
   // Get the file path from command-line arguments
 
@@ -32,7 +32,7 @@ const run = async () => {
     // eslint-disable-next-line no-undef
     const loadedModule = require(filePath);
     if (loadedModule && typeof loadedModule.handler === 'function') {
-      await loadedModule.handler(); // Call the module if it's a function
+      return await loadedModule.handler(roomId, gameId); // Call the module if it's a function
     } else {
       // eslint-disable-next-line no-undef
       console.log('Loaded module:', loadedModule);
@@ -44,8 +44,9 @@ const run = async () => {
 };
 
 // Define a route to handle GET requests
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+app.get('/', async (req, res) => {
+  const data = await run('test', 'test');
+  res.send(data);
 });
 
 // Start the server

@@ -27,6 +27,7 @@ export type FirebaseGameType = {
   joiner_last_active_time: number;
   winner?: string;
   creator?: string;
+  chatGptConversation?: string;
   turnStorage?: Record<MovePositionType, FirebaseTurnStorageType>;
 };
 
@@ -42,3 +43,30 @@ export type WaitingRoomDbItemType = {
   gameId?: string;
   roomId?: string;
 };
+
+export type FirebasePlayerType = {
+  id: string;
+  username: string;
+};
+
+export type FirebaseUserType = {
+  username: string;
+  live?: number;
+  activeSession?: boolean;
+  uid?: string;
+};
+
+export type FirebaseRoomType = {
+  creator: FirebasePlayerType;
+  joiner?: FirebasePlayerType;
+  creator_last_visit?: number;
+  joiner_last_visit?: number;
+  games?: Record<string, FirebaseGameType>;
+};
+
+export type FirebaseAppModelType = {
+  rooms: Record<string, FirebaseRoomType>;
+  users: Record<string, FirebaseUserType>;
+  "waiting-room": Record<string, FirebaseUserType>;
+};
+

@@ -101,6 +101,8 @@ export type RoomExitedResponseType = {
 export type FirebaseUserType = {
   username: string;
   live?: number;
+  activeSession?: boolean;
+  uid?: string;
 };
 
 export type FirebaseTurnStorageType = {

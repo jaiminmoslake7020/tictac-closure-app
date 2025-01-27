@@ -23,9 +23,7 @@ module.exports = (env) => ({
       {
         test: /\.ts$/,
         use: ['babel-loader', 'ts-loader'], // Use Babel and TypeScript loaders
-        exclude: [
-          '/node_modules/', // Exclude dependencies from bundling
-        ],
+        exclude: ['/node_modules/'],// Exclude dependencies from bundling
       },
     ],
   },

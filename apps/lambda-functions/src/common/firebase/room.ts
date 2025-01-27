@@ -1,5 +1,5 @@
 import { UserType } from '../types';
-import { addDocument } from './core';
+import {addDocument, updateDocument} from './core';
 import { getCurrentTime } from '../utils';
 
 export const createRoom = async (
@@ -20,3 +20,11 @@ export const createRoom = async (
     console.error('Error joinRoom:', e);
   }
 };
+
+export const updateRoom = async ( roomId: string, roomData: any) => {
+    try {
+        await updateDocument(`rooms/${roomId}`, roomData);
+    } catch (e) {
+        console.error('Error updating room:', e);
+    }
+}

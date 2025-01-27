@@ -1,5 +1,7 @@
 import * as admin from 'firebase-admin';
 import { getSecret } from '../aws/get-secret';
+import {firestore} from 'firebase-admin';
+import DocumentSnapshot = firestore.DocumentSnapshot;
 
 let app: admin.app.App | undefined = undefined;
 const getFirebaseApp = async (): Promise<admin.app.App> => {
@@ -70,4 +72,17 @@ export const updateDocument = async (path: string, updatedDocData: any) => {
   } catch (e) {
     console.error('Error Updating document', path, updatedDocData, e);
   }
+};
+
+export const getDocument = async (
+  documentPath: string,
+): Promise<DocumentSnapshot<any, any> | undefined> => {
+  try {
+    const f = await getFirestoreObject();
+    const documentReference = f.doc(documentPath);
+    return await documentReference.get();
+  } catch (e) {
+    console.error('Error getting document:', documentPath, e);
+  }
+  return undefined;
 };

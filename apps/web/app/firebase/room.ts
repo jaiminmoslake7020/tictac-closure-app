@@ -17,7 +17,7 @@ export const getRoomData = async (roomCode: string): Promise<FirebaseRoomType | 
       return null;
     }
   } catch (e) {
-    console.error('Error getRoomData:', e);
+    console.error('Error getGameData:', e);
     return Promise.resolve(null);
   }
 };
