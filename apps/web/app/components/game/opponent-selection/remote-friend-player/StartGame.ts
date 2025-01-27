@@ -11,7 +11,12 @@ import {
   useContextUserSession,
   UseCurrentMoveHookType,
 } from '@contexts/index';
-import { createGame, getAllGameMoves, getGame, onGameCreated } from '@firebase-dir/game';
+import {
+  createGame,
+  getAllGameMoves,
+  getGame,
+  onGameCreated,
+} from '@firebase-dir/game';
 import { addToRoot, createEL } from '@utils/index';
 import { Layout } from '@components/layouts/layout/Layout';
 import { Loader } from '@components/base';
@@ -21,16 +26,18 @@ import {
   GameActionsType,
 } from '@components/game/GameActions';
 import { IsGameAvailableSubscriber } from '@components/game/opponent-selection/remote-friend-player/IsGameAvailableSubscriber';
-import { UpdateLastActiveTimeSubscriber } from '@components/game/opponent-selection/remote-friend-player/UpdateLastActiveTimeSubscriber';
-import { AddErrorWithAction } from '@components/base/ux/notification/AddErrorWithAction';
 import { turnData } from '@data/index';
+import { startSubscribers } from '@components/game/firebase-subscriber/FirebaseSubscriber';
+import { ShowErrorMessageWrapper } from '@components/game/opponent-selection/remote-friend-player/ShowErrorMessageWrapper';
 
 export const StartGame = (
   contextsData: InitializeContextsFunctionType,
   gameActions: GameActionCallbacksType,
-  onLevelSelected: () => void,
+  onLevelSelected: () => void
 ) => {
-  const { setCurrentMove } = useContextCurrentMove(contextsData) as UseCurrentMoveHookType;
+  const { setCurrentMove } = useContextCurrentMove(
+    contextsData
+  ) as UseCurrentMoveHookType;
 
   const { getUser } = useContextUserSession(contextsData);
 
@@ -44,20 +51,10 @@ export const StartGame = (
 
   const { showLoader, stopLoader } = Loader();
 
-  const addGameAvailableSubscriber = async () => {
-    // console.log('addGameAvailableSubscriber');
-    const { isGameAvailableSubscriber } = IsGameAvailableSubscriber(contextsData, gameActions);
-    await isGameAvailableSubscriber();
-  };
-
-  const updateGameSubscriber = async () => {
-    // console.log('updateGameSubscriber');
-    const { updateGameIsActiveSubscriber } = UpdateLastActiveTimeSubscriber(
-      contextsData,
-      gameActions,
-    );
-    await updateGameIsActiveSubscriber();
-  };
+  const { showJustErrorMessage } = ShowErrorMessageWrapper(
+    contextsData,
+    gameActions
+  );
 
   const createGameForRoomJoiner = async () => {
     // console.log('createGameForRoomJoiner');
@@ -69,8 +66,7 @@ export const StartGame = (
       // console.log('GAME CREATED BY ME', g.id);
       setGameId(g.id);
       setCurrentMove(currentMove);
-      await updateGameSubscriber();
-      await addGameAvailableSubscriber();
+      await startSubscribers(contextsData, gameActions);
       onLevelSelected();
     } else {
       // TODO: Show error message
@@ -99,8 +95,7 @@ export const StartGame = (
           setGameId(gameId);
           setCurrentMove(d.currentMove);
           stopLoader();
-          await updateGameSubscriber();
-          await addGameAvailableSubscriber();
+          await startSubscribers(contextsData, gameActions);
           onLevelSelected();
         } else {
           // console.log('GAME ALREADY STARTED onGameCreated', getGameId(), hasGameId(), oneTimeExecution);
@@ -108,7 +103,7 @@ export const StartGame = (
       },
       () => {
         // console.log('onGameCreated Finished');
-      },
+      }
     );
   };
 
@@ -123,14 +118,16 @@ export const StartGame = (
 
   const joinGame = async () => {
     // console.log('joinGame');
-    const { isGameAvailable } = IsGameAvailableSubscriber(contextsData, gameActions);
-    const isItAvailable = await isGameAvailable();
+    const { isGameAvailable } = IsGameAvailableSubscriber(
+      contextsData,
+      gameActions
+    );
+    const gameDocumentPath = getGameDocumentPath(contextsData);
+    const isItAvailable = await isGameAvailable(gameDocumentPath);
     // console.log('isItAvailable', isItAvailable);
     if (isItAvailable) {
-      await updateGameSubscriber();
-      await addGameAvailableSubscriber();
+      await startSubscribers(contextsData, gameActions);
 
-      const gameDocumentPath = getGameDocumentPath(contextsData);
       if (gameDocumentPath) {
         const gameData = await getGame(gameDocumentPath);
         if (gameData) {
@@ -150,16 +147,10 @@ export const StartGame = (
           }
           onLevelSelected();
         } else {
-          AddErrorWithAction('Game is not available at Firebase.', () => {
-            const gA = GameActions(contextsData, gameActions) as GameActionsType;
-            gA.exitRoom();
-          });
+          showJustErrorMessage('Game is not available at Firebase.');
         }
       } else {
-        AddErrorWithAction('Game path is incorrect.', () => {
-          const gA = GameActions(contextsData, gameActions) as GameActionsType;
-          gA.exitRoom();
-        });
+        showJustErrorMessage('Game path is incorrect. - 2');
       }
     }
   };

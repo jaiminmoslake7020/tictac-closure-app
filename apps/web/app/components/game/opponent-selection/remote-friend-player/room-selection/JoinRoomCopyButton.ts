@@ -8,7 +8,7 @@ export type JoinRoomCopyButtonType = {
 
 export const JoinRoomCopyButton = (
   roomId: string,
-  onRoomCodeCopied: () => void,
+  onRoomCodeCopied: () => void
 ): JoinRoomCopyButtonType => {
   const { getDiv, setDiv, removeDiv } = useDiv();
 
@@ -23,7 +23,10 @@ export const JoinRoomCopyButton = (
   const render = () => {
     setDiv('join-room-text-group');
     setDiv2('join-room-copy-group');
-    const p1 = H2('Please share this room code with your friend.', 'room-code-info');
+    const p1 = H2(
+      'Please share this room code with your friend.',
+      'room-code-info'
+    );
     set2(p1);
     getDiv().append(get2());
     const p = P(roomId, 'room-code');

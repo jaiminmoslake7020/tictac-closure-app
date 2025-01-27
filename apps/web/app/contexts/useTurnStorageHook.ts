@@ -38,7 +38,9 @@ export const useTurnStorageHook = (): UseTurnStorageHookType => {
   };
 
   const getAnotherPlayerTurns = (): AnotherPersonMovePositionsTypeWithNull => {
-    return turnStorage[turnData.anotherTurn] ? turnStorage[turnData.anotherTurn] : null;
+    return turnStorage[turnData.anotherTurn]
+      ? turnStorage[turnData.anotherTurn]
+      : null;
   };
 
   const resetTurnStorage = () => {

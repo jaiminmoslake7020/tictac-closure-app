@@ -34,7 +34,14 @@ import {
 
 import { Loader, LoaderType } from './ux';
 
-export type { useButtonType, useDivType, useSpanType, useTextInputType, useFormType, LoaderType };
+export type {
+  useButtonType,
+  useDivType,
+  useSpanType,
+  useTextInputType,
+  useFormType,
+  LoaderType,
+};
 
 export {
   Button,

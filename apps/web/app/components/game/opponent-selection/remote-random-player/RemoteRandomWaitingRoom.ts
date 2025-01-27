@@ -7,7 +7,10 @@ import {
   useContextRoomCodeId,
   useContextUserSession,
 } from '@contexts/index';
-import { GameActionCallbacksType, GameActions } from '@components/game/GameActions';
+import {
+  GameActionCallbacksType,
+  GameActions,
+} from '@components/game/GameActions';
 import { H2, Loader, useButton, useDiv } from '@components/base';
 import {
   checkRoom,
@@ -27,7 +30,7 @@ export type RemoteRandomWaitingRoomType = {
 export const RemoteRandomWaitingRoom = (
   contextsData: InitializeContextsFunctionType,
   onLevelSelected: () => void,
-  gameActions: GameActionCallbacksType,
+  gameActions: GameActionCallbacksType
 ): RemoteRandomWaitingRoomType => {
   const { showLoader, addText, updateText, stopLoader } = Loader();
 
@@ -98,7 +101,8 @@ export const RemoteRandomWaitingRoom = (
               getGame(gameDocumentPath).then((gameData) => {
                 if (gameData) {
                   const { currentMove } = gameData;
-                  const { setCurrentMove } = useContextCurrentMove(contextsData);
+                  const { setCurrentMove } =
+                    useContextCurrentMove(contextsData);
                   setCurrentMove(currentMove);
                   stopLoader();
                   clearInterval(interval);

@@ -7,7 +7,7 @@ export type OpponentSelectionItemType = {
 
 export const OpponentSelectionItem = (
   label: string,
-  onChange: (e: any) => void,
+  onChange: (e: any) => void
 ): OpponentSelectionItemType => {
   const { getDiv, setDiv, removeDiv } = useDiv();
 

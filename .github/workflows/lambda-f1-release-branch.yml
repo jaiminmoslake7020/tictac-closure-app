@@ -6,6 +6,9 @@ on:
   push:
     branches: ["release-lambda-f1-*"] # Run only on given branches
 
+
+
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -60,6 +63,7 @@ jobs:
           LAYER_NAME: ${{ vars.LAYER_NAME_PROD }}
           RULE_NAME: ${{ vars.RULE_NAME_PROD }}
           ROLE_NAME: ${{ vars.ROLE_NAME }}
+          SECRET_NAME: ${{ vars.SECRET_NAME }}
           ENV_VAR3: ${{ vars.ENV_VAR3_PROD }}
           ENV_VAR1: ${{ vars.FIREBASE_PROJECT_ID_PROD }}
           ZIP_FILE: "lambda.zip"

@@ -137,6 +137,14 @@ if [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
   VALIDATION_FAILED="true"
 fi
 
+if [ -z "$SECRET_NAME" ]; then
+  echo "Error: Missing required environment variables."
+  echo "Please set SECRET_NAME."
+  echo "current value:$SECRET_NAME"
+  VALIDATION_FAILED="true"
+fi
+
+
 # Check if the required environment variables are set
 if [ $VALIDATION_FAILED == "true" ]; then
   echo "Validation failed."

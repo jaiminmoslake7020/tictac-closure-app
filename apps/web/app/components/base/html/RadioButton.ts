@@ -3,7 +3,7 @@ import { Span } from './Text';
 
 export const RadioButton = (
   labelText: string,
-  inputChangeFunction: EventListenerOrEventListenerObject,
+  inputChangeFunction: EventListenerOrEventListenerObject
 ) => {
   const label = Label('radio-btn');
   const input = CheckboxInput(labelText, labelText, 'input-' + labelText);

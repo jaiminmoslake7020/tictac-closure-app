@@ -4,7 +4,7 @@ import { useSpan } from '@components/base';
 export const Button = (
   btnLabel: string,
   btnClassList: string,
-  onClick: EventListenerOrEventListenerObject,
+  onClick: EventListenerOrEventListenerObject
 ): HTMLButtonElement => {
   let button = createEL('button') as HTMLButtonElement;
   if (btnClassList !== '') {
@@ -23,9 +23,13 @@ export const IconButton = (
   btnLabel: string,
   btnClassList: string,
   icon: string,
-  onClick: EventListenerOrEventListenerObject,
+  onClick: EventListenerOrEventListenerObject
 ): HTMLButtonElement => {
-  const button = Button('', btnClassList + ' btn-icon ', onClick) as HTMLButtonElement;
+  const button = Button(
+    '',
+    btnClassList + ' btn-icon ',
+    onClick
+  ) as HTMLButtonElement;
 
   const { getSpan, setSpan } = useSpan();
   setSpan('');
@@ -45,7 +49,7 @@ export type useButtonType = {
   setButton: (
     btnLabel: string,
     btnClassList: string,
-    onClick: EventListenerOrEventListenerObject,
+    onClick: EventListenerOrEventListenerObject
   ) => void;
   removeButton: () => void;
 };
@@ -60,7 +64,7 @@ export const useButton = (): useButtonType => {
   const setButton = (
     btnLabel: string,
     btnClassList: string,
-    onClick: EventListenerOrEventListenerObject,
+    onClick: EventListenerOrEventListenerObject
   ) => {
     button = Button(btnLabel, btnClassList, onClick);
   };

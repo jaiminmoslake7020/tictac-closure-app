@@ -1,4 +1,7 @@
-import { InitializeContextsFunctionType, useContextUserSession } from '@contexts/index';
+import {
+  InitializeContextsFunctionType,
+  useContextUserSession,
+} from '@contexts/index';
 import { RoomReadyResponseType, UserType } from '@types-dir/index';
 import {
   useDiv,
@@ -20,11 +23,19 @@ export type JoinRoomInputType = {
 
 export const JoinRoomInput = (
   contextsData: InitializeContextsFunctionType,
-  onRoomReady: (v: RoomReadyResponseType) => Promise<void>,
+  onRoomReady: (v: RoomReadyResponseType) => Promise<void>
 ): JoinRoomInputType => {
   const { getDiv, setDiv, removeDiv } = useDiv();
-  const { getDiv: getDivOne, setDiv: setDivOne, removeDiv: removeDivOne } = useDiv();
-  const { getDiv: getDivTwo, setDiv: setDivTwo, removeDiv: removeDivTwo } = useDiv();
+  const {
+    getDiv: getDivOne,
+    setDiv: setDivOne,
+    removeDiv: removeDivOne,
+  } = useDiv();
+  const {
+    getDiv: getDivTwo,
+    setDiv: setDivTwo,
+    removeDiv: removeDivTwo,
+  } = useDiv();
   const { getInput, setInput, removeInput } = useTextInput();
   const { get, set, remove: removeState } = useState();
   const { get: get2, set: set2, remove: removeState2 } = useState();

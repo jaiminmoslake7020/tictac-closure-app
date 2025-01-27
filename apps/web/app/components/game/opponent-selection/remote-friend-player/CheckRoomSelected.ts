@@ -19,7 +19,10 @@ import { RoomSelection } from './room-selection/RoomSelection';
 import { addToRoot } from '@utils/index';
 import { Layout } from '@components/layouts/layout/Layout';
 import { isRoomReady } from '@utils/room';
-import { GameActionCallbacksType, GameActions } from '@components/game/GameActions';
+import {
+  GameActionCallbacksType,
+  GameActions,
+} from '@components/game/GameActions';
 import { StartGame } from '@components/game/opponent-selection/remote-friend-player/StartGame';
 import { RoomActiveSubscriber } from '@components/game/opponent-selection/remote-friend-player/RoomActiveSubscriber';
 import { Loader } from '@components/base';
@@ -31,11 +34,13 @@ export type CheckRoomSelectedType = {
 export const CheckRoomSelected = (
   contextsData: InitializeContextsFunctionType,
   onLevelSelected: () => void,
-  gameActions: GameActionCallbacksType,
+  gameActions: GameActionCallbacksType
 ): CheckRoomSelectedType => {
-  const { setAnotherPlayer } = useContextAnotherPlayer(contextsData) as UseAnotherPlayerHookType;
+  const { setAnotherPlayer } = useContextAnotherPlayer(
+    contextsData
+  ) as UseAnotherPlayerHookType;
   const { setRoomCodeId, removeRoomCodeId } = useContextRoomCodeId(
-    contextsData,
+    contextsData
   ) as UseRoomCodeIdHookType;
   const { getUser } = useContextUserSession(contextsData);
   const { getGameId, hasGameId, removeGameId } = useContextGameId(contextsData);
@@ -44,7 +49,11 @@ export const CheckRoomSelected = (
   const { stopLoader, showLoader } = Loader();
 
   const startGameProcess = async () => {
-    const { startProcess } = StartGame(contextsData, gameActions, onLevelSelected);
+    const { startProcess } = StartGame(
+      contextsData,
+      gameActions,
+      onLevelSelected
+    );
     await startProcess();
   };
 
@@ -56,9 +65,9 @@ export const CheckRoomSelected = (
     await joinGame();
   };
 
-  const addRoomSubscriber = async (v: RoomReadyResponseType) => {
+  const roomActiveCheck = async () => {
     const { checkRoomActive } = RoomActiveSubscriber(contextsData, gameActions);
-    await checkRoomActive(v);
+    await checkRoomActive();
   };
 
   const onRoomSelected = async (v: RoomReadyResponseType) => {
@@ -66,7 +75,7 @@ export const CheckRoomSelected = (
     setAnotherPlayer(v.anotherPlayer);
     setPlayerType(v.playerType);
     await startGameProcess();
-    await addRoomSubscriber(v);
+    await roomActiveCheck();
   };
 
   const askRoomSelection = () => {
@@ -78,26 +87,24 @@ export const CheckRoomSelected = (
     }
   };
 
-  const roomDataPresentProcess = async (roomCode: string, roomData: FirebaseRoomType) => {
+  const roomDataPresentProcess = async (
+    roomCode: string,
+    roomData: FirebaseRoomType
+  ) => {
     if (isRoomReady(roomData)) {
       // console.log("Room with data in session is at Firebase");
       const userId = getUser().id;
-      const playerType: GamePlayerType = userId === roomData['creator'].id ? 'creator' : 'joiner';
+      const playerType: GamePlayerType =
+        userId === roomData['creator'].id ? 'creator' : 'joiner';
       const anotherPlayer =
         playerType === 'creator'
           ? (roomData['joiner'] as UserType)
           : (roomData['creator'] as UserType);
-      const roomReadyResponse = {
-        roomCode,
-        anotherPlayer,
-        playerType,
-      } as RoomReadyResponseType;
       setPlayerType(playerType);
       setAnotherPlayer(anotherPlayer);
       if (hasGameId() && getGameId()) {
         // console.log("Room with data in session has GameId ", roomCode, getGameId(), playerType);
         showLoader();
-        await addRoomSubscriber(roomReadyResponse);
         await joinGameProcess();
       } else {
         // console.log("Room with data in session does not have GameId", roomCode, playerType);
@@ -114,7 +121,7 @@ export const CheckRoomSelected = (
 
   const startCheckRoomSelected = async () => {
     const { hasRoomCodeId, getRoomCodeId } = useContextRoomCodeId(
-      contextsData,
+      contextsData
     ) as UseRoomCodeIdHookType;
     if (hasRoomCodeId()) {
       const roomCode = getRoomCodeId();

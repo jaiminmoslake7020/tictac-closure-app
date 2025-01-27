@@ -1,17 +1,19 @@
-import {
-  MovePositionType,
-  TicTacCellRowFunctionType,
-  TicTacTableType,
-  TurnHandlerType,
-} from '@types-dir/index';
+import { MovePositionType, TurnHandlerType } from '@types-dir/index';
 import { createEL } from '@utils/index';
-import { TicTacCellRow } from './TicTacCellRow';
+import { TicTacCellRow, TicTacCellRowFunctionType } from './TicTacCellRow';
 import { InitializeContextsFunctionType } from '@contexts/index';
+
+export type TicTacTableType = {
+  render: () => HTMLDivElement;
+  reset: () => void;
+  updateOtherPersonMove: (v: MovePositionType) => Promise<void>;
+  exitGame: () => void;
+};
 
 export const TicTacTable = (
   getTurnHandlerType: () => TurnHandlerType,
   updateInfo: () => void,
-  contextData: InitializeContextsFunctionType,
+  contextData: InitializeContextsFunctionType
 ): TicTacTableType => {
   let ticTacTable: undefined | HTMLDivElement;
 
@@ -46,9 +48,11 @@ export const TicTacTable = (
       trArray.push(tr);
     }
     getTicTacTable().classList.add('tic-tac-table');
-    getTicTacTable().addEventListener('click', () => {
-      // console.log('e', e);
-    });
+    // getTicTacTable().addEventListener('click', (e) => {
+    //    if (e.isTrusted) {
+    //      console.log('e', e);
+    //    }
+    // });
     return getTicTacTable();
   };
 
@@ -65,9 +69,21 @@ export const TicTacTable = (
     updateInfo();
   };
 
+  const exitGame = () => {
+    for (let i = 0; i < 3; i++) {
+      trArray[i].exitGame();
+    }
+
+    trArray.pop();
+    trArray.pop();
+    trArray.pop();
+    getTicTacTable().remove();
+  };
+
   return {
     render,
     reset,
     updateOtherPersonMove,
+    exitGame,
   };
 };

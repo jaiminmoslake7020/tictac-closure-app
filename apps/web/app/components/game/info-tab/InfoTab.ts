@@ -1,6 +1,8 @@
 import {
+  checkGameCompleted,
   getGameIdWithRoomCode,
   InitializeContextsFunctionType,
+  isItRemoteGame,
   useContextGamePlayerType,
   useContextOpponentType,
   useContextWinner,
@@ -13,6 +15,7 @@ import {
 } from './ChangeAppLevelInfoTabButton';
 import { useDiv, useState } from '@components/base';
 import { RestartGameButton, RestartGameButtonType } from './RestartGameButton';
+import { stopSubscribers } from '@components/game/firebase-subscriber/FirebaseSubscriber';
 
 export type InfoTabType = {
   render: () => HTMLDivElement;
@@ -20,11 +23,12 @@ export type InfoTabType = {
   updateInfo: (reload: () => void) => void;
   resetApp: () => void;
   updateRoomInfo: () => void;
+  exitGame: () => void;
 };
 
 export const InfoTab = (
   onLevelChange: () => void,
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): InfoTabType => {
   const DEBUG_ROOM_INFO = false;
 
@@ -82,7 +86,7 @@ export const InfoTab = (
       ChangeAppLevelInfoTabButton(contextsData, () => {
         reset();
         onLevelChange();
-      }),
+      })
     );
     getDiv().append(getChangeLevelBtn().render());
   };
@@ -115,7 +119,6 @@ export const InfoTab = (
   };
 
   const addWinner = () => {
-    removeTurn();
     setWinner(Winner(contextsData));
     getDiv().prepend(getWinner().render());
     getWinner().update();
@@ -151,7 +154,9 @@ export const InfoTab = (
   };
 
   const addRestartGameButton = (reload: Function) => {
-    setRestartGameButton(RestartGameButton(onGameRestart.bind(null, reload), getPlayerType()));
+    setRestartGameButton(
+      RestartGameButton(onGameRestart.bind(null, reload), getPlayerType())
+    );
     getDiv().append((getRestartGameButton() as RestartGameButtonType).render());
   };
 
@@ -173,8 +178,13 @@ export const InfoTab = (
 
   const updateInfo = (reload: () => void) => {
     const { getWinner } = useContextWinner(contextsData);
-    updateRoomInfo();
-    if (getWinner() !== null) {
+    if (getWinner() !== null || checkGameCompleted(contextsData)) {
+      if (isItRemoteGame(contextsData)) {
+        stopSubscribers().then(() => {
+          console.log('stopSubscribers');
+        });
+      }
+      removeTurn();
       addWinner();
       addRestartGameButton(reload);
     } else {
@@ -183,9 +193,16 @@ export const InfoTab = (
   };
 
   const resetApp = () => {
-    updateRoomInfo();
     removeWinner();
     removeRestartButton();
+  };
+
+  const exitGame = () => {
+    removeTurn();
+    removeWinner();
+    removeRestartButton();
+    getDivOne().remove();
+    getDiv().remove();
   };
 
   return {
@@ -194,6 +211,7 @@ export const InfoTab = (
     updateInfo,
     resetApp,
     updateRoomInfo,
+    exitGame,
   };
 };
 

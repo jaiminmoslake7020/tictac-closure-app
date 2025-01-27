@@ -66,7 +66,7 @@ export const getFirestoreObject = (): Firestore => {
 export const listenToDocument = (
   collectionName: string,
   documentId: string,
-  onRetrieve: (d: any) => void,
+  onRetrieve: (d: any) => void
 ) => {
   const db = getFirestoreObject();
   const docRef = doc(db, collectionName, documentId);
@@ -82,7 +82,7 @@ export const listenToDocument = (
     },
     (error) => {
       console.error('Error listening to document changes:', error);
-    },
+    }
   );
 
   return unsubscribe; // Call this function to stop listening
@@ -91,7 +91,7 @@ export const listenToDocument = (
 // Listen for real-time updates to a specific document
 export const listenToCollection = (
   collectionName: string,
-  onRetrieve: (d: any, length: number) => void,
+  onRetrieve: (d: any, length: number) => void
 ) => {
   const db = getFirestoreObject();
   const collectionRef = collection(db, collectionName);
@@ -108,7 +108,7 @@ export const listenToCollection = (
     },
     (error) => {
       console.error('Error listening to collection changes:', error);
-    },
+    }
   ); // Call this function to stop listening
 };
 
@@ -116,7 +116,7 @@ export const listenToCollection = (
 export const listenToCollectionV2 = (
   collectionName: string,
   onRetrieve: (d: any, l: number) => void,
-  onFinished: () => void,
+  onFinished: () => void
 ) => {
   const db = getFirestoreObject();
   const collectionRef = collection(db, collectionName);
@@ -137,14 +137,14 @@ export const listenToCollectionV2 = (
     },
     () => {
       onFinished();
-    },
+    }
   ); // Call this function to stop listening
 };
 
 export const insertNewDocumentWithId = async (
   path: string,
   proposedDocId: string,
-  docData: any,
+  docData: any
 ) => {
   try {
     const f = getFirestoreObject();
@@ -155,7 +155,10 @@ export const insertNewDocumentWithId = async (
   }
 };
 
-export const insertNewDocumentWithoutId = async (path: string, docData: any) => {
+export const insertNewDocumentWithoutId = async (
+  path: string,
+  docData: any
+) => {
   try {
     const f = getFirestoreObject();
     const docRef = doc(f, path);
@@ -165,7 +168,10 @@ export const insertNewDocumentWithoutId = async (path: string, docData: any) => 
   }
 };
 
-export const addDocument = async (collectionPath: string, docData: any): Promise<any> => {
+export const addDocument = async (
+  collectionPath: string,
+  docData: any
+): Promise<any> => {
   try {
     const f = getFirestoreObject();
     const collectionRef = collection(f, collectionPath);

@@ -49,10 +49,15 @@ export const clickedHelper = () => {
     return false;
   };
 
+  const removeClicked = (columnId: ColumnIdType) => {
+    clickedCollection.delete(columnId);
+  };
+
   return {
     setClicked,
     setUnClicked,
     getClicked,
+    removeClicked,
   };
 };
 
@@ -71,10 +76,15 @@ export const OnClickCollection = () => {
     return functionCollection.has(id);
   };
 
+  const removeFn = (id: ColumnIdType) => {
+    functionCollection.delete(id);
+  };
+
   return {
     getFn,
     addFn,
     hasFn,
+    removeFn,
   };
 };
 
@@ -93,10 +103,15 @@ export const TdCollection = () => {
     return TdCollectionVar.has(id);
   };
 
+  const removeTd = (id: ColumnIdType) => {
+    TdCollectionVar.delete(id);
+  };
+
   return {
     addTd,
     getTd,
     hasTd,
+    removeTd,
   };
 };
 
@@ -115,9 +130,14 @@ export const TdCellCollection = () => {
     return TdCellCollectionVar.has(id);
   };
 
+  const removeTdCell = (id: ColumnIdType) => {
+    TdCellCollectionVar.delete(id);
+  };
+
   return {
     addTdCell,
     getTdCell,
     hasTdCell,
+    removeTdCell,
   };
 };

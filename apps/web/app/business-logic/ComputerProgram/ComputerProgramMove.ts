@@ -11,7 +11,9 @@ import {
 } from '@contexts/index';
 import { turnData } from '@data/index';
 
-export const ComputerProgramMove = (contextsData: InitializeContextsFunctionType) => {
+export const ComputerProgramMove = (
+  contextsData: InitializeContextsFunctionType
+) => {
   const { anotherTurn } = turnData;
   const { getAppLevelType } = useContextAppLevelType(contextsData);
   const { getWinner } = useContextWinner(contextsData);

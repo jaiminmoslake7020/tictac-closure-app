@@ -5,9 +5,10 @@ export type TicTacCellValueType = {
   render: () => HTMLDivElement;
   addText: (v: TurnType) => void;
   removeText: () => void;
+  remove: () => void;
 };
 
-export const TicTacCellValue = () => {
+export const TicTacCellValue = (): TicTacCellValueType => {
   let div: undefined | HTMLDivElement;
 
   const getDiv = (): HTMLDivElement => {
@@ -32,9 +33,14 @@ export const TicTacCellValue = () => {
     getDiv().innerHTML = '';
   };
 
+  const remove = () => {
+    getDiv().remove();
+  };
+
   return {
     render,
     addText,
     removeText,
+    remove,
   };
 };

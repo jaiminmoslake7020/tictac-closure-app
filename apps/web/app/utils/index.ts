@@ -24,7 +24,10 @@ export const addToRoot = (anotherEL: HTMLElement) => {
   appendEl('#root', anotherEL);
 };
 
-export const applyClassList = (el: any | HTMLElement, classList: string): any | HTMLElement => {
+export const applyClassList = (
+  el: any | HTMLElement,
+  classList: string
+): any | HTMLElement => {
   classList
     .trim()
     .split(' ')
@@ -65,7 +68,11 @@ export const History = (): HistoryType => {
 
 export const getBrowserName = () => {
   const userAgent = navigator.userAgent;
-  if (userAgent.includes('Chrome') && !userAgent.includes('Edg') && !userAgent.includes('OPR')) {
+  if (
+    userAgent.includes('Chrome') &&
+    !userAgent.includes('Edg') &&
+    !userAgent.includes('OPR')
+  ) {
     return 'Google Chrome';
   } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
     return 'Safari';

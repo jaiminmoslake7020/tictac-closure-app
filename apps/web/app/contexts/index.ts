@@ -3,7 +3,10 @@ import { UseOpponentTypeHookType, useOpponentType } from './useOpponentType';
 import { UseAnotherPlayerHookType, useAnotherPlayer } from './useAnotherPlayer';
 import { UseCurrentMoveHookType, useCurrentMove } from './useCurrentMove';
 import { UserSessionHookType, useUserSession } from './useUser';
-import { UseTurnStorageHookType, useTurnStorageHook } from './useTurnStorageHook';
+import {
+  UseTurnStorageHookType,
+  useTurnStorageHook,
+} from './useTurnStorageHook';
 import { UseWinnerSeqHookType, useWinnerSeqHook } from './useWinnerSeqHook';
 import { UseWinnerHookType, useWinnerHook } from './useWinnerHook';
 import { UseTurnHookType, useTurnHook } from './useTurnType';
@@ -11,7 +14,10 @@ import { UseRoomCodeIdHookType, useRoomCodeIdHook } from './useRoomCodeId';
 import { UseGameIdHookType, useGameIdHook } from '@contexts/useGameId';
 import { ColumnIdType, MovePositionType, UserType } from '@types-dir/index';
 import { getRandomInt } from '@utils/index';
-import { useGamePlayerTypeHook, UseGamePlayerTypeHookType } from '@contexts/useGamePlayerType';
+import {
+  useGamePlayerTypeHook,
+  UseGamePlayerTypeHookType,
+} from '@contexts/useGamePlayerType';
 import {
   computerProgram,
   remoteFriendPlayer,
@@ -94,7 +100,7 @@ export const contextsMap = {
 // contexts should be global and share state between app or atlest nodeTree where it starts
 export const useContexts = (
   contextName: string,
-  contextsMapList: InitializeContextsFunctionType,
+  contextsMapList: InitializeContextsFunctionType
 ) => {
   const { addContext, getContext, hasContext } = contextsMapList;
 
@@ -188,89 +194,123 @@ export const useContexts = (
 };
 
 export const useContextAppLevelType = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): UseAppLevelHookType => {
-  return useContexts(contextsMap.AppLevelType, contextsData) as UseAppLevelHookType;
+  return useContexts(
+    contextsMap.AppLevelType,
+    contextsData
+  ) as UseAppLevelHookType;
 };
 
 export const useContextOpponentType = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): UseOpponentTypeHookType => {
-  return useContexts(contextsMap.OpponentType, contextsData) as UseOpponentTypeHookType;
+  return useContexts(
+    contextsMap.OpponentType,
+    contextsData
+  ) as UseOpponentTypeHookType;
 };
 
 export const useContextAnotherPlayer = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): UseAnotherPlayerHookType => {
-  return useContexts(contextsMap.AnotherPlayer, contextsData) as UseAnotherPlayerHookType;
+  return useContexts(
+    contextsMap.AnotherPlayer,
+    contextsData
+  ) as UseAnotherPlayerHookType;
 };
 
 export const useContextCurrentMove = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): UseCurrentMoveHookType => {
-  return useContexts(contextsMap.CurrentMove, contextsData) as UseCurrentMoveHookType;
+  return useContexts(
+    contextsMap.CurrentMove,
+    contextsData
+  ) as UseCurrentMoveHookType;
 };
 
 export const useContextUserSession = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): UserSessionHookType => {
   return useContexts(contextsMap.User, contextsData) as UserSessionHookType;
 };
 
 export const useContextTurnStorage = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): UseTurnStorageHookType => {
-  return useContexts(contextsMap.TurnStorage, contextsData) as UseTurnStorageHookType;
+  return useContexts(
+    contextsMap.TurnStorage,
+    contextsData
+  ) as UseTurnStorageHookType;
 };
 
 export const useContextWinner = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): UseWinnerHookType => {
   return useContexts(contextsMap.Winner, contextsData) as UseWinnerHookType;
 };
 
 export const useContextWinnerSeq = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): UseWinnerSeqHookType => {
-  return useContexts(contextsMap.WinnerSeq, contextsData) as UseWinnerSeqHookType;
+  return useContexts(
+    contextsMap.WinnerSeq,
+    contextsData
+  ) as UseWinnerSeqHookType;
 };
 
 export const useContextTurnHookType = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): UseTurnHookType => {
   return useContexts(contextsMap.TurnType, contextsData) as UseTurnHookType;
 };
 
 export const useContextRoomCodeId = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): UseRoomCodeIdHookType => {
-  return useContexts(contextsMap.RoomCodeId, contextsData) as UseRoomCodeIdHookType;
+  return useContexts(
+    contextsMap.RoomCodeId,
+    contextsData
+  ) as UseRoomCodeIdHookType;
 };
 
 export const useContextGameId = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): UseGameIdHookType => {
   return useContexts(contextsMap.GameId, contextsData) as UseGameIdHookType;
 };
 
 export const useContextGamePlayerType = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): UseGamePlayerTypeHookType => {
-  return useContexts(contextsMap.GamePlayerType, contextsData) as UseGamePlayerTypeHookType;
+  return useContexts(
+    contextsMap.GamePlayerType,
+    contextsData
+  ) as UseGamePlayerTypeHookType;
 };
 
-export const isItRemoteGame = (contextsData: InitializeContextsFunctionType): boolean => {
+export const isItRemoteGame = (
+  contextsData: InitializeContextsFunctionType
+): boolean => {
   const { getOpponentType } = useContextOpponentType(contextsData);
-  return getOpponentType() === remoteFriendPlayer || getOpponentType() === remoteRandomPlayer;
+  return (
+    getOpponentType() === remoteFriendPlayer ||
+    getOpponentType() === remoteRandomPlayer
+  );
 };
 
-export const isItSameDeviceGame = (contextsData: InitializeContextsFunctionType): boolean => {
+export const isItSameDeviceGame = (
+  contextsData: InitializeContextsFunctionType
+): boolean => {
   const { getOpponentType } = useContextOpponentType(contextsData);
-  return getOpponentType() === sameDevicePlay || getOpponentType() === computerProgram;
+  return (
+    getOpponentType() === sameDevicePlay ||
+    getOpponentType() === computerProgram
+  );
 };
 
 export const getGameIdWithRoomCode = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): {
   roomCodeId: string;
   gameId: string;
@@ -287,7 +327,7 @@ export const getGameIdWithRoomCode = (
 };
 
 export const getGameDocumentPath = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): string | undefined => {
   const { roomCodeId, gameId } = getGameIdWithRoomCode(contextsData) || {};
   if (!roomCodeId) {
@@ -300,12 +340,14 @@ export const getGameDocumentPath = (
 };
 
 export const getTurnStorageCollectionPath = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): string => {
   return `${getGameDocumentPath(contextsData)}/turnStorage`;
 };
 
-export const isItRemotePlayerTurn = (contextsData: InitializeContextsFunctionType): boolean => {
+export const isItRemotePlayerTurn = (
+  contextsData: InitializeContextsFunctionType
+): boolean => {
   const { getCurrentMove } = useContextCurrentMove(contextsData);
 
   const { getUser } = useContextUserSession(contextsData);
@@ -315,7 +357,9 @@ export const isItRemotePlayerTurn = (contextsData: InitializeContextsFunctionTyp
   return currentMove !== user.id;
 };
 
-export const getRandomMove = (contextsData: InitializeContextsFunctionType): string => {
+export const getRandomMove = (
+  contextsData: InitializeContextsFunctionType
+): string => {
   const { getUser } = useContextUserSession(contextsData);
 
   const { getAnotherPlayer } = useContextAnotherPlayer(contextsData);
@@ -327,21 +371,42 @@ export const getRandomMove = (contextsData: InitializeContextsFunctionType): str
 };
 
 export const getAllCurrentTurns = (
-  contextsData: InitializeContextsFunctionType,
+  contextsData: InitializeContextsFunctionType
 ): MovePositionType[] => {
   const { getTurnStorage } = useContextTurnStorage(contextsData);
   const turnStorage = getTurnStorage();
-  return [...(turnStorage[turnData.turn] || []), ...(turnStorage[turnData.anotherTurn] || [])];
+  return [
+    ...(turnStorage[turnData.turn] || []),
+    ...(turnStorage[turnData.anotherTurn] || []),
+  ];
 };
 
 export const isUsedTurn = (
   contextsData: InitializeContextsFunctionType,
-  columnId: ColumnIdType,
+  columnId: ColumnIdType
 ) => {
   const moveType = columnId.replace('-', '') as MovePositionType;
   return getAllCurrentTurns(contextsData).includes(moveType);
 };
 
-export const checkGameCompleted = (contextsData: InitializeContextsFunctionType) => {
+export const checkGameCompleted = (
+  contextsData: InitializeContextsFunctionType
+) => {
   return getAllCurrentTurns(contextsData).length === 9;
+};
+
+export const removeGameContextsData = (
+  contextsData: InitializeContextsFunctionType
+) => {
+  const { resetTurnStorage } = useContextTurnStorage(contextsData);
+  const { removeWinnerSequence } = useContextWinnerSeq(contextsData);
+  const { removeWinner } = useContextWinner(contextsData);
+  resetTurnStorage();
+  removeWinnerSequence();
+  removeWinner();
+
+  if (isItSameDeviceGame(contextsData)) {
+    const { resetTurn } = useContextTurnHookType(contextsData);
+    resetTurn();
+  }
 };

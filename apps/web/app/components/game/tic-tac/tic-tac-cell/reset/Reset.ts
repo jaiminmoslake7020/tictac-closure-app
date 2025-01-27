@@ -4,20 +4,30 @@ import {
   tdClassList,
   setUnClicked,
   resetStopAnimateMoveSuccess,
+  hasTd,
 } from '@tic-tac/tic-tac-cell/common';
-import { ChangeFunctionType, ColumnIdType, TDClassIdType } from '@types-dir/index';
+import {
+  ChangeFunctionType,
+  ColumnIdType,
+  TDClassIdType,
+} from '@types-dir/index';
 import {
   InitializeContextsFunctionType,
   isItRemoteGame,
   isItRemotePlayerTurn,
 } from '@contexts/index';
-import { addClickListener, removeClickListener } from '@tic-tac/tic-tac-cell/on-click/OnClick';
+import {
+  addClickListener,
+  removeClickListener,
+} from '@tic-tac/tic-tac-cell/on-click/OnClick';
 
 const removeAllNewClasses = (columnId: ColumnIdType) => {
   Object.keys(tdClassList).map((keyname: string | TDClassIdType) => {
     const className = tdClassList[keyname as TDClassIdType];
-    if (getTd(columnId).classList.contains(className)) {
-      getTd(columnId).classList.remove(className);
+    if (hasTd(columnId)) {
+      if (getTd(columnId).classList.contains(className)) {
+        getTd(columnId).classList.remove(className);
+      }
     }
   });
 };
@@ -25,7 +35,7 @@ const removeAllNewClasses = (columnId: ColumnIdType) => {
 export const Reset = (
   contextData: InitializeContextsFunctionType,
   columnId: ColumnIdType,
-  newChangeTurn: ChangeFunctionType,
+  newChangeTurn: ChangeFunctionType
 ) => {
   const cv = getTdCell(columnId);
   if (cv) {

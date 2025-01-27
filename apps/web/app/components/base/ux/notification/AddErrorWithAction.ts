@@ -3,7 +3,12 @@ import { NotificationSecondaryAction } from '@components/base/ux/notification/No
 import { NotificationHandler } from '@components/base/ux/notification/NotificationHandler';
 
 export const AddErrorWithAction = (message: string, action: () => void) => {
-  const ib = IconButton('Re-create room', ' with-text ', 'fa-solid fa-power-off', action);
+  const ib = IconButton(
+    'Re-create room',
+    ' with-text ',
+    'fa-solid fa-power-off',
+    action
+  );
   const n = NotificationSecondaryAction(ib as HTMLElement);
   const { addError } = NotificationHandler();
   addError(message, null, n);

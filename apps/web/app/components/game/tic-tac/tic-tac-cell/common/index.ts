@@ -27,29 +27,34 @@ const {
   reset: resetStopAnimateMoveSuccess,
 } = stopAnimateMoveSuccess();
 
-const { addFn, getFn, hasFn } = OnClickCollection();
+const { addFn, getFn, hasFn, removeFn } = OnClickCollection();
 
-const { addTd, hasTd, getTd } = TdCollection();
+const { addTd, hasTd, getTd, removeTd } = TdCollection();
 
-const { addTdCell, hasTdCell, getTdCell } = TdCellCollection();
+const { addTdCell, hasTdCell, getTdCell, removeTdCell } = TdCellCollection();
 
-export { getStopAnimateMoveSuccess, incrementStopAnimateMoveSuccess, resetStopAnimateMoveSuccess };
-
-const { setUnClicked, setClicked, getClicked } = clickedHelper();
+const { setUnClicked, setClicked, getClicked, removeClicked } = clickedHelper();
 
 export {
+  getStopAnimateMoveSuccess,
+  incrementStopAnimateMoveSuccess,
+  resetStopAnimateMoveSuccess,
   setUnClicked,
   setClicked,
   getClicked,
+  removeClicked,
   addFn,
   getFn,
+  removeFn,
   hasFn,
   addTd,
   hasTd,
   getTd,
+  removeTd,
   addTdCell,
   hasTdCell,
   getTdCell,
+  removeTdCell,
 };
 
 export const tdClassList = {
@@ -101,6 +106,10 @@ export const anotherPersonMove = (columnId: ColumnIdType) => {
   setClicked(columnId);
 };
 
+export const unfilledItem = (columnId: ColumnIdType) => {
+  setUnClicked(columnId);
+};
+
 export const performSuccessAnimation = (columnId: ColumnIdType) => {
   setTimeout(() => {
     getTd(columnId).classList.add(tdClassList.typeSuccess);
@@ -114,7 +123,7 @@ export const performSuccessAnimation = (columnId: ColumnIdType) => {
 export const changeRelevantCellToSuccessStatus = (
   contextData: InitializeContextsFunctionType,
   columnId: ColumnIdType,
-  winnerSequence: WiningSequenceType,
+  winnerSequence: WiningSequenceType
 ) => {
   const { getAnotherPlayerTurns } = useContextTurnStorage(contextData);
   const anotherPersonMoves = getAnotherPlayerTurns();
@@ -147,7 +156,7 @@ export const enableCell = (columnId: ColumnIdType) => {
 
 export const checkWinnerIsAvailable = (
   contextData: InitializeContextsFunctionType,
-  columnId: ColumnIdType,
+  columnId: ColumnIdType
 ) => {
   const { getWinnerSequence } = useContextWinnerSeq(contextData);
   const winnerSequence = getWinnerSequence();
