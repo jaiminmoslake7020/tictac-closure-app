@@ -74,3 +74,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           LAYER_NAME: ${{ vars.LAYER_NAME_DEV }}
           FUNCTION_NAME: ${{ vars.FUNCTION_NAME_DEV_1 }}
+          FUNCTION_NAME_2: ${{ vars.FUNCTION_NAME_DEV_2 }}

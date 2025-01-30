@@ -51,4 +51,15 @@ if [ "$FN1" == "$FUNCTION_NAME" ]; then
 
 fi
 
+# Update the Lambda functions with the new layer do it only to local and development layer
+FN2=$(aws lambda list-functions --query 'Functions[?FunctionName==`'$FUNCTION_NAME_2'`].FunctionName' --output text)
+echo "Checking function 2 $FN2"
+if [ "$FN2" == "$FUNCTION_NAME_2" ]; then
+  echo "Found function updating layer for $FUNCTION_NAME_2"
+  aws lambda update-function-configuration \
+      --function-name "$FUNCTION_NAME_2" \
+      --layers "arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:layer:$LAYER_NAME:$VERSION_NUMBER" \
+
+fi
+
 echo "Lambda layer $LAYER_NAME updated successfully."
