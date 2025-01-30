@@ -38,8 +38,7 @@ ApiEndpoint=$(aws apigatewayv2 update-api \
         \"AllowMethods\": [\"GET\"],
         \"AllowHeaders\": [\"*\"],
         \"ExposeHeaders\": [\"*\"],
-        \"MaxAge\": 3600
-    }" \
+        \"MaxAge\": 3600 }" \
     --query "ApiEndpoint" --output text)
 
 echo "API Gateway CORS configuration updated successfully. for $ApiEndpoint"
@@ -76,7 +75,7 @@ DeploymentId=$(aws apigatewayv2 create-deployment \
 echo "API Gateway $API_NAME $DeploymentId deployed successfully."
 
 # Output API URL
-echo "API URL: https://$API_ID.execute-api.$AWS_REGION.amazonaws.com"
+echo "API URL: https://$API_ID.execute-api.$AWS_REGION.amazonaws.com/default$RESOURCE_PATH"
 
 # add a permission to the Lambda function to allow it to be invoked by the API Gateway
 aws lambda add-permission \
@@ -86,7 +85,6 @@ aws lambda add-permission \
   --principal apigateway.amazonaws.com \
   --source-arn "arn:aws:execute-api:$AWS_REGION:$AWS_ACCOUNT_ID:$API_ID/*/$HTTP_METHOD$RESOURCE_PATH" \
 
-curl https://$API_ID.execute-api.$AWS_REGION.amazonaws.com/default$RESOURCE_PATH
 
 
 
