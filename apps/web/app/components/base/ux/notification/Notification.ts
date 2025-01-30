@@ -86,6 +86,7 @@ export const Notification = (
     addSecondaryAction();
 
     getDiv().append(getDivOne());
+    getDiv().setAttribute('data-id', notification.id);
 
     handleTimeout();
     return getDiv();

@@ -1,17 +1,14 @@
-import { P } from '@components/base';
+import {P} from '@components/base';
 import {
+  getUserId,
   InitializeContextsFunctionType,
+  isItGameWithOpenAi,
   isItRemoteGame,
   isItRemotePlayerTurn,
-  useContextAnotherPlayer,
-  useContextOpponentType,
+  isItSameDeviceGame,
+  useContextAnotherPlayer, useContextCurrentMove,
   useContextTurnHookType,
 } from '@contexts/index';
-import {
-  computerProgram,
-  remoteFriendPlayer,
-  sameDevicePlay,
-} from '@data/index';
 
 export type WhosTurnFunctionType = {
   render: () => HTMLParagraphElement;
@@ -22,11 +19,12 @@ export type WhosTurnFunctionType = {
 export const WhosTurn = (
   contextsData: InitializeContextsFunctionType
 ): WhosTurnFunctionType => {
-  const { getOpponentType } = useContextOpponentType(contextsData);
 
   const { getAnotherPlayer } = useContextAnotherPlayer(contextsData);
 
   const { getTurn } = useContextTurnHookType(contextsData);
+
+  const { getCurrentMove } = useContextCurrentMove(contextsData);
 
   let p: undefined | HTMLParagraphElement;
   const setP = (item: HTMLParagraphElement) => {
@@ -71,13 +69,16 @@ export const WhosTurn = (
 
   const updateTurn = () => {
     if (
-      getOpponentType() === computerProgram ||
-      getOpponentType() === sameDevicePlay
+      isItSameDeviceGame(contextsData)
     ) {
       const newTurn = getTurn();
       update('Current turn: ' + newTurn);
-    } else if (getOpponentType() === remoteFriendPlayer) {
+    } else if (isItRemoteGame(contextsData)) {
       update(getPlayerName());
+    }  else if (isItGameWithOpenAi(contextsData)) {
+      const currentMove = getCurrentMove();
+      const userId = getUserId(contextsData);
+      update( userId === currentMove ? 'Your Turn' : 'Current Turn: "' + getAnotherPlayer().username + '"' );
     }
   };
 

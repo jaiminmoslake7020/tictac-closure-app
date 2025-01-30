@@ -1,4 +1,4 @@
-import { UserType } from '../types';
+import {FirebasePlayerType, UserType} from '../types';
 import {addDocument, updateDocument} from './core';
 import { getCurrentTime } from '../utils';
 
@@ -28,3 +28,21 @@ export const updateRoom = async ( roomId: string, roomData: any) => {
         console.error('Error updating room:', e);
     }
 }
+
+export const joinRoom = async (
+  roomCode: string,
+  joiner: FirebasePlayerType,
+): Promise<void> => {
+  try {
+    const roomData = {
+      joiner: {
+        ...joiner,
+        live: getCurrentTime() + 10000
+      },
+      joiner_last_visit: getCurrentTime() + 30000,
+    };
+    await updateRoom(roomCode, roomData);
+  } catch (e) {
+    console.error('Error joinRoom', e);
+  }
+};

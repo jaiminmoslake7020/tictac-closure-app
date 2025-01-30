@@ -19,12 +19,15 @@ import {
 } from '@components/game/GameActions';
 import { RemoteRandomWaitingRoom } from '@components/game/opponent-selection/remote-random-player/RemoteRandomWaitingRoom';
 import {
-  computerProgram,
+  computerProgram, openAiChatGpt,
   remoteFriendPlayer,
   remoteRandomPlayer,
   sameDevicePlay,
 } from '@data/index';
 import { RemoteRandomRestartDisplay } from '@components/game/opponent-selection/remote-random-player/RemoteRandomRestartDisplay';
+import {
+  OpenApiChatPlayerSelected
+} from '@components/game/opponent-selection/open-api-chat-player-selected/OpenApiChatPlayerSelected';
 
 export type OpponentSelectionType = {
   render: () => void | Promise<void>;
@@ -75,6 +78,14 @@ export const OpponentSelection = (
     render();
   };
 
+  const openAiChatGptPlayerSelected = async () => {
+    const {
+      setUp
+    } = OpenApiChatPlayerSelected(contextsData);
+    await setUp();
+    onLevelSelected();
+  }
+
   const onPlayerSelected = async (value: OpponentType) => {
     const { resetTurnStorage } = useContextTurnStorage(contextsData);
     resetTurnStorage();
@@ -92,6 +103,8 @@ export const OpponentSelection = (
       remoteFriendPlayerSelected();
     } else if (value === remoteRandomPlayer) {
       remoteRandomPlayerSelected();
+    } else if (value === openAiChatGpt) {
+      await openAiChatGptPlayerSelected();
     }
   };
 

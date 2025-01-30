@@ -86,3 +86,17 @@ export const getDocument = async (
   }
   return undefined;
 };
+
+export const insertNewDocumentWithId = async (
+  path: string,
+  proposedDocId: string,
+  docData: any
+) => {
+  try {
+    const f = await getFirestoreObject();
+    const docRef = f.doc(path + '/' + proposedDocId);
+    await docRef.set(docData);
+  } catch (e) {
+    console.error('Error at insertNewDocumentWithId: ', path, proposedDocId, e);
+  }
+};

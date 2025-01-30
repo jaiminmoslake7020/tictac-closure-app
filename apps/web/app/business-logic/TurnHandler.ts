@@ -1,4 +1,5 @@
 import {
+  ChatGptErrorObjectType,
   MovePositionType,
   TurnHandlerType,
   TurnType,
@@ -8,8 +9,8 @@ import { CheckWinner } from './CheckWinner';
 import {
   checkGameCompleted,
   getAllCurrentTurns,
-  getGameDocumentPath,
-  InitializeContextsFunctionType,
+  getGameDocumentPath, getGameIdWithRoomCode, getNumberOfTurnsMade,
+  InitializeContextsFunctionType, isItGameWithOpenAi,
   isItRemoteGame,
   useContextAnotherPlayer,
   useContextCurrentMove,
@@ -17,7 +18,7 @@ import {
   useContextOpponentType,
   useContextTurnHookType,
   useContextTurnStorage,
-  useContextUserSession,
+  useContextUserSession, useContextWinner,
 } from '@contexts/index';
 import { ComputerProgramMove } from './ComputerProgram/ComputerProgramMove';
 import { RemoteFriendPlayer } from './RemoteFriendPlayer/RemoteFriendPlayer';
@@ -27,8 +28,13 @@ import {
   updateGameWithCurrentMove,
 } from '@firebase-dir/index';
 import { UseCurrentMoveHookType } from '@contexts/index';
-import { turnData } from '@data/index';
-import { setGameCompletedWithoutWinner } from '@firebase-dir/game';
+import {ChatGptErrorObject, computerProgram, sameDevicePlay, turnData} from '@data/index';
+import {askChatGptForItsMove, setGameCompletedWithoutWinner} from '@firebase-dir/game';
+import {
+  AddErrorWithAction,
+  AddErrorWithCustomAction,
+  AddErrorWithoutAction
+} from '@components/base/ux/notification/AddErrorWithAction';
 
 export const setWinnerAtFirebase = (
   contextsData: InitializeContextsFunctionType,
@@ -84,9 +90,12 @@ export const checkGameCompletedInner = (
   return false;
 };
 
+
+
 export const TurnHandler = (
   contextsData: InitializeContextsFunctionType,
-  anotherPersonMadeMove: (v: MovePositionType) => Promise<void>
+  anotherPersonMadeMove: () => Promise<void>,
+  reload: () => void
 ): TurnHandlerType => {
   const { setCurrentMove } = useContextCurrentMove(
     contextsData
@@ -98,21 +107,25 @@ export const TurnHandler = (
 
   const { getAnotherPlayer } = useContextAnotherPlayer(contextsData);
 
-  const { getTurn, changeTurn } = useContextTurnHookType(contextsData);
+  const { getWinner } = useContextWinner(contextsData);
+
+  const { getTurn, changeTurn, setUserTurn, setAnotherUserTurn } = useContextTurnHookType(contextsData);
 
   const opponentType = getOpponentType();
 
   const { addNewTurn } = useContextTurnStorage(contextsData);
 
   const changeTurnOfTurnHandler = async (v: MovePositionType) => {
-    if (isItRemoteGame(contextsData)) {
+    if (isItRemoteGame(contextsData) || isItGameWithOpenAi(contextsData)) {
       const gameDocumentPath = getGameDocumentPath(contextsData);
       if (gameDocumentPath) {
+        const numberOfTurnsMade = getNumberOfTurnsMade(contextsData);
         const turnStorageCollectionPath = `${gameDocumentPath}/turnStorage`;
         await addNewTurnFirebase(
           turnStorageCollectionPath,
           getUser().id as string,
-          v
+          v,
+          numberOfTurnsMade + 1
         );
         if (gameDocumentPath) {
           await updateGameWithCurrentMove(
@@ -124,6 +137,35 @@ export const TurnHandler = (
         }
         addNewTurn(v, getTurn() as TurnType);
         setCurrentMove(getAnotherPlayer().id);
+        if (isItGameWithOpenAi(contextsData)) {
+          CheckWinner(contextsData, setWinnerAtFirebase);
+        }
+
+        if (
+          isItGameWithOpenAi(contextsData) &&
+          !checkGameCompleted(contextsData) &&
+          getWinner() === null
+        ) {
+          const { roomCodeId, gameId } = getGameIdWithRoomCode(contextsData) || {};
+          if (
+            roomCodeId && gameId
+          ) {
+            // keeping it async and not waiting for it to fulfill
+            askChatGptForItsMove(roomCodeId, gameId).then((res) => {
+              if (
+                res.chatGptMove.indexOf('ERROR') !== -1
+              ) {
+                AddErrorWithCustomAction(ChatGptErrorObject[res.chatGptMove as ChatGptErrorObjectType] as string, 'Restart Game', reload);
+              } else {
+                console.log('askChatGptForItsMove', res.chatGptMove);
+              }
+            });
+          } else {
+            console.error('roomCodeId or gameId is not available');
+          }
+        } else {
+          console.log('checkGameCompleted(contextsData)', checkGameCompleted(contextsData));
+        }
       } else {
         console.log(
           'gameDocumentPath is not available. Game might be completed or ended.'
@@ -135,22 +177,25 @@ export const TurnHandler = (
     afterChangeTurn();
   };
 
-  const afterChangeTurn = async () => {
-    if (isItRemoteGame(contextsData)) {
-      await CheckWinner(contextsData, setWinnerAtFirebase);
+  const afterChangeTurn = () => {
+    if (
+      isItRemoteGame(contextsData)
+      || isItGameWithOpenAi(contextsData)
+    ) {
+      CheckWinner(contextsData, setWinnerAtFirebase);
       checkGameCompletedInner(contextsData);
     } else {
-      await CheckWinner(contextsData);
+      CheckWinner(contextsData);
     }
     anotherPersonChangeTurn();
   };
 
   const anotherPersonChangeTurn = () => {
-    if (opponentType === 'same-device-play') {
+    if (opponentType === sameDevicePlay) {
       changeTurn();
-    } else if (opponentType === 'computer-program') {
+    } else if (opponentType === computerProgram) {
       ComputerProgramMove(contextsData);
-    } else if (isItRemoteGame(contextsData)) {
+    } else if (isItRemoteGame(contextsData) || isItGameWithOpenAi(contextsData)) {
       changeTurn();
     }
   };
@@ -159,23 +204,24 @@ export const TurnHandler = (
     // console.log('turnStorage');
   };
 
-  if (isItRemoteGame(contextsData)) {
+  if (
+    isItRemoteGame(contextsData) ||
+    isItGameWithOpenAi(contextsData)
+  ) {
     RemoteFriendPlayer(contextsData, async (doc: any) => {
       const { userId, position } = doc;
       if (!getAllCurrentTurns(contextsData).includes(position)) {
         if (userId !== getUser().id) {
           //other person made move
-          if (getTurn() === turnData.turn) {
-            changeTurn();
-          }
+          setAnotherUserTurn();
           addNewTurn(position, getTurn() as TurnType);
-          await CheckWinner(contextsData, setWinnerAtFirebase);
+          CheckWinner(contextsData, setWinnerAtFirebase);
           checkGameCompletedInner(contextsData);
 
           // now make it change who will have move
           setCurrentMove(getUser().id);
-          changeTurn();
-          await anotherPersonMadeMove(position);
+          setUserTurn();
+          await anotherPersonMadeMove();
         }
       } else {
         // console.log('position is already taken', position, userId);

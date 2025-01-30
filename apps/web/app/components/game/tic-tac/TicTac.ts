@@ -2,7 +2,6 @@ import { InfoTab, InfoTabType } from '@components/game/info-tab/InfoTab';
 import { TurnHandler } from '@business-logic/TurnHandler';
 import {
   FirebaseGameType,
-  MovePositionType,
   TurnHandlerType,
   UserType,
 } from '@types-dir/index';
@@ -20,12 +19,13 @@ import {
   UseRoomCodeIdHookType,
   useContextGameId,
   getRandomMove,
-  isItSameDeviceGame,
+  isItSameDeviceGame, isItGameWithOpenAi,
 } from '@contexts/index';
-import { useDiv } from '@components/base';
-import { createGame, onGameCreated } from '@firebase-dir/game';
+import {Loader, useDiv} from '@components/base';
+import {askChatGptToJoinGame, createGame, onGameCreated} from '@firebase-dir/game';
 import { GameActionCallbacksType } from '@components/game/GameActions';
 import { startSubscribers } from '@components/game/firebase-subscriber/FirebaseSubscriber';
+import {AddErrorWithoutAction} from '@components/base/ux/notification/AddErrorWithAction';
 
 export type TicTacType = {
   render: () => HTMLDivElement;
@@ -41,6 +41,9 @@ export const TicTac = (
   let ticTacTableType: TicTacTableType | undefined;
 
   const { getDiv: getWrapperDiv, setDiv: setWrapperDiv } = useDiv();
+  const {
+    showLoader, stopLoader
+  } = Loader();
 
   const setInfoTabDiv = (item: InfoTabType) => {
     infoTabDiv = item;
@@ -62,9 +65,9 @@ export const TicTac = (
     return ticTacTableType as TicTacTableType;
   };
 
-  const anotherPersonMadeMove = async (v: MovePositionType) => {
+  const anotherPersonMadeMove = async () => {
     // console.log('anotherPersonMadeMove updateInfo');
-    await getTicTacTable().updateOtherPersonMove(v);
+    await getTicTacTable().updateOtherPersonMove();
   };
 
   const resetGameJoiner = () => {
@@ -100,17 +103,21 @@ export const TicTac = (
       }
     }
 
-    setTurnHandlerType(TurnHandler(contextsData, anotherPersonMadeMove));
+    setTurnHandlerType(TurnHandler(contextsData, anotherPersonMadeMove, reStartGameStoppedWithError));
     const table = getTicTacTable();
     table.reset();
     getInfoTabDiv().addTurn();
   };
 
+  // alllowed only for remote game and chatGPT game
+  // if it is not remote game , it is chatGPT game
   const reStartGame = async () => {
+    showLoader();
     const { setGameId } = useContextGameId(contextsData);
     const { setCurrentMove } = useContextCurrentMove(contextsData);
     const { getRoomCodeId } = useContextRoomCodeId(contextsData);
     const { getUser } = useContextUserSession(contextsData);
+    const { setUserTurn, setAnotherUserTurn } = useContextTurnHookType(contextsData);
 
     const roomCodeId = getRoomCodeId();
     const userItem = getUser() as UserType;
@@ -119,17 +126,27 @@ export const TicTac = (
     if (g) {
       // console.log('Game started', g.id);
       setGameId(g.id);
-      setCurrentMove(currentMove);
-      await startSubscribers(contextsData, { ...gameActionsObject, exitGame });
+      if (
+        isItRemoteGame(contextsData)
+      ) {
+        setCurrentMove(currentMove);
+        await startSubscribers(contextsData, { ...gameActionsObject, exitGame });
+      } else {
+        // on game with ChatGPT, Player is always first to make move
+        setUserTurn();
+        setCurrentMove(userItem.id);
+        await askChatGptToJoinGame(roomCodeId, g.id);
+      }
       resetGame();
+      stopLoader();
     } else {
-      // TODO: Show error message
-      // console.log('Error creating game');
+      AddErrorWithoutAction('Error creating game by me');
+      stopLoader();
     }
   };
 
   const reload = async () => {
-    if (isItRemoteGame(contextsData)) {
+    if (isItRemoteGame(contextsData) || isItGameWithOpenAi(contextsData)) {
       await reStartGame();
     } else {
       // console.log("resetGame");
@@ -148,6 +165,7 @@ export const TicTac = (
     getInfoTabDiv().updateInfo(reload);
   };
 
+  // Remote Game Listener, note required for game with ChatGPT
   const addRestartGameListener = () => {
     // console.log('addRestartGameListener');
     const { getRoomCodeId } = useContextRoomCodeId(
@@ -183,8 +201,13 @@ export const TicTac = (
     );
   };
 
+  const reStartGameStoppedWithError = () => {
+    getInfoTabDiv().resetApp();
+    reload();
+  }
+
   const render = () => {
-    setTurnHandlerType(TurnHandler(contextsData, anotherPersonMadeMove));
+    setTurnHandlerType(TurnHandler(contextsData, anotherPersonMadeMove, reStartGameStoppedWithError));
     setInfoTabDiv(InfoTab(reload, contextsData));
 
     setWrapperDiv('wrapper-div');

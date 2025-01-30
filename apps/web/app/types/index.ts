@@ -59,12 +59,14 @@ export type OpponentType =
   | 'remote-random-player'
   | 'remote-friend-player'
   | 'computer-program'
-  | 'same-device-play';
+  | 'same-device-play'
+  | 'openai-chat-gpt';
 export type OpponentLabelType =
   | 'Remote Random Player'
   | 'Remote Friend Player'
   | 'Computer Program'
-  | 'Same Device Play';
+  | 'Same Device Play'
+  | 'OpenAi Chat-GPT';
 export type OpponentFormButtonType = {
   label: OpponentLabelType;
   value: OpponentType;
@@ -147,3 +149,5 @@ export type WaitingRoomDbItemType = {
   roomId?: string;
   playerType?: GamePlayerType;
 };
+
+export type ChatGptErrorObjectType = 'ERROR' | 'ERROR_USED_MOVE' | 'ERROR_INVALID_MOVE' | 'ERROR_WON_GAME_PREDICATION';

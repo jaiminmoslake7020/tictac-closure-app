@@ -45,7 +45,9 @@ const run = async (roomId, gameId) => {
 
 // Define a route to handle GET requests
 app.get('/', async (req, res) => {
-  const data = await run('test', 'test');
+  const roomId = req.query.roomId;
+  const gameId = req.query.gameId;
+  const data = await run(roomId, gameId);
   res.send(data);
 });
 

@@ -1,5 +1,5 @@
 import {FirebaseGameType, FirebaseGameTypeDocumentReference, UserType} from '../types';
-import { getRandomMove } from '../utils';
+import {getCurrentTime, getRandomMove} from '../utils';
 import {addDocument, getDocument, updateDocument} from './core';
 
 export const getGamePath = (roomId: string, gameId: string) : string => `rooms/${roomId}/games/${gameId}`;
@@ -45,10 +45,11 @@ export const getGameData = async (roomId: string, gameId: string) :Promise<undef
   }
 }
 
-export const updateChatGptConversation = async ( roomId: string, gameId:string, conversation: any) => {
+export const updateChatGptConversation = async ( roomId: string, gameId:string, conversation: any, userPrompt:any) => {
   try {
     await updateDocument(getGamePath(roomId, gameId), {
-      chatGptConversation: conversation
+      chatGptConversation: conversation,
+      userPrompt: userPrompt
     });
   } catch (e) {
     console.error('Error updating room:', e);
@@ -59,7 +60,10 @@ export const retrieveCurrentChatGptConversation = async ( roomId: string, gameId
   try {
     const gameData = await getGameData(roomId, gameId);
     if (gameData) {
-      return gameData.chatGptConversation
+      return {
+        conversation: gameData.chatGptConversation,
+        userPrompt: gameData.userPrompt
+      };
     }
     return undefined;
   } catch (e) {
@@ -76,3 +80,36 @@ export const validateGame = async (roomId: string, gameId: string) : Promise<boo
     return false;
   }
 }
+
+export const updateGameWithCurrentMove = async (
+  roomId: string,
+  gameId: string,
+  currentMove: string
+) => {
+  try {
+    const gamePath = getGamePath(roomId, gameId);
+    await updateDocument(gamePath, {
+      currentMove,
+      joiner_last_active_time: getCurrentTime(),
+    });
+  } catch (e) {
+    console.error('Error updateGameWithCurrentMove', e);
+  }
+};
+
+export const joinGame = async (
+  roomId: string,
+  gameId: string,
+  joinerUserId: string
+): Promise<void> => {
+  try {
+    const roomData = {
+      joiner_last_active_time: getCurrentTime(),
+      joiner: joinerUserId
+    };
+    const gamePath = getGamePath(roomId, gameId);
+    await updateDocument(gamePath, roomData);
+  } catch (e) {
+    console.error('Error joinRoom', e);
+  }
+};

@@ -1,5 +1,5 @@
 import { TicTac, TicTacType } from './TicTac';
-import { InitializeContextsFunctionType } from '@contexts/index';
+import {InitializeContextsFunctionType, isItRemoteGame} from '@contexts/index';
 import { useDiv, useState } from '@components/base';
 import { GameActionCallbacksType } from '@components/game/GameActions';
 import {RoomActiveSubscriber} from '@components/game/opponent-selection/remote-friend-player/RoomActiveSubscriber';
@@ -40,7 +40,9 @@ export const LoadTicTacApp = (
 
     window.history.pushState(null, '', '#/app');
 
-    addRoomActiveSubscriber( {...gameActionsObject, exitGame: exitGame} );
+    if (isItRemoteGame(contextsData)) {
+      addRoomActiveSubscriber( {...gameActionsObject, exitGame: exitGame} );
+    }
     return getDiv();
   };
 

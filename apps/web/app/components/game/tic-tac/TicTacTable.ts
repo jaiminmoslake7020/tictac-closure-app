@@ -1,12 +1,13 @@
 import { MovePositionType, TurnHandlerType } from '@types-dir/index';
 import { createEL } from '@utils/index';
 import { TicTacCellRow, TicTacCellRowFunctionType } from './TicTacCellRow';
-import { InitializeContextsFunctionType } from '@contexts/index';
+import {InitializeContextsFunctionType, isItGameWithOpenAi, useContextCurrentMove} from '@contexts/index';
+import {openAiUser} from '@data/index';
 
 export type TicTacTableType = {
   render: () => HTMLDivElement;
   reset: () => void;
-  updateOtherPersonMove: (v: MovePositionType) => Promise<void>;
+  updateOtherPersonMove: () => Promise<void>;
   exitGame: () => void;
 };
 
@@ -36,7 +37,6 @@ export const TicTacTable = (
     for (let i = 0; i < 3; i++) {
       trArray[i].update(handleChangeTurn);
     }
-    // console.log('handleChangeTurn updateInfo');
     updateInfo();
   };
 

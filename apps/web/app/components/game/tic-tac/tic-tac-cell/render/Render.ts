@@ -53,6 +53,7 @@ export const Render = (
   const id = TicTacCellIdentifier(columnId);
   const td = document.createElement('div');
   td.setAttribute('id', 'column-' + columnId);
+  td.setAttribute('role', 'button');
   td.classList.add('tic-tac-cell');
   td.append(id.render());
   addTd(columnId, td);

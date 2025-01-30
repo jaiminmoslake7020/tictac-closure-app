@@ -20,6 +20,7 @@ const envKeys = !process.env.FIREBASE_CONFIG_API_KEY ? Object.keys(env).reduce((
   'process.env.FIREBASE_CONFIG_MESSAGING_SENDER_ID': JSON.stringify(process.env.FIREBASE_CONFIG_MESSAGING_SENDER_ID),
   'process.env.FIREBASE_CONFIG_APP_ID': JSON.stringify(process.env.FIREBASE_CONFIG_APP_ID),
   'process.env.FIREBASE_CONFIG_MEASUREMENT_ID': JSON.stringify(process.env.FIREBASE_CONFIG_MEASUREMENT_ID),
+  'process.env.LAMBDA_CHATGPT_PLAYER_API_URL': JSON.stringify(process.env.LAMBDA_CHATGPT_PLAYER_API_URL),
 };
 
 module.exports = env  => ({
