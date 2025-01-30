@@ -4,8 +4,9 @@ import {
   MatrixType,
   MovePositionType,
   MovePositionTypeChatGpt,
-  TurnStorageType
+  TurnStorageType,
 } from '../../../common/types';
+import {getSecretCore} from '../../../common/aws/get-secret';
 
 const chatInsert = `
 You will engage in a Tic-tac-Toe game with the user. Follow the rules of the game strictly and provide responses as instructed.
@@ -65,144 +66,189 @@ Determine the move position for your turn as a numeric string ("00", "01", "02",
 
 `;
 
-let openAiClient:OpenAI;
+let openAiClient: OpenAI;
 
-export const configureOpenAIClient = ():OpenAI => {
+export const configureOpenAIClient = (apiKey: string): OpenAI => {
   openAiClient = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY, // This is the default and can be omitted
+    apiKey, // This is the default and can be omitted
   });
   return openAiClient;
-}
+};
 
-export const getOpenAIClient = ():OpenAI => {
+export const getOpenAIClient = (apiKey: string): OpenAI => {
   if (openAiClient) {
     return openAiClient;
   }
-  return configureOpenAIClient();
+  return configureOpenAIClient(apiKey);
+};
+
+export const getApiKeySecret = async () :Promise<string | undefined> => {
+  const secret_env = process.env.SECRET_NAME_OPENAI_API_KEY;
+  if (secret_env) {
+    const secret = await getSecretCore(secret_env);
+    const p =
+      'OPEN_API_KEY_' + process.env.FIREBASE_PRIVATE_KEY_BASE64;
+    if (secret && secret[p]) {
+      return secret[p];
+    } else {
+      console.error('OpenAI API Key not found in environment');
+    }
+  } else {
+    console.error('OpenAI API Key not found in environment');
+  }
+  return undefined;
 }
 
-export const requestChatGptConversation = async (messages: ChatCompletionMessageType[]) => {
+export const requestChatGptConversation = async (
+  messages: ChatCompletionMessageType[],
+) => {
   try {
-    const response = await getOpenAIClient().chat.completions.create({
-      model: "gpt-3.5-turbo", // or "gpt-4" if available
-      messages: messages,
-    });
-    return response.choices[0].message.content;
+    const apiKey = await getApiKeySecret();
+    if (apiKey) {
+      const response = await getOpenAIClient(apiKey).chat.completions.create({
+        model: 'gpt-3.5-turbo', // or "gpt-4" if available
+        messages: messages,
+      });
+      return response.choices[0].message.content;
+    } else {
+      console.error('Error getting OpenAI API Key');
+    }
   } catch (error) {
-    console.error("Error interacting with OpenAI API:", error);
+    console.error('Error interacting with OpenAI API:', error);
   }
-}
+};
 
 export const initiateChatGptConversation = async () => {
   try {
     return await requestChatGptConversation(getInitialPrompt());
   } catch (error) {
-    console.error("Error interacting with OpenAI API:", error);
+    console.error('Error interacting with OpenAI API:', error);
   }
-}
+};
 
 export const askForChatGptMove = async (messages: any) => {
   try {
     return await requestChatGptConversation(messages);
   } catch (error) {
-    console.error("Error interacting with OpenAI API:", error);
+    console.error('Error interacting with OpenAI API:', error);
   }
-}
+};
 
-export const getInitialPrompt = () :ChatCompletionMessageType[] => {
+export const getInitialPrompt = (): ChatCompletionMessageType[] => {
   return [
-    {role: "system", content: 'You are master of TypeScript! and You are master at playing Tic-tac-Toe game!'},
-    {role: "user", content: chatInsert},
+    {
+      role: 'system',
+      content:
+        'You are master of TypeScript! and You are master at playing Tic-tac-Toe game!',
+    },
+    { role: 'user', content: chatInsert },
   ];
-}
+};
 
-export const getInitialPromptMessageArray = () :string[] => {
-  return getInitialPrompt().map((message)=> message.content as string);
-}
-
+export const getInitialPromptMessageArray = (): string[] => {
+  return getInitialPrompt().map((message) => message.content as string);
+};
 
 export const processPromptsArray = (
   messages: ChatCompletionMessageType[],
-) : string[] => {
-  const filteredMessages = messages.filter((message :ChatCompletionMessageType) => message.role !== "assistant");
+): string[] => {
+  const filteredMessages = messages.filter(
+    (message: ChatCompletionMessageType) => message.role !== 'assistant',
+  );
   return filteredMessages.map((message) => message.content as string);
-}
+};
 
-export const positionEdit = (position: MovePositionType) :MovePositionTypeChatGpt => {
+export const positionEdit = (
+  position: MovePositionType,
+): MovePositionTypeChatGpt => {
   const p = Number(position);
   const first = parseInt(String(Number(p / 10))) - 1;
-  const second = p % 10 - 1;
+  const second = (p % 10) - 1;
   return `${first as 0 | 1 | 2}${second as 0 | 1 | 2}` as MovePositionTypeChatGpt;
-}
+};
 
-export const positionEditReverse = (position: MovePositionTypeChatGpt) :MovePositionType => {
+export const positionEditReverse = (
+  position: MovePositionTypeChatGpt,
+): MovePositionType => {
   const p = position.split('');
   const first = Number(p[0]) + 1;
   const second = Number(p[1]) + 1;
   return `${first as 1 | 2 | 3}${second as 1 | 2 | 3}` as MovePositionType;
-}
+};
 
-export const prepareChatGptPrompt = (conversation: string[], userPrompt: string[], matrix: MatrixType, sortMoves: TurnStorageType[], playerUserId: string) :{
-  messages: ChatCompletionMessageType[],
-  latestUserMessage: ChatCompletionMessageType | undefined
+export const prepareChatGptPrompt = (
+  conversation: string[],
+  userPrompt: string[],
+  matrix: MatrixType,
+  sortMoves: TurnStorageType[],
+  playerUserId: string,
+): {
+  messages: ChatCompletionMessageType[];
+  latestUserMessage: ChatCompletionMessageType | undefined;
 } => {
-  const [
-    initialResponse,
-    ...rest
-  ] = conversation;
+  const [initialResponse, ...rest] = conversation;
 
-  const [
-    firstPrompt,
-    secondPrompt,
-    ...restPrompt
-  ] = userPrompt;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [firstPrompt, secondPrompt, ...restPrompt] = userPrompt;
 
   const messages = getInitialPrompt();
-  messages.push({ role: "assistant", content: initialResponse});
+  messages.push({ role: 'assistant', content: initialResponse });
 
   const restArray = Array.isArray(rest) ? rest : [];
-  const length = restArray.length;
   let startAt = 0;
   let startAtRestPrompt = 0;
 
   let latestUserMessage = undefined;
-  sortMoves.forEach((move : TurnStorageType, index:number) => {
+  sortMoves.forEach((move: TurnStorageType, index: number) => {
     const newPostion = positionEdit(move.position);
     if (move.userId === playerUserId) {
       if (sortMoves.length - 1 === index) {
-        latestUserMessage = { role: "user", content: JSON.stringify({
-          move: newPostion,
-          game_board: matrix,
-        })}
+        latestUserMessage = {
+          role: 'user',
+          content: JSON.stringify({
+            move: newPostion,
+            game_board: matrix,
+          }),
+        };
         messages.push(latestUserMessage as ChatCompletionMessageType);
       } else if (Array.isArray(restPrompt) && restPrompt[startAtRestPrompt]) {
-        messages.push({ role: "user", content: restPrompt[startAtRestPrompt]} as ChatCompletionMessageType);
+        messages.push({
+          role: 'user',
+          content: restPrompt[startAtRestPrompt],
+        } as ChatCompletionMessageType);
         startAtRestPrompt++;
       } else {
-        messages.push({ role: "user", content: JSON.stringify({
+        messages.push({
+          role: 'user',
+          content: JSON.stringify({
             move: newPostion,
-          })});
+          }),
+        });
       }
     } else {
       if (Array.isArray(restArray) && restArray[startAt]) {
-        messages.push({ role: "assistant", content: restArray[startAt]});
+        messages.push({ role: 'assistant', content: restArray[startAt] });
         startAt++;
       } else {
-        messages.push({ role: "assistant", content: newPostion});
+        messages.push({ role: 'assistant', content: newPostion });
       }
     }
   });
 
   return {
     messages,
-    latestUserMessage
+    latestUserMessage,
   } as any;
-}
+};
 
-export const extractJsonFromChatGptResponse = (response: string) :undefined | {
-  move: string,
-  game_board: MatrixType
-} => {
+export const extractJsonFromChatGptResponse = (
+  response: string,
+):
+  | undefined
+  | {
+      move: string;
+      game_board: MatrixType;
+    } => {
   // Regular expression to match a JSON object
   const jsonRegex = /\{(?:[^{}]|(?<nested>\{(?:[^{}]|\\k<nested>)*\}))*\}/;
 
@@ -212,17 +258,16 @@ export const extractJsonFromChatGptResponse = (response: string) :undefined | {
   if (match) {
     try {
       const jsonObject = JSON.parse(match[0]);
-      console.log("Extracted JSON:", jsonObject);
+      console.log('Extracted JSON:', jsonObject);
       return {
         ...jsonObject,
         move: positionEditReverse(jsonObject.move),
       };
     } catch (error) {
-      console.error("Invalid JSON:", error);
+      console.error('Invalid JSON:', error);
     }
   } else {
-    console.error("Invalid Response, No JSON found in the string.:", response);
+    console.error('Invalid Response, No JSON found in the string.:', response);
   }
   return undefined;
-}
-
+};

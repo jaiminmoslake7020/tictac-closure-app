@@ -1,150 +1,221 @@
 import {
   joinGame,
   retrieveCurrentChatGptConversation,
-  updateChatGptConversation, updateGameWithCurrentMove,
-  validateGame
+  updateChatGptConversation,
+  updateGameWithCurrentMove,
+  validateGame,
 } from '../../../common/firebase/game';
 import {
-  askForChatGptMove, extractJsonFromChatGptResponse,
+  askForChatGptMove,
+  extractJsonFromChatGptResponse,
   getInitialPromptMessageArray,
   initiateChatGptConversation,
-  prepareChatGptPrompt, processPromptsArray
+  prepareChatGptPrompt,
+  processPromptsArray,
 } from '../chatgpt';
-import {addNewTurnFirebase, getTurnStorageData} from '../../../common/firebase/turn-storage';
+import {
+  addNewTurnFirebase,
+  getTurnStorageData,
+} from '../../../common/firebase/turn-storage';
 import {
   FirebasePlayerType,
   MatrixType,
   MovePositionType,
-  TurnStorageType
+  TurnStorageType,
 } from '../../../common/types';
-import {joinRoom} from '../../../common/firebase/room';
+import { joinRoom } from '../../../common/firebase/room';
 
 const ChatGptUser = {
   id: 'OpenAI',
   username: 'OpenAI - ChatGPT',
 } as FirebasePlayerType;
 
-export const createTurnMatrix = (playerUserId:string, data:TurnStorageType[]) :MatrixType => {
+export const createTurnMatrix = (
+  playerUserId: string,
+  data: TurnStorageType[],
+): MatrixType => {
   const matrix = [
-    ["NULL","NULL","NULL"],
-    ["NULL","NULL","NULL"],
-    ["NULL","NULL","NULL"],
+    ['NULL', 'NULL', 'NULL'],
+    ['NULL', 'NULL', 'NULL'],
+    ['NULL', 'NULL', 'NULL'],
   ] as MatrixType;
-  data.forEach((player:TurnStorageType) => {
+  data.forEach((player: TurnStorageType) => {
     const [row, col] = player.position.split('');
-    matrix[Number(row) - 1][Number(col) - 1] = player.userId === playerUserId ? 'Player' : 'OpenAI';
+    matrix[Number(row) - 1][Number(col) - 1] =
+      player.userId === playerUserId ? 'Player' : 'OpenAI';
   });
   return matrix;
 };
 
-export const processTurnStorageData = async (roomCode: string, gameId: string) :Promise<{
-  matrix: MatrixType,
-  sortMoves: TurnStorageType[],
-  usedMoves: MovePositionType[],
-  playerUserId: string
-} | undefined> => {
-  const data = await getTurnStorageData(roomCode, gameId) as TurnStorageType[];
+export const processTurnStorageData = async (
+  roomCode: string,
+  gameId: string,
+): Promise<
+  | {
+      matrix: MatrixType;
+      sortMoves: TurnStorageType[];
+      usedMoves: MovePositionType[];
+      playerUserId: string;
+    }
+  | undefined
+> => {
+  const data = (await getTurnStorageData(
+    roomCode,
+    gameId,
+  )) as TurnStorageType[];
   if (Array.isArray(data)) {
-    const findPlayer = data.filter((player:TurnStorageType) => player.numberOfTurnsMade === 1);
-    const sortMoves = data.sort((a:TurnStorageType, b:TurnStorageType) => a.numberOfTurnsMade - b.numberOfTurnsMade);
-    const usedMoves = data.map((player:TurnStorageType) =>  player.position) as MovePositionType[];
+    const findPlayer = data.filter(
+      (player: TurnStorageType) => player.numberOfTurnsMade === 1,
+    );
+    const sortMoves = data.sort(
+      (a: TurnStorageType, b: TurnStorageType) =>
+        a.numberOfTurnsMade - b.numberOfTurnsMade,
+    );
+    const usedMoves = data.map(
+      (player: TurnStorageType) => player.position,
+    ) as MovePositionType[];
     const playerUserId = findPlayer[0].userId;
     const matrix = createTurnMatrix(playerUserId, data);
     return {
       matrix,
       sortMoves,
       usedMoves,
-      playerUserId
+      playerUserId,
     };
   }
   return undefined;
-}
+};
 
-export const validateChatGptMove = (processedMove: string, usedMoves: MovePositionType[]) => {
-  const validTurn = [11, 12, 13, 21, 22, 23, 31, 32, 33].includes(Number(processedMove));
-  const notUsedTurn = !usedMoves.includes(processedMove as MovePositionType)
+export const validateChatGptMove = (
+  processedMove: string,
+  usedMoves: MovePositionType[],
+) => {
+  const validTurn = [11, 12, 13, 21, 22, 23, 31, 32, 33].includes(
+    Number(processedMove),
+  );
+  const notUsedTurn = !usedMoves.includes(processedMove as MovePositionType);
   return validTurn && notUsedTurn;
-}
+};
 
-export const askChatGptToMakeMove = async (roomCode: string, gameId: string) => {
- if (await validateGame(roomCode, gameId)) {
-   const {
-     conversation: retrievedConversation,
-     userPrompt
-   } = await retrieveCurrentChatGptConversation(roomCode, gameId) || {};
-   if (retrievedConversation) {
-     const processedData = await processTurnStorageData(roomCode, gameId);
-     const {
-       matrix,
-       sortMoves,
-       playerUserId,
-       usedMoves
-     } = processedData || {};
-     if (Array.isArray(matrix) && Array.isArray(sortMoves) && Array.isArray(usedMoves) && Array.isArray(userPrompt)  && playerUserId) {
-       const {
-          messages: promptMessages,
-          latestUserMessage
-       } = prepareChatGptPrompt(retrievedConversation, userPrompt, matrix, sortMoves, playerUserId);
-       const response = await askForChatGptMove(promptMessages);
-       if (response) {
-         const extractJsonFromChatGptResponseData = extractJsonFromChatGptResponse(response);
-         if (extractJsonFromChatGptResponseData) {
-           const processedPromptsMessages= processPromptsArray(promptMessages);
-           await updateChatGptConversation(roomCode, gameId, [...retrievedConversation, response],processedPromptsMessages);
-           const chatGptMove = extractJsonFromChatGptResponseData.move;
-           if (chatGptMove) {
-             if (validateChatGptMove(chatGptMove, usedMoves)){
-               try {
-                 await addNewTurnFirebase(roomCode, gameId, ChatGptUser.id, chatGptMove as MovePositionType, sortMoves.length + 1);
-                 await updateGameWithCurrentMove(roomCode, gameId, playerUserId);
-                 return {
-                   conversation: [...retrievedConversation, response],
-                   validateGame: true,
-                   response: response,
-                   chatGptMove: chatGptMove
-                 };
-               } catch (e) {
-                 console.error('Error addNewTurnFirebase', e);
-               }
-             } else {
-               const usedMove = (usedMoves || []).includes(chatGptMove as MovePositionType);
-               return {
-                 chatGptMove: usedMove ? 'ERROR_USED_MOVE' : 'ERROR_INVALID_MOVE',
-               }
-             }
-           } else {
-             throw new Error('ChatGpt move is not found');
-           }
-         } else {
-           const a = ((response || '')?.toLowerCase() as string).indexOf('congratulations') === -1 ;
-           const b = ((response || '')?.toLowerCase() as string).indexOf('won game') === -1;
-           const wonGamePrediction = a || b;
-           return {
-             chatGptMove: wonGamePrediction ? 'ERROR_WON_GAME_PREDICATION' : 'ERROR_INVALID_MOVE',
-           };
-         }
-       } else {
+export const askChatGptToMakeMove = async (
+  roomCode: string,
+  gameId: string,
+) => {
+  if (await validateGame(roomCode, gameId)) {
+    const { conversation: retrievedConversation, userPrompt } =
+      (await retrieveCurrentChatGptConversation(roomCode, gameId)) || {};
+    if (retrievedConversation) {
+      const processedData = await processTurnStorageData(roomCode, gameId);
+      const { matrix, sortMoves, playerUserId, usedMoves } =
+        processedData || {};
+      if (
+        Array.isArray(matrix) &&
+        Array.isArray(sortMoves) &&
+        Array.isArray(usedMoves) &&
+        Array.isArray(userPrompt) &&
+        playerUserId
+      ) {
+        const { messages: promptMessages } = prepareChatGptPrompt(
+          retrievedConversation,
+          userPrompt,
+          matrix,
+          sortMoves,
+          playerUserId,
+        );
+        const response = await askForChatGptMove(promptMessages);
+        if (response) {
+          const extractJsonFromChatGptResponseData =
+            extractJsonFromChatGptResponse(response);
+          if (extractJsonFromChatGptResponseData) {
+            const processedPromptsMessages =
+              processPromptsArray(promptMessages);
+            await updateChatGptConversation(
+              roomCode,
+              gameId,
+              [...retrievedConversation, response],
+              processedPromptsMessages,
+            );
+            const chatGptMove = extractJsonFromChatGptResponseData.move;
+            if (chatGptMove) {
+              if (validateChatGptMove(chatGptMove, usedMoves)) {
+                try {
+                  await addNewTurnFirebase(
+                    roomCode,
+                    gameId,
+                    ChatGptUser.id,
+                    chatGptMove as MovePositionType,
+                    sortMoves.length + 1,
+                  );
+                  await updateGameWithCurrentMove(
+                    roomCode,
+                    gameId,
+                    playerUserId,
+                  );
+                  return {
+                    conversation: [...retrievedConversation, response],
+                    validateGame: true,
+                    response: response,
+                    chatGptMove: chatGptMove,
+                  };
+                } catch (e) {
+                  console.error('Error addNewTurnFirebase', e);
+                }
+              } else {
+                const usedMove = (usedMoves || []).includes(
+                  chatGptMove as MovePositionType,
+                );
+                return {
+                  chatGptMove: usedMove
+                    ? 'ERROR_USED_MOVE'
+                    : 'ERROR_INVALID_MOVE',
+                };
+              }
+            } else {
+              throw new Error('ChatGpt move is not found');
+            }
+          } else {
+            const a =
+              ((response || '')?.toLowerCase() as string).indexOf(
+                'congratulations',
+              ) === -1;
+            const b =
+              ((response || '')?.toLowerCase() as string).indexOf(
+                'won game',
+              ) === -1;
+            const wonGamePrediction = a || b;
+            return {
+              chatGptMove: wonGamePrediction
+                ? 'ERROR_WON_GAME_PREDICATION'
+                : 'ERROR_INVALID_MOVE',
+            };
+          }
+        } else {
           throw new Error('askForChatGptMove is failed');
-       }
-     } else {
-       throw new Error('Processed data is not valid');
-     }
-   } else {
-     const response = await initiateChatGptConversation();
-     if (response) {
-       const userPrompts = getInitialPromptMessageArray();
-       await updateChatGptConversation(roomCode, gameId, [response], userPrompts);
-       await joinRoom(roomCode, ChatGptUser);
-       await joinGame(roomCode, gameId, ChatGptUser.id);
-       return {
-         validateGame: true,
-         response: response,
-       };
-     } else{
+        }
+      } else {
+        throw new Error('Processed data is not valid');
+      }
+    } else {
+      const response = await initiateChatGptConversation();
+      if (response) {
+        const userPrompts = getInitialPromptMessageArray();
+        await updateChatGptConversation(
+          roomCode,
+          gameId,
+          [response],
+          userPrompts,
+        );
+        await joinRoom(roomCode, ChatGptUser);
+        await joinGame(roomCode, gameId, ChatGptUser.id);
+        return {
+          validateGame: true,
+          response: response,
+        };
+      } else {
         throw new Error('initiateChatGptConversation is failed');
-     }
-   }
- } else {
-   throw new Error('Invalid game');
- }
-}
+      }
+    }
+  } else {
+    throw new Error('Invalid game');
+  }
+};

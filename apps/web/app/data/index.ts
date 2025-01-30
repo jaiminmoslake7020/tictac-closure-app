@@ -71,15 +71,17 @@ export const opponentFormButtonTypeList = opponentTypes.map(
   })
 ) as OpponentFormButtonType[];
 
-
-export const openAiUser ={
+export const openAiUser = {
   id: 'OpenAI',
   username: 'OpenAI - ChatGPT',
 } as FirebasePlayerType;
 
 export const ChatGptErrorObject = {
-  'ERROR': 'Something went wrong. Please try again.',
-  'ERROR_INVALID_MOVE': 'Invalid Move by Chat-GPT. Please try again and restart game.',
-  'ERROR_USED_MOVE': 'Chat-GPT made a move on already used position. Please try again and restart game.',
-  'ERROR_WON_GAME_PREDICATION': 'Chat-GPT predicted that one of you has won the game, without making any move. Please try again and restart game.',
+  ERROR: 'Something went wrong. Please try again.',
+  ERROR_INVALID_MOVE:
+    'Invalid Move by Chat-GPT. Please try again and restart game.',
+  ERROR_USED_MOVE:
+    'Chat-GPT made a move on already used position. Please try again and restart game.',
+  ERROR_WON_GAME_PREDICATION:
+    'Chat-GPT predicted that one of you has won the game, without making any move. Please try again and restart game.',
 } as Record<ChatGptErrorObjectType, string>;

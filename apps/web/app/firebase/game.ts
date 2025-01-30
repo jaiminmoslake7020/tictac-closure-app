@@ -2,7 +2,8 @@ import {
   addDocument,
   fetchAllDocuments,
   getDocument,
-  insertNewDocumentWithId, lambdaChatgptApiUrl,
+  insertNewDocumentWithId,
+  lambdaChatgptApiUrl,
   listenToCollectionV2,
   updateDocument,
 } from '@firebase-dir/core';
@@ -13,7 +14,7 @@ import {
   GamePlayerType,
   MovePositionType,
 } from '@types-dir/index';
-import {QueryDocumentSnapshot} from '@firebase/firestore';
+import { QueryDocumentSnapshot } from '@firebase/firestore';
 
 export const updateGameWithCurrentMove = async (
   gamePath: string,
@@ -39,7 +40,7 @@ export const addNewTurnFirebase = async (
       {
         userId,
         position,
-        numberOfTurnsMade
+        numberOfTurnsMade,
       }
     );
   } catch (e) {
@@ -147,33 +148,24 @@ export const onGameCreated = (
   );
 };
 
-
-
-export const chatGptRequest = async (
-  roomId: string,
-  gameId: string,
-) =>{
+export const chatGptRequest = async (roomId: string, gameId: string) => {
   try {
-    const response = await fetch(lambdaChatgptApiUrl+'/?roomId='+roomId+'&gameId='+gameId);
+    const response = await fetch(
+      lambdaChatgptApiUrl + '/give-your-move?roomId=' + roomId + '&gameId=' + gameId
+    );
     return await response.json();
   } catch (e) {
     console.error('Error informChatGptToJoinGame: ', e);
     return Promise.resolve({
-      chatGptMove: 'ERROR'
+      chatGptMove: 'ERROR',
     });
   }
-}
+};
 
-export const askChatGptForItsMove = async (
-  roomId: string,
-  gameId: string,
-) => {
+export const askChatGptForItsMove = async (roomId: string, gameId: string) => {
   return await chatGptRequest(roomId, gameId);
 };
 
-export const askChatGptToJoinGame = async (
-  roomId: string,
-  gameId: string,
-) => {
+export const askChatGptToJoinGame = async (roomId: string, gameId: string) => {
   return await chatGptRequest(roomId, gameId);
 };

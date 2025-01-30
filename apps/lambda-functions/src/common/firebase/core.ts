@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import { getSecret } from '../aws/get-secret';
-import {firestore} from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 import DocumentSnapshot = firestore.DocumentSnapshot;
 
 let app: admin.app.App | undefined = undefined;
@@ -90,7 +90,7 @@ export const getDocument = async (
 export const insertNewDocumentWithId = async (
   path: string,
   proposedDocId: string,
-  docData: any
+  docData: any,
 ) => {
   try {
     const f = await getFirestoreObject();

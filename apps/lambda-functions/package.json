@@ -13,9 +13,11 @@
     "firebase-admin": "^13.0.2",
     "@aws-sdk/client-secrets-manager": "^3.731.0",
     "openai": "^4.80.1",
-    "axios": "1.7.9"
+    "axios": "1.7.9",
+    "aws-lambda": "^1.0.7"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.0",
     "aws-sdk": "^2.1692.0",
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",

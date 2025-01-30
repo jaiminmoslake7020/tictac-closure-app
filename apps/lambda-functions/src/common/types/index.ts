@@ -81,24 +81,23 @@ export type FirebaseRoomType = {
 export type FirebaseAppModelType = {
   rooms: Record<string, FirebaseRoomType>;
   users: Record<string, FirebaseUserType>;
-  "waiting-room": Record<string, FirebaseUserType>;
+  'waiting-room': Record<string, FirebaseUserType>;
 };
 
-
 export type TurnStorageType = {
-  id: string,
-  userId: string,
-  position: MovePositionType,
-  numberOfTurnsMade: number,
-}
-
+  id: string;
+  userId: string;
+  position: MovePositionType;
+  numberOfTurnsMade: number;
+};
 
 export type MatrixCellType = 'Player' | 'OpenAI' | 'NULL';
 
 export type MatrixType = [
   [MatrixCellType, MatrixCellType, MatrixCellType],
   [MatrixCellType, MatrixCellType, MatrixCellType],
-  [MatrixCellType, MatrixCellType, MatrixCellType]
-]
+  [MatrixCellType, MatrixCellType, MatrixCellType],
+];
 
-export type ChatCompletionMessageType =  OpenAI.Chat.Completions.ChatCompletionMessageParam;
+export type ChatCompletionMessageType =
+  OpenAI.Chat.Completions.ChatCompletionMessageParam;

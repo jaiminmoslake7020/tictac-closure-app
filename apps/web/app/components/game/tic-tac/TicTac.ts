@@ -1,10 +1,6 @@
 import { InfoTab, InfoTabType } from '@components/game/info-tab/InfoTab';
 import { TurnHandler } from '@business-logic/TurnHandler';
-import {
-  FirebaseGameType,
-  TurnHandlerType,
-  UserType,
-} from '@types-dir/index';
+import { FirebaseGameType, TurnHandlerType, UserType } from '@types-dir/index';
 import { TicTacTable, TicTacTableType } from './TicTacTable';
 import {
   InitializeContextsFunctionType,
@@ -19,13 +15,18 @@ import {
   UseRoomCodeIdHookType,
   useContextGameId,
   getRandomMove,
-  isItSameDeviceGame, isItGameWithOpenAi,
+  isItSameDeviceGame,
+  isItGameWithOpenAi,
 } from '@contexts/index';
-import {Loader, useDiv} from '@components/base';
-import {askChatGptToJoinGame, createGame, onGameCreated} from '@firebase-dir/game';
+import { Loader, useDiv } from '@components/base';
+import {
+  askChatGptToJoinGame,
+  createGame,
+  onGameCreated,
+} from '@firebase-dir/game';
 import { GameActionCallbacksType } from '@components/game/GameActions';
 import { startSubscribers } from '@components/game/firebase-subscriber/FirebaseSubscriber';
-import {AddErrorWithoutAction} from '@components/base/ux/notification/AddErrorWithAction';
+import { AddErrorWithoutAction } from '@components/base/ux/notification/AddErrorWithAction';
 
 export type TicTacType = {
   render: () => HTMLDivElement;
@@ -41,9 +42,7 @@ export const TicTac = (
   let ticTacTableType: TicTacTableType | undefined;
 
   const { getDiv: getWrapperDiv, setDiv: setWrapperDiv } = useDiv();
-  const {
-    showLoader, stopLoader
-  } = Loader();
+  const { showLoader, stopLoader } = Loader();
 
   const setInfoTabDiv = (item: InfoTabType) => {
     infoTabDiv = item;
@@ -103,7 +102,13 @@ export const TicTac = (
       }
     }
 
-    setTurnHandlerType(TurnHandler(contextsData, anotherPersonMadeMove, reStartGameStoppedWithError));
+    setTurnHandlerType(
+      TurnHandler(
+        contextsData,
+        anotherPersonMadeMove,
+        reStartGameStoppedWithError
+      )
+    );
     const table = getTicTacTable();
     table.reset();
     getInfoTabDiv().addTurn();
@@ -117,7 +122,7 @@ export const TicTac = (
     const { setCurrentMove } = useContextCurrentMove(contextsData);
     const { getRoomCodeId } = useContextRoomCodeId(contextsData);
     const { getUser } = useContextUserSession(contextsData);
-    const { setUserTurn, setAnotherUserTurn } = useContextTurnHookType(contextsData);
+    const { setUserTurn } = useContextTurnHookType(contextsData);
 
     const roomCodeId = getRoomCodeId();
     const userItem = getUser() as UserType;
@@ -126,11 +131,12 @@ export const TicTac = (
     if (g) {
       // console.log('Game started', g.id);
       setGameId(g.id);
-      if (
-        isItRemoteGame(contextsData)
-      ) {
+      if (isItRemoteGame(contextsData)) {
         setCurrentMove(currentMove);
-        await startSubscribers(contextsData, { ...gameActionsObject, exitGame });
+        await startSubscribers(contextsData, {
+          ...gameActionsObject,
+          exitGame,
+        });
       } else {
         // on game with ChatGPT, Player is always first to make move
         setUserTurn();
@@ -204,10 +210,16 @@ export const TicTac = (
   const reStartGameStoppedWithError = () => {
     getInfoTabDiv().resetApp();
     reload();
-  }
+  };
 
   const render = () => {
-    setTurnHandlerType(TurnHandler(contextsData, anotherPersonMadeMove, reStartGameStoppedWithError));
+    setTurnHandlerType(
+      TurnHandler(
+        contextsData,
+        anotherPersonMadeMove,
+        reStartGameStoppedWithError
+      )
+    );
     setInfoTabDiv(InfoTab(reload, contextsData));
 
     setWrapperDiv('wrapper-div');

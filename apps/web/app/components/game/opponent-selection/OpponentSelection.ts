@@ -5,10 +5,11 @@ import { addToRoot } from '@utils/index';
 import { Layout } from '@components/layouts/layout/Layout';
 import { CheckRoomSelected } from '@components/game/opponent-selection/remote-friend-player/CheckRoomSelected';
 import {
-  InitializeContextsFunctionType, useContextCurrentMove,
+  InitializeContextsFunctionType,
   useContextGameId,
   useContextOpponentType,
-  useContextRoomCodeId, useContextTurnHookType,
+  useContextRoomCodeId,
+  useContextTurnHookType,
   useContextTurnStorage,
   UseOpponentTypeHookType,
 } from '@contexts/index';
@@ -19,15 +20,14 @@ import {
 } from '@components/game/GameActions';
 import { RemoteRandomWaitingRoom } from '@components/game/opponent-selection/remote-random-player/RemoteRandomWaitingRoom';
 import {
-  computerProgram, openAiChatGpt,
+  computerProgram,
+  openAiChatGpt,
   remoteFriendPlayer,
   remoteRandomPlayer,
   sameDevicePlay,
 } from '@data/index';
 import { RemoteRandomRestartDisplay } from '@components/game/opponent-selection/remote-random-player/RemoteRandomRestartDisplay';
-import {
-  OpenApiChatPlayerSelected
-} from '@components/game/opponent-selection/open-api-chat-player-selected/OpenApiChatPlayerSelected';
+import { OpenApiChatPlayerSelected } from '@components/game/opponent-selection/open-api-chat-player-selected/OpenApiChatPlayerSelected';
 
 export type OpponentSelectionType = {
   render: () => void | Promise<void>;
@@ -79,12 +79,10 @@ export const OpponentSelection = (
   };
 
   const openAiChatGptPlayerSelected = async () => {
-    const {
-      setUp
-    } = OpenApiChatPlayerSelected(contextsData);
+    const { setUp } = OpenApiChatPlayerSelected(contextsData);
     await setUp();
     onLevelSelected();
-  }
+  };
 
   const onPlayerSelected = async (value: OpponentType) => {
     const { resetTurnStorage } = useContextTurnStorage(contextsData);

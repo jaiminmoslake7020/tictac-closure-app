@@ -1,9 +1,50 @@
-import {askChatGptToMakeMove} from './service';
+import { askChatGptToMakeMove } from './service';
+import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 
-export const handler = async (roomCode: string, gameId: string) => {
-  if (roomCode && gameId) {
-    return await askChatGptToMakeMove(roomCode, gameId);
-  } else {
-    throw new Error('Invalid Room and Game');
+
+export const handler = async (event :APIGatewayProxyEventV2) :Promise<APIGatewayProxyResultV2> => {
+  // Access query parameters
+  const queryParams = event.queryStringParameters;
+
+  // Example: Get a specific parameter
+  const roomCode = queryParams?.roomCode;
+  const gameId = queryParams?.gameId;
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: "Found query parameters",
+      queryParams,
+    }),
+  };
+
+  try {
+    if (roomCode && gameId) {
+      const body = await askChatGptToMakeMove(roomCode as string, gameId as string);
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: "Success",
+          body: body,
+          queryParams,
+        }),
+      };
+    } else {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          message: "Invalid Room and Game",
+          queryParams,
+        }),
+      };
+    }
+  } catch (e) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "Error executing the function",
+        queryParams,
+      }),
+    };
   }
 };

@@ -18,7 +18,8 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 
-export const lambdaChatgptApiUrl = process.env.LAMBDA_CHATGPT_PLAYER_API_URL as string;
+export const lambdaChatgptApiUrl = process.env
+  .LAMBDA_CHATGPT_PLAYER_API_URL as string;
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_CONFIG_API_KEY as string,

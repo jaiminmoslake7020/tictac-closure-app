@@ -1,8 +1,13 @@
-import {FirebaseGameType, FirebaseGameTypeDocumentReference, UserType} from '../types';
-import {getCurrentTime, getRandomMove} from '../utils';
-import {addDocument, getDocument, updateDocument} from './core';
+import {
+  FirebaseGameType,
+  FirebaseGameTypeDocumentReference,
+  UserType,
+} from '../types';
+import { getCurrentTime, getRandomMove } from '../utils';
+import { addDocument, getDocument, updateDocument } from './core';
 
-export const getGamePath = (roomId: string, gameId: string) : string => `rooms/${roomId}/games/${gameId}`;
+export const getGamePath = (roomId: string, gameId: string): string =>
+  `rooms/${roomId}/games/${gameId}`;
 
 export const createGame = async (
   roomCode: string,
@@ -34,8 +39,10 @@ export const createGameForRoomJoiner = async (
   return undefined;
 };
 
-
-export const getGameData = async (roomId: string, gameId: string) :Promise<undefined | FirebaseGameType> => {
+export const getGameData = async (
+  roomId: string,
+  gameId: string,
+): Promise<undefined | FirebaseGameType> => {
   try {
     const data = await getDocument(getGamePath(roomId, gameId));
     return data && data.exists ? data.data() : undefined;
@@ -43,26 +50,34 @@ export const getGameData = async (roomId: string, gameId: string) :Promise<undef
     console.error('Error updating room:', e);
     return undefined;
   }
-}
+};
 
-export const updateChatGptConversation = async ( roomId: string, gameId:string, conversation: any, userPrompt:any) => {
+export const updateChatGptConversation = async (
+  roomId: string,
+  gameId: string,
+  conversation: any,
+  userPrompt: any,
+) => {
   try {
     await updateDocument(getGamePath(roomId, gameId), {
       chatGptConversation: conversation,
-      userPrompt: userPrompt
+      userPrompt: userPrompt,
     });
   } catch (e) {
     console.error('Error updating room:', e);
   }
-}
+};
 
-export const retrieveCurrentChatGptConversation = async ( roomId: string, gameId:string) => {
+export const retrieveCurrentChatGptConversation = async (
+  roomId: string,
+  gameId: string,
+) => {
   try {
     const gameData = await getGameData(roomId, gameId);
     if (gameData) {
       return {
         conversation: gameData.chatGptConversation,
-        userPrompt: gameData.userPrompt
+        userPrompt: gameData.userPrompt,
       };
     }
     return undefined;
@@ -70,21 +85,24 @@ export const retrieveCurrentChatGptConversation = async ( roomId: string, gameId
     console.error('Error retrieveCurrentChatGptConversation:', e);
     return undefined;
   }
-}
+};
 
-export const validateGame = async (roomId: string, gameId: string) : Promise<boolean> => {
+export const validateGame = async (
+  roomId: string,
+  gameId: string,
+): Promise<boolean> => {
   try {
     return Boolean(await getGameData(roomId, gameId));
   } catch (e) {
     console.error('Error retrieveCurrentChatGptConversation:', e);
     return false;
   }
-}
+};
 
 export const updateGameWithCurrentMove = async (
   roomId: string,
   gameId: string,
-  currentMove: string
+  currentMove: string,
 ) => {
   try {
     const gamePath = getGamePath(roomId, gameId);
@@ -100,12 +118,12 @@ export const updateGameWithCurrentMove = async (
 export const joinGame = async (
   roomId: string,
   gameId: string,
-  joinerUserId: string
+  joinerUserId: string,
 ): Promise<void> => {
   try {
     const roomData = {
       joiner_last_active_time: getCurrentTime(),
-      joiner: joinerUserId
+      joiner: joinerUserId,
     };
     const gamePath = getGamePath(roomId, gameId);
     await updateDocument(gamePath, roomData);

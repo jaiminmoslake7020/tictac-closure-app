@@ -1,5 +1,6 @@
 import {
-  InitializeContextsFunctionType, isItGameWithOpenAi,
+  InitializeContextsFunctionType,
+  isItGameWithOpenAi,
   isItRemoteGame,
   isItRemotePlayerTurn,
   useContextTurnStorage,
@@ -39,7 +40,8 @@ export const Update = (
   } else {
     if (isItRemoteGame(contextData) && isItRemotePlayerTurn(contextData)) {
       disableCell(columnId);
-    } if (isItGameWithOpenAi(contextData) && isItRemotePlayerTurn(contextData)) {
+    }
+    if (isItGameWithOpenAi(contextData) && isItRemotePlayerTurn(contextData)) {
       disableCell(columnId);
     } else if (Array.isArray(anotherPersonMoves)) {
       if (!anotherPersonMoves.includes(moveType)) {

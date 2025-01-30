@@ -14,14 +14,16 @@ export const AddErrorWithAction = (message: string, action: () => void) => {
   addError(message, null, n);
 };
 
-
 export const AddErrorWithoutAction = (message: string) => {
   const { addError } = NotificationHandler();
   addError(message, null);
 };
 
-
-export const AddErrorWithCustomAction = (message: string, btnLable: string, action: () => void) => {
+export const AddErrorWithCustomAction = (
+  message: string,
+  btnLable: string,
+  action: () => void
+) => {
   const ib = IconButton(
     btnLable,
     ' with-text ',
@@ -33,7 +35,5 @@ export const AddErrorWithCustomAction = (message: string, btnLable: string, acti
   );
   const n = NotificationSecondaryAction(ib as HTMLElement);
   const { addError } = NotificationHandler();
-  const {
-    remove
-  } = addError(message, null, n);
+  const { remove } = addError(message, null, n);
 };

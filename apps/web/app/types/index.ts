@@ -150,4 +150,8 @@ export type WaitingRoomDbItemType = {
   playerType?: GamePlayerType;
 };
 
-export type ChatGptErrorObjectType = 'ERROR' | 'ERROR_USED_MOVE' | 'ERROR_INVALID_MOVE' | 'ERROR_WON_GAME_PREDICATION';
+export type ChatGptErrorObjectType =
+  | 'ERROR'
+  | 'ERROR_USED_MOVE'
+  | 'ERROR_INVALID_MOVE'
+  | 'ERROR_WON_GAME_PREDICATION';

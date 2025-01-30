@@ -7,7 +7,8 @@ import {
   renderValue,
   disableCell,
   addFn,
-  enableCell, removeFn,
+  enableCell,
+  removeFn,
 } from '@tic-tac/tic-tac-cell/common';
 import {
   ChangeFunctionType,

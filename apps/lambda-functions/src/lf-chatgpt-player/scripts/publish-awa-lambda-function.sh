@@ -24,23 +24,48 @@ VALIDATION_FAILED="false"
 # Check if the required environment variables are set
 if [ -z "$FUNCTION_NAME" ]; then
   echo "Error: Missing required environment variables."
-  echo "Please set FUNCTION_NAME."
+  echo "Please set FUNCTION_NAME_2."
   echo "current value:$FUNCTION_NAME"
   VALIDATION_FAILED="true"
 fi
 
-if [ -z "$RULE_NAME" ]; then
+# Check if the required environment variables are set
+if [ -z "$HTTP_METHOD" ]; then
   echo "Error: Missing required environment variables."
-  echo "Please set RULE_NAME."
-  echo "current value:$RULE_NAME"
+  echo "Please set HTTP_METHOD."
+  echo "current value:$HTTP_METHOD"
   VALIDATION_FAILED="true"
 fi
 
 # Check if the required environment variables are set
-if [ -z "$ROLE_ARN" ]; then
+if [ -z "$RESOURCE_PATH" ]; then
   echo "Error: Missing required environment variables."
-  echo "Please set ROLE_ARN."
-  echo "current value:$ROLE_ARN"
+  echo "Please set RESOURCE_PATH."
+  echo "current value:$RESOURCE_PATH"
+  VALIDATION_FAILED="true"
+fi
+
+# Check if the required environment variables are set
+if [ -z "$API_NAME" ]; then
+  echo "Error: Missing required environment variables."
+  echo "Please set API_NAME."
+  echo "current value:$API_NAME"
+  VALIDATION_FAILED="true"
+fi
+
+# Check if the required environment variables are set
+if [ -z "$ROLE_NAME" ]; then
+  echo "Error: Missing required environment variables."
+  echo "Please set ROLE_NAME."
+  echo "current value:$ROLE_NAME"
+  VALIDATION_FAILED="true"
+fi
+
+# Check if the required environment variables are set
+if [ -z "$ENV_TYPE" ]; then
+  echo "Error: Missing required environment variables."
+  echo "Please set ENV_TYPE."
+  echo "current value:$ENV_TYPE"
   VALIDATION_FAILED="true"
 fi
 

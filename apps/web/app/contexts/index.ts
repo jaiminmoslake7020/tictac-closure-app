@@ -19,7 +19,8 @@ import {
   UseGamePlayerTypeHookType,
 } from '@contexts/useGamePlayerType';
 import {
-  computerProgram, openAiChatGpt,
+  computerProgram,
+  openAiChatGpt,
   remoteFriendPlayer,
   remoteRandomPlayer,
   sameDevicePlay,
@@ -303,9 +304,7 @@ export const isItGameWithOpenAi = (
   contextsData: InitializeContextsFunctionType
 ): boolean => {
   const { getOpponentType } = useContextOpponentType(contextsData);
-  return (
-    getOpponentType() === openAiChatGpt
-  );
+  return getOpponentType() === openAiChatGpt;
 };
 
 export const isItSameDeviceGame = (

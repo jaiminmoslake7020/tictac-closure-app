@@ -1,4 +1,4 @@
-import {P} from '@components/base';
+import { P } from '@components/base';
 import {
   getUserId,
   InitializeContextsFunctionType,
@@ -6,7 +6,8 @@ import {
   isItRemoteGame,
   isItRemotePlayerTurn,
   isItSameDeviceGame,
-  useContextAnotherPlayer, useContextCurrentMove,
+  useContextAnotherPlayer,
+  useContextCurrentMove,
   useContextTurnHookType,
 } from '@contexts/index';
 
@@ -19,7 +20,6 @@ export type WhosTurnFunctionType = {
 export const WhosTurn = (
   contextsData: InitializeContextsFunctionType
 ): WhosTurnFunctionType => {
-
   const { getAnotherPlayer } = useContextAnotherPlayer(contextsData);
 
   const { getTurn } = useContextTurnHookType(contextsData);
@@ -68,17 +68,19 @@ export const WhosTurn = (
   };
 
   const updateTurn = () => {
-    if (
-      isItSameDeviceGame(contextsData)
-    ) {
+    if (isItSameDeviceGame(contextsData)) {
       const newTurn = getTurn();
       update('Current turn: ' + newTurn);
     } else if (isItRemoteGame(contextsData)) {
       update(getPlayerName());
-    }  else if (isItGameWithOpenAi(contextsData)) {
+    } else if (isItGameWithOpenAi(contextsData)) {
       const currentMove = getCurrentMove();
       const userId = getUserId(contextsData);
-      update( userId === currentMove ? 'Your Turn' : 'Current Turn: "' + getAnotherPlayer().username + '"' );
+      update(
+        userId === currentMove
+          ? 'Your Turn'
+          : 'Current Turn: "' + getAnotherPlayer().username + '"'
+      );
     }
   };
 

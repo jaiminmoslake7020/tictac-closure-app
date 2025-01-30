@@ -12,12 +12,18 @@ export default [
       "src/lf-pair-support-service-lambda/webpack.config.js",
       "src/lf-pair-support-service-lambda/babel.config.js",
       "src/lf-pair-support-service-lambda/dist/*",
+      "src/lf-pair-support-service-lambda/app.js",
+      "src/lf-chatgpt-player/webpack.config.js",
+      "src/lf-chatgpt-player/babel.config.js",
+      "src/lf-chatgpt-player/dist/*",
+      "src/lf-chatgpt-player/app.js",
       "**/*.config.js",
       "!**/eslint.config.js"
     ]
   },
   {
     rules: {
+      "no-useless-escape": "off",
       "no-unused-disable-directive": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/ban-ts-comment": "off",
@@ -27,7 +33,7 @@ export default [
     }
   },
   {
-    files: ["**/*.ts", "**/*.js"],
+    files: ["**/*.ts"],
     linterOptions: {
       reportUnusedDisableDirectives: false
     }

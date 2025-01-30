@@ -1,9 +1,10 @@
-import {fetchAllDocuments, insertNewDocumentWithId} from './core';
-import {MovePositionType} from '../types';
+import { fetchAllDocuments, insertNewDocumentWithId } from './core';
+import { MovePositionType } from '../types';
 
-export const getTurnStoragePath = (roomId: string, gameId: string) : string => `rooms/${roomId}/games/${gameId}/turnStorage`;
+export const getTurnStoragePath = (roomId: string, gameId: string): string =>
+  `rooms/${roomId}/games/${gameId}/turnStorage`;
 
-export const getTurnStorageData = async (roomCode: string, gameId: string)  => {
+export const getTurnStorageData = async (roomCode: string, gameId: string) => {
   const turnStoragePath = getTurnStoragePath(roomCode, gameId);
   try {
     return await fetchAllDocuments(turnStoragePath);
@@ -11,15 +12,14 @@ export const getTurnStorageData = async (roomCode: string, gameId: string)  => {
     console.error('Error getTurnStorage', e);
     return undefined;
   }
-}
-
+};
 
 export const addNewTurnFirebase = async (
   roomCode: string,
   gameId: string,
   userId: string,
   position: MovePositionType,
-  numberOfTurnsMade: number
+  numberOfTurnsMade: number,
 ) => {
   try {
     const turnStorageCollectionPath = getTurnStoragePath(roomCode, gameId);
@@ -29,8 +29,8 @@ export const addNewTurnFirebase = async (
       {
         userId,
         position,
-        numberOfTurnsMade
-      }
+        numberOfTurnsMade,
+      },
     );
   } catch (e) {
     console.error('Error addNewTurnFirebase: ', e);

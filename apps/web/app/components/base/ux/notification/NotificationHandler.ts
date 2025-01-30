@@ -28,7 +28,7 @@ export type NotificationHandlerType = {
     secondaryAction?: NotificationSecondaryActionType
   ) => {
     id: string;
-    remove: () => void
+    remove: () => void;
   };
   addInfo: (
     message: string,
@@ -36,7 +36,7 @@ export type NotificationHandlerType = {
     secondaryAction?: NotificationSecondaryActionType
   ) => {
     id: string;
-    remove: () => void
+    remove: () => void;
   };
   addSuccess: (
     message: string,
@@ -44,7 +44,7 @@ export type NotificationHandlerType = {
     secondaryAction?: NotificationSecondaryActionType
   ) => {
     id: string;
-    remove: () => void
+    remove: () => void;
   };
   addWarning: (
     message: string,
@@ -52,13 +52,12 @@ export type NotificationHandlerType = {
     secondaryAction?: NotificationSecondaryActionType
   ) => {
     id: string;
-    remove: () => void
+    remove: () => void;
   };
   removeNotification: (id: string) => void;
 };
 
 export const NotificationHandler = (): NotificationHandlerType => {
-
   const addNotification = (d: NotificationType) => {
     const { render, remove } = Notification(d);
     document.querySelector('.notification')?.append(render());
@@ -86,7 +85,12 @@ export const NotificationHandler = (): NotificationHandlerType => {
     timeout: null | number = 5000,
     secondaryAction?: NotificationSecondaryActionType
   ) => {
-    const n = createNotificationObject(message, 'error', timeout, secondaryAction);
+    const n = createNotificationObject(
+      message,
+      'error',
+      timeout,
+      secondaryAction
+    );
     const { remove } = addNotification(n);
     return {
       id: n.id,
@@ -100,8 +104,13 @@ export const NotificationHandler = (): NotificationHandlerType => {
     secondaryAction?: NotificationSecondaryActionType
   ) => {
     console.info('INFO', message);
-    const n = createNotificationObject(message, 'info', timeout, secondaryAction);
-    const {remove} = addNotification(n);
+    const n = createNotificationObject(
+      message,
+      'info',
+      timeout,
+      secondaryAction
+    );
+    const { remove } = addNotification(n);
     return {
       id: n.id,
       remove,
@@ -114,8 +123,13 @@ export const NotificationHandler = (): NotificationHandlerType => {
     secondaryAction?: NotificationSecondaryActionType
   ) => {
     console.info('SUCCESS', message);
-    const n = createNotificationObject(message, 'success', timeout, secondaryAction);
-    const {remove} = addNotification(n);
+    const n = createNotificationObject(
+      message,
+      'success',
+      timeout,
+      secondaryAction
+    );
+    const { remove } = addNotification(n);
     return {
       id: n.id,
       remove,
@@ -128,8 +142,13 @@ export const NotificationHandler = (): NotificationHandlerType => {
     secondaryAction?: NotificationSecondaryActionType
   ) => {
     console.warn('WARNING', message);
-    const n = createNotificationObject(message, 'warning', timeout, secondaryAction);
-    const {remove} = addNotification(n);
+    const n = createNotificationObject(
+      message,
+      'warning',
+      timeout,
+      secondaryAction
+    );
+    const { remove } = addNotification(n);
     return {
       id: n.id,
       remove,

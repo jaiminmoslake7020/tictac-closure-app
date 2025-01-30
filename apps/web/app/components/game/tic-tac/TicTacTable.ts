@@ -1,8 +1,7 @@
 import { MovePositionType, TurnHandlerType } from '@types-dir/index';
 import { createEL } from '@utils/index';
 import { TicTacCellRow, TicTacCellRowFunctionType } from './TicTacCellRow';
-import {InitializeContextsFunctionType, isItGameWithOpenAi, useContextCurrentMove} from '@contexts/index';
-import {openAiUser} from '@data/index';
+import { InitializeContextsFunctionType } from '@contexts/index';
 
 export type TicTacTableType = {
   render: () => HTMLDivElement;

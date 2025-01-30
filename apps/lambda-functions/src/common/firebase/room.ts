@@ -1,5 +1,5 @@
-import {FirebasePlayerType, UserType} from '../types';
-import {addDocument, updateDocument} from './core';
+import { FirebasePlayerType, UserType } from '../types';
+import { addDocument, updateDocument } from './core';
 import { getCurrentTime } from '../utils';
 
 export const createRoom = async (
@@ -21,13 +21,13 @@ export const createRoom = async (
   }
 };
 
-export const updateRoom = async ( roomId: string, roomData: any) => {
-    try {
-        await updateDocument(`rooms/${roomId}`, roomData);
-    } catch (e) {
-        console.error('Error updating room:', e);
-    }
-}
+export const updateRoom = async (roomId: string, roomData: any) => {
+  try {
+    await updateDocument(`rooms/${roomId}`, roomData);
+  } catch (e) {
+    console.error('Error updating room:', e);
+  }
+};
 
 export const joinRoom = async (
   roomCode: string,
@@ -37,7 +37,7 @@ export const joinRoom = async (
     const roomData = {
       joiner: {
         ...joiner,
-        live: getCurrentTime() + 10000
+        live: getCurrentTime() + 10000,
       },
       joiner_last_visit: getCurrentTime() + 30000,
     };

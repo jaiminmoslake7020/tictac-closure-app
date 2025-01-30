@@ -9,8 +9,11 @@ import { CheckWinner } from './CheckWinner';
 import {
   checkGameCompleted,
   getAllCurrentTurns,
-  getGameDocumentPath, getGameIdWithRoomCode, getNumberOfTurnsMade,
-  InitializeContextsFunctionType, isItGameWithOpenAi,
+  getGameDocumentPath,
+  getGameIdWithRoomCode,
+  getNumberOfTurnsMade,
+  InitializeContextsFunctionType,
+  isItGameWithOpenAi,
   isItRemoteGame,
   useContextAnotherPlayer,
   useContextCurrentMove,
@@ -18,7 +21,8 @@ import {
   useContextOpponentType,
   useContextTurnHookType,
   useContextTurnStorage,
-  useContextUserSession, useContextWinner,
+  useContextUserSession,
+  useContextWinner,
 } from '@contexts/index';
 import { ComputerProgramMove } from './ComputerProgram/ComputerProgramMove';
 import { RemoteFriendPlayer } from './RemoteFriendPlayer/RemoteFriendPlayer';
@@ -28,13 +32,17 @@ import {
   updateGameWithCurrentMove,
 } from '@firebase-dir/index';
 import { UseCurrentMoveHookType } from '@contexts/index';
-import {ChatGptErrorObject, computerProgram, sameDevicePlay, turnData} from '@data/index';
-import {askChatGptForItsMove, setGameCompletedWithoutWinner} from '@firebase-dir/game';
 import {
-  AddErrorWithAction,
-  AddErrorWithCustomAction,
-  AddErrorWithoutAction
-} from '@components/base/ux/notification/AddErrorWithAction';
+  ChatGptErrorObject,
+  computerProgram,
+  sameDevicePlay,
+  turnData,
+} from '@data/index';
+import {
+  askChatGptForItsMove,
+  setGameCompletedWithoutWinner,
+} from '@firebase-dir/game';
+import { AddErrorWithCustomAction } from '@components/base/ux/notification/AddErrorWithAction';
 
 export const setWinnerAtFirebase = (
   contextsData: InitializeContextsFunctionType,
@@ -90,8 +98,6 @@ export const checkGameCompletedInner = (
   return false;
 };
 
-
-
 export const TurnHandler = (
   contextsData: InitializeContextsFunctionType,
   anotherPersonMadeMove: () => Promise<void>,
@@ -109,7 +115,8 @@ export const TurnHandler = (
 
   const { getWinner } = useContextWinner(contextsData);
 
-  const { getTurn, changeTurn, setUserTurn, setAnotherUserTurn } = useContextTurnHookType(contextsData);
+  const { getTurn, changeTurn, setUserTurn, setAnotherUserTurn } =
+    useContextTurnHookType(contextsData);
 
   const opponentType = getOpponentType();
 
@@ -146,16 +153,19 @@ export const TurnHandler = (
           !checkGameCompleted(contextsData) &&
           getWinner() === null
         ) {
-          const { roomCodeId, gameId } = getGameIdWithRoomCode(contextsData) || {};
-          if (
-            roomCodeId && gameId
-          ) {
+          const { roomCodeId, gameId } =
+            getGameIdWithRoomCode(contextsData) || {};
+          if (roomCodeId && gameId) {
             // keeping it async and not waiting for it to fulfill
             askChatGptForItsMove(roomCodeId, gameId).then((res) => {
-              if (
-                res.chatGptMove.indexOf('ERROR') !== -1
-              ) {
-                AddErrorWithCustomAction(ChatGptErrorObject[res.chatGptMove as ChatGptErrorObjectType] as string, 'Restart Game', reload);
+              if (res.chatGptMove.indexOf('ERROR') !== -1) {
+                AddErrorWithCustomAction(
+                  ChatGptErrorObject[
+                    res.chatGptMove as ChatGptErrorObjectType
+                  ] as string,
+                  'Restart Game',
+                  reload
+                );
               } else {
                 console.log('askChatGptForItsMove', res.chatGptMove);
               }
@@ -164,7 +174,10 @@ export const TurnHandler = (
             console.error('roomCodeId or gameId is not available');
           }
         } else {
-          console.log('checkGameCompleted(contextsData)', checkGameCompleted(contextsData));
+          console.log(
+            'checkGameCompleted(contextsData)',
+            checkGameCompleted(contextsData)
+          );
         }
       } else {
         console.log(
@@ -178,10 +191,7 @@ export const TurnHandler = (
   };
 
   const afterChangeTurn = () => {
-    if (
-      isItRemoteGame(contextsData)
-      || isItGameWithOpenAi(contextsData)
-    ) {
+    if (isItRemoteGame(contextsData) || isItGameWithOpenAi(contextsData)) {
       CheckWinner(contextsData, setWinnerAtFirebase);
       checkGameCompletedInner(contextsData);
     } else {
@@ -195,7 +205,10 @@ export const TurnHandler = (
       changeTurn();
     } else if (opponentType === computerProgram) {
       ComputerProgramMove(contextsData);
-    } else if (isItRemoteGame(contextsData) || isItGameWithOpenAi(contextsData)) {
+    } else if (
+      isItRemoteGame(contextsData) ||
+      isItGameWithOpenAi(contextsData)
+    ) {
       changeTurn();
     }
   };
@@ -204,10 +217,7 @@ export const TurnHandler = (
     // console.log('turnStorage');
   };
 
-  if (
-    isItRemoteGame(contextsData) ||
-    isItGameWithOpenAi(contextsData)
-  ) {
+  if (isItRemoteGame(contextsData) || isItGameWithOpenAi(contextsData)) {
     RemoteFriendPlayer(contextsData, async (doc: any) => {
       const { userId, position } = doc;
       if (!getAllCurrentTurns(contextsData).includes(position)) {

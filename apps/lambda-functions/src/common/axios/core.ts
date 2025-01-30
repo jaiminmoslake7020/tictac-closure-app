@@ -13,12 +13,12 @@ export const sendRequest = async (url: string, method: string, data: any) => {
     console.error('Error sendRequest', error);
     return null;
   }
-}
+};
 
 export const sendGetRequest = async (url: string) => {
   return sendRequest(url, 'GET', null);
-}
+};
 
 export const sendPostRequest = async (url: string, data: any) => {
   return sendRequest(url, 'POST', data);
-}
+};
