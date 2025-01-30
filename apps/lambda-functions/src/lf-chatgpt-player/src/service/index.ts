@@ -7,7 +7,7 @@ import {
 } from '../../../common/firebase/game';
 import {
   askForChatGptMove,
-  extractJsonFromChatGptResponse,
+  extractJsonFromChatGptResponse, getApiKeySecret,
   getInitialPromptMessageArray,
   initiateChatGptConversation,
   prepareChatGptPrompt,
@@ -196,6 +196,10 @@ export const askChatGptToMakeMove = async (
         throw new Error('Processed data is not valid');
       }
     } else {
+      const apiKey = await getApiKeySecret();
+      if (!apiKey) {
+        throw new Error('apiKey is not found');
+      }
       const response = await initiateChatGptConversation();
       if (response) {
         const userPrompts = getInitialPromptMessageArray();

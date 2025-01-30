@@ -5,18 +5,9 @@ import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 export const handler = async (event :APIGatewayProxyEventV2) :Promise<APIGatewayProxyResultV2> => {
   // Access query parameters
   const queryParams = event.queryStringParameters;
-
   // Example: Get a specific parameter
   const roomCode = queryParams?.roomCode;
   const gameId = queryParams?.gameId;
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: "Found query parameters",
-      queryParams,
-    }),
-  };
 
   try {
     if (roomCode && gameId) {
@@ -43,6 +34,7 @@ export const handler = async (event :APIGatewayProxyEventV2) :Promise<APIGateway
       statusCode: 500,
       body: JSON.stringify({
         message: "Error executing the function",
+        error: String(e),
         queryParams,
       }),
     };

@@ -87,7 +87,7 @@ export const getApiKeySecret = async () :Promise<string | undefined> => {
   if (secret_env) {
     const secret = await getSecretCore(secret_env);
     const p =
-      'OPEN_API_KEY_' + process.env.FIREBASE_PRIVATE_KEY_BASE64;
+      'OPEN_API_KEY_' + process.env.ENV_TYPE;
     if (secret && secret[p]) {
       return secret[p];
     } else {

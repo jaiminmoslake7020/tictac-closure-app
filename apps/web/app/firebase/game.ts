@@ -151,9 +151,17 @@ export const onGameCreated = (
 export const chatGptRequest = async (roomId: string, gameId: string) => {
   try {
     const response = await fetch(
-      lambdaChatgptApiUrl + '/give-your-move?roomId=' + roomId + '&gameId=' + gameId
+      lambdaChatgptApiUrl + '/default/give-your-move?roomCode=' + roomId + '&gameId=' + gameId
     );
-    return await response.json();
+    const json = await response.json();
+    if (json.statusCode === 200) {
+      const jsonBody = JSON.parse(json.body);
+      return jsonBody.body;
+    } else {
+      return Promise.resolve({
+        chatGptMove: 'ERROR',
+      });
+    }
   } catch (e) {
     console.error('Error informChatGptToJoinGame: ', e);
     return Promise.resolve({
