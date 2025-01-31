@@ -154,14 +154,7 @@ export const chatGptRequest = async (roomId: string, gameId: string) => {
       lambdaChatgptApiUrl + '/default/give-your-move?roomCode=' + roomId + '&gameId=' + gameId
     );
     const json = await response.json();
-    if (json.statusCode === 200) {
-      const jsonBody = JSON.parse(json.body);
-      return jsonBody.body;
-    } else {
-      return Promise.resolve({
-        chatGptMove: 'ERROR',
-      });
-    }
+    return json.body;
   } catch (e) {
     console.error('Error informChatGptToJoinGame: ', e);
     return Promise.resolve({
