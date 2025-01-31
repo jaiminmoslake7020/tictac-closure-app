@@ -153,7 +153,6 @@ export const askChatGptToMakeMove = async (
                   );
                   return {
                     conversation: [...retrievedConversation, response],
-                    validateGame: true,
                     response: response,
                     chatGptMove: chatGptMove,
                   };
@@ -169,6 +168,8 @@ export const askChatGptToMakeMove = async (
                     ? 'ERROR_USED_MOVE'
                     : 'ERROR_INVALID_MOVE',
                   moveUsed: chatGptMove,
+                  conversation: [...retrievedConversation, response],
+                  response: response,
                 };
               }
             } else {
@@ -188,6 +189,8 @@ export const askChatGptToMakeMove = async (
               chatGptMove: wonGamePrediction
                 ? 'ERROR_WON_GAME_PREDICATION'
                 : 'ERROR_INVALID_MOVE',
+              conversation: [...retrievedConversation, response],
+              response: response,
             };
           }
         } else {
@@ -213,7 +216,6 @@ export const askChatGptToMakeMove = async (
         await joinRoom(roomCode, ChatGptUser);
         await joinGame(roomCode, gameId, ChatGptUser.id);
         return {
-          validateGame: true,
           response: response,
         };
       } else {
