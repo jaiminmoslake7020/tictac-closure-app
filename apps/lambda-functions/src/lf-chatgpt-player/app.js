@@ -45,10 +45,10 @@ const run = async (roomId, gameId) => {
 
 // Define a route to handle GET requests
 app.get('/default/give-your-move', async (req, res) => {
-  const roomId = req.query.roomId;
+  const roomCode = req.query.roomCode;
   const gameId = req.query.gameId;
-  const data = await run({queryStringParameters: {roomCode:roomId, gameId}});
-  res.send(data);
+  const data = await run({queryStringParameters: {roomCode, gameId}});
+  res.send(JSON.parse(data?.body));
 });
 
 // Start the server

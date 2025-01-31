@@ -91,10 +91,10 @@ export const getApiKeySecret = async () :Promise<string | undefined> => {
     if (secret && secret[p]) {
       return secret[p];
     } else {
-      console.error('OpenAI API Key not found in environment');
+      console.error('OpenAI API Key not found in environment', secret, p);
     }
   } else {
-    console.error('OpenAI API Key not found in environment');
+    console.error('SECRET_NAME_OPENAI_API_KEY is not found', secret_env);
   }
   return undefined;
 }

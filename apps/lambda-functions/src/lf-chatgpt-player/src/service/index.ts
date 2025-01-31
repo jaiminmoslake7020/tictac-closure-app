@@ -168,6 +168,7 @@ export const askChatGptToMakeMove = async (
                   chatGptMove: usedMove
                     ? 'ERROR_USED_MOVE'
                     : 'ERROR_INVALID_MOVE',
+                  moveUsed: chatGptMove,
                 };
               }
             } else {
