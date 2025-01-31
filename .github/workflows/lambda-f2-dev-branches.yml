@@ -74,7 +74,7 @@ jobs:
           RESOURCE_PATH: "/give-your-move"
           API_NAME: ${{ vars.API_NAME_DEV }}
           ENV_VAR4: ${{ vars.API_NAME_DEV }}
-          ENV_TYPE: "dev"
+          ENV_TYPE: "DEV"
           ALLOWED_ORIGIN: ${{ vars.ALLOWED_ORIGIN_DEV }}
 
 
