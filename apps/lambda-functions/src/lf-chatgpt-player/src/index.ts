@@ -1,8 +1,9 @@
 import { askChatGptToMakeMove } from './service';
-import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
+import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 
-
-export const handler = async (event :APIGatewayProxyEventV2) :Promise<APIGatewayProxyResultV2> => {
+export const handler = async (
+  event: APIGatewayProxyEventV2,
+): Promise<APIGatewayProxyResultV2> => {
   // Access query parameters
   const queryParams = event.queryStringParameters;
   // Example: Get a specific parameter
@@ -15,11 +16,14 @@ export const handler = async (event :APIGatewayProxyEventV2) :Promise<APIGateway
 
   try {
     if (roomCode && gameId) {
-      const body = await askChatGptToMakeMove(roomCode as string, gameId as string);
+      const body = await askChatGptToMakeMove(
+        roomCode as string,
+        gameId as string,
+      );
       return {
         statusCode: 200,
         body: JSON.stringify({
-          message: "Success",
+          message: 'Success',
           body: body,
           queryParams,
         }),
@@ -28,7 +32,7 @@ export const handler = async (event :APIGatewayProxyEventV2) :Promise<APIGateway
       return {
         ...wrongResponse,
         body: JSON.stringify({
-          message: "Invalid Room and Game",
+          message: 'Invalid Room and Game',
           queryParams,
         }),
       };
@@ -37,7 +41,7 @@ export const handler = async (event :APIGatewayProxyEventV2) :Promise<APIGateway
     return {
       ...wrongResponse,
       body: JSON.stringify({
-        message: "Error executing the function",
+        message: 'Error executing the function',
         error: String(e),
         queryParams,
       }),

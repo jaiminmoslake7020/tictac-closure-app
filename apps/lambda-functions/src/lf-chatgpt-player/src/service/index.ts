@@ -7,9 +7,10 @@ import {
 } from '../../../common/firebase/game';
 import {
   askForChatGptMove,
-  extractJsonFromChatGptResponse, getApiKeySecret,
+  getApiKeySecret,
   getInitialPromptMessageArray,
   initiateChatGptConversation,
+  positionEditReverse,
   prepareChatGptPrompt,
   processPromptsArray,
 } from '../chatgpt';
@@ -22,6 +23,7 @@ import {
   MatrixType,
   MovePositionType,
   TurnStorageType,
+  JsonConvertedResponseType
 } from '../../../common/types';
 import { joinRoom } from '../../../common/firebase/room';
 
@@ -86,6 +88,13 @@ export const processTurnStorageData = async (
   return undefined;
 };
 
+export const validateMove = (processedMove: string) => {
+  const validTurn = [11, 12, 13, 21, 22, 23, 31, 32, 33].includes(
+    Number(processedMove),
+  );
+  return validTurn;
+};
+
 export const validateChatGptMove = (
   processedMove: string,
   usedMoves: MovePositionType[],
@@ -97,10 +106,83 @@ export const validateChatGptMove = (
   return validTurn && notUsedTurn;
 };
 
+const getJsonArrayFromResponse = (response : string, finalArray :JsonConvertedResponseType[] ) => {
+  const jsonRegex = /\{(?:[^{}"]|"(?:\\.|[^"\\])*")*\}/;
+
+  // Extract the JSON
+  const matchArray = response.match(jsonRegex);
+
+  if (matchArray && matchArray[0]) {
+    const match =  matchArray[0];
+    let responseStrip = response.replace( match , '' );
+    try {
+      const jsonObject = JSON.parse(match);
+      if (jsonObject && jsonObject.move && jsonObject.game_board) {
+        finalArray.push(jsonObject);
+      }
+    } catch (error) {
+      console.error('Invalid JSON:', error);
+    }
+    finalArray = getJsonArrayFromResponse( responseStrip,  finalArray);
+  }
+  return finalArray;
+}
+
+export const extractJsonFromChatGptResponse = (
+  response: string,
+  usedMoves: MovePositionType[],
+):
+  | undefined
+  | JsonConvertedResponseType => {
+
+  // Extract the JSON
+  const matchArray = getJsonArrayFromResponse(response, []);
+  let returnResponse: { move: string; game_board: MatrixType } | undefined =
+    undefined;
+  let usedMoveReturnResponse:
+    | { move: string; game_board: MatrixType }
+    | undefined = undefined;
+
+  if (matchArray) {
+    matchArray.forEach((match, index) => {
+      if (match && !returnResponse) {
+        try {
+          const jsonObject = match;
+          console.log('jsonObject: ', index, '\n', jsonObject);
+          if (
+            validateChatGptMove(positionEditReverse(jsonObject.move), usedMoves)
+          ) {
+            returnResponse = {
+              ...jsonObject,
+              move: positionEditReverse(jsonObject.move),
+            };
+          } else if (validateMove(positionEditReverse(jsonObject.move))) {
+            usedMoveReturnResponse = {
+              ...jsonObject,
+              move: positionEditReverse(jsonObject.move),
+            };
+          }
+        } catch (error) {
+          console.error('Invalid JSON:', error);
+        }
+      } else {
+        console.error(
+          'Invalid Response, No JSON found in the string.:',
+          response,
+        );
+      }
+    });
+  }
+
+  if (returnResponse) {
+    return returnResponse;
+  }
+  return usedMoveReturnResponse;
+};
 
 export const initiateConversation = async (
   roomCode: string,
-  gameId: string
+  gameId: string,
 ) => {
   const apiKey = await getApiKeySecret();
   if (!apiKey) {
@@ -109,21 +191,17 @@ export const initiateConversation = async (
   const response = await initiateChatGptConversation();
   if (response) {
     const userPrompts = getInitialPromptMessageArray();
-    await updateChatGptConversation(
-      roomCode,
-      gameId,
-      [response],
-      userPrompts,
-    );
+    await updateChatGptConversation(roomCode, gameId, [response], userPrompts);
     await joinRoom(roomCode, ChatGptUser);
     await joinGame(roomCode, gameId, ChatGptUser.id);
     return {
+      conversation: userPrompts,
       response: response,
     };
   } else {
     throw new Error('initiateChatGptConversation is failed');
   }
-}
+};
 
 export const askChatGptToMakeMove = async (
   roomCode: string,
@@ -153,7 +231,7 @@ export const askChatGptToMakeMove = async (
         const response = await askForChatGptMove(promptMessages);
         if (response) {
           const extractJsonFromChatGptResponseData =
-            extractJsonFromChatGptResponse(response);
+            extractJsonFromChatGptResponse(response, usedMoves);
           if (extractJsonFromChatGptResponseData) {
             const processedPromptsMessages =
               processPromptsArray(promptMessages);
@@ -207,17 +285,17 @@ export const askChatGptToMakeMove = async (
             const a =
               ((response || '')?.toLowerCase() as string).indexOf(
                 'congratulations',
-              ) === -1;
+              ) !== -1;
             const b =
               ((response || '')?.toLowerCase() as string).indexOf(
                 'won game',
-              ) === -1;
+              ) !== -1;
             const wonGamePrediction = a || b;
             return {
               chatGptMove: wonGamePrediction
                 ? 'ERROR_WON_GAME_PREDICATION'
                 : 'ERROR_INVALID_MOVE',
-              conversation: [...retrievedConversation, response],
+              conversation: promptMessages,
               response: response,
             };
           }

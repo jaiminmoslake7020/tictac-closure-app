@@ -151,7 +151,11 @@ export const onGameCreated = (
 export const chatGptRequest = async (roomId: string, gameId: string) => {
   try {
     const response = await fetch(
-      lambdaChatgptApiUrl + '/default/give-your-move?roomCode=' + roomId + '&gameId=' + gameId
+      lambdaChatgptApiUrl +
+        '/default/give-your-move?roomCode=' +
+        roomId +
+        '&gameId=' +
+        gameId
     );
     const json = await response.json();
     return json.body;

@@ -3,9 +3,7 @@ import {
   GetSecretValueCommand,
 } from '@aws-sdk/client-secrets-manager';
 
-export const getSecretCore = async (
-  secret_name: string,
-) => {
+export const getSecretCore = async (secret_name: string) => {
   const client = new SecretsManagerClient({
     region: 'us-west-2',
   });
