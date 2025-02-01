@@ -9,6 +9,10 @@ export const handler = async (event :APIGatewayProxyEventV2) :Promise<APIGateway
   const roomCode = queryParams?.roomCode;
   const gameId = queryParams?.gameId;
 
+  const wrongResponse = {
+    statusCode: 500,
+  };
+
   try {
     if (roomCode && gameId) {
       const body = await askChatGptToMakeMove(roomCode as string, gameId as string);
@@ -22,7 +26,7 @@ export const handler = async (event :APIGatewayProxyEventV2) :Promise<APIGateway
       };
     } else {
       return {
-        statusCode: 500,
+        ...wrongResponse,
         body: JSON.stringify({
           message: "Invalid Room and Game",
           queryParams,
@@ -31,7 +35,7 @@ export const handler = async (event :APIGatewayProxyEventV2) :Promise<APIGateway
     }
   } catch (e) {
     return {
-      statusCode: 500,
+      ...wrongResponse,
       body: JSON.stringify({
         message: "Error executing the function",
         error: String(e),

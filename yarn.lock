@@ -4375,7 +4375,7 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
-chokidar@^3.5.1, chokidar@^3.6.0:
+chokidar@^3.5.1, chokidar@^3.5.2, chokidar@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.6.0.tgz#197c6cc669ef2a8dc5e7b4d97ee4e092c3eb0d5b"
   integrity sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==
@@ -8168,6 +8168,13 @@ node-gyp@^10.0.0:
     semver "^7.3.5"
     tar "^6.2.1"
     which "^4.0.0"
+
+node-hmr@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/node-hmr/-/node-hmr-1.4.0.tgz#d2fb6b6b18ffe8ee6336aa646ee4911967a1a828"
+  integrity sha512-1QcM4WCo6MkMpOJQds9Xxolmw15yj7GndtRNxxWjeWaODnm1qOu+qZfplQV5HGMVPBRsh26ZGa+eZ62m8t9W0A==
+  dependencies:
+    chokidar "^3.5.2"
 
 node-machine-id@1.1.12:
   version "1.1.12"

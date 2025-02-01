@@ -97,6 +97,34 @@ export const validateChatGptMove = (
   return validTurn && notUsedTurn;
 };
 
+
+export const initiateConversation = async (
+  roomCode: string,
+  gameId: string
+) => {
+  const apiKey = await getApiKeySecret();
+  if (!apiKey) {
+    throw new Error('apiKey is not found');
+  }
+  const response = await initiateChatGptConversation();
+  if (response) {
+    const userPrompts = getInitialPromptMessageArray();
+    await updateChatGptConversation(
+      roomCode,
+      gameId,
+      [response],
+      userPrompts,
+    );
+    await joinRoom(roomCode, ChatGptUser);
+    await joinGame(roomCode, gameId, ChatGptUser.id);
+    return {
+      response: response,
+    };
+  } else {
+    throw new Error('initiateChatGptConversation is failed');
+  }
+}
+
 export const askChatGptToMakeMove = async (
   roomCode: string,
   gameId: string,
@@ -152,7 +180,7 @@ export const askChatGptToMakeMove = async (
                     playerUserId,
                   );
                   return {
-                    conversation: [...retrievedConversation, response],
+                    conversation: promptMessages,
                     response: response,
                     chatGptMove: chatGptMove,
                   };
@@ -168,7 +196,7 @@ export const askChatGptToMakeMove = async (
                     ? 'ERROR_USED_MOVE'
                     : 'ERROR_INVALID_MOVE',
                   moveUsed: chatGptMove,
-                  conversation: [...retrievedConversation, response],
+                  conversation: promptMessages,
                   response: response,
                 };
               }
@@ -200,27 +228,7 @@ export const askChatGptToMakeMove = async (
         throw new Error('Processed data is not valid');
       }
     } else {
-      const apiKey = await getApiKeySecret();
-      if (!apiKey) {
-        throw new Error('apiKey is not found');
-      }
-      const response = await initiateChatGptConversation();
-      if (response) {
-        const userPrompts = getInitialPromptMessageArray();
-        await updateChatGptConversation(
-          roomCode,
-          gameId,
-          [response],
-          userPrompts,
-        );
-        await joinRoom(roomCode, ChatGptUser);
-        await joinGame(roomCode, gameId, ChatGptUser.id);
-        return {
-          response: response,
-        };
-      } else {
-        throw new Error('initiateChatGptConversation is failed');
-      }
+      return await initiateConversation(roomCode, gameId);
     }
   } else {
     throw new Error('Invalid game');
