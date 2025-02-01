@@ -1,13 +1,10 @@
 # This workflow will build and deploy a static webapp to Netlify
-name: DEV Build and Deploy Lambda Function 2 chatgpt player service dev
+name: QA Build and Deploy Lambda Function 2 chatgpt player service dev
 
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches-ignore: ["main",'release-*'] # Skip if branch is main or release-webapp-*
-    paths:
-      - 'apps/lambda-functions/src/lf-chatgpt-player/**'
-      - '.github/workflows/lambda-f2-dev-branches.yml'
+    branches: ["main"] # Skip if branch is main or release-webapp-*
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -54,26 +51,26 @@ jobs:
       - name: Upsert AWS lambda
         run: yarn run lambda:fn2:publish
         env:
-          ENV_VAR2: ${{ secrets.ENV_VAR2_DEV }}
+          ENV_VAR2: ${{ secrets.ENV_VAR2_QA }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          FUNCTION_NAME: ${{ vars.FUNCTION_NAME_DEV_2 }}
-          LAYER_NAME: ${{ vars.LAYER_NAME_DEV }}
+          FUNCTION_NAME: ${{ vars.FUNCTION_NAME_QA_2 }}
+          LAYER_NAME: ${{ vars.LAYER_NAME_QA }}
           ROLE_NAME: ${{ vars.ROLE_NAME }}
           SECRET_NAME: ${{ vars.SECRET_NAME }}
           SECRET_NAME_OPENAI_API_KEY: ${{ vars.SECRET_NAME_OPENAI_API_KEY }}
-          ENV_VAR3: ${{ vars.ENV_VAR3_DEV }}
-          ENV_VAR1: ${{ vars.FIREBASE_PROJECT_ID_DEV }}
+          ENV_VAR3: ${{ vars.ENV_VAR3_QA }}
+          ENV_VAR1: ${{ vars.FIREBASE_PROJECT_ID_QA }}
           ZIP_FILE: "lambda.zip"
           BUNDLE_FILE: "dist/bundle.js"
           HANDLER: "dist/bundle.handler"
           HTTP_METHOD: "GET"
           RESOURCE_PATH: "/give-your-move"
-          API_NAME: ${{ vars.API_NAME_DEV }}
-          ENV_TYPE: "DEV"
-          ALLOWED_ORIGIN: ${{ vars.ALLOWED_ORIGIN_DEV }}
+          API_NAME: ${{ vars.API_NAME_QA }}
+          ENV_TYPE: "QA"
+          ALLOWED_ORIGIN: ${{ vars.ALLOWED_ORIGIN_QA }}
 
 
 
