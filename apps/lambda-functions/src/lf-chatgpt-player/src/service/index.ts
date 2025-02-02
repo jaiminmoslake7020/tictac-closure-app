@@ -7,9 +7,9 @@ import {
 } from '../../../common/firebase/game';
 import {
   askForChatGptMove,
-  extractJsonFromChatGptResponse, getApiKeySecret,
+  getApiKeySecret,
   getInitialPromptMessageArray,
-  initiateChatGptConversation,
+  initiateChatGptConversation, positionEditReverse,
   prepareChatGptPrompt,
   processPromptsArray,
 } from '../chatgpt';
@@ -86,6 +86,15 @@ export const processTurnStorageData = async (
   return undefined;
 };
 
+export const validateMove = (
+  processedMove: string,
+) => {
+  const validTurn = [11, 12, 13, 21, 22, 23, 31, 32, 33].includes(
+    Number(processedMove),
+  );
+  return validTurn;
+};
+
 export const validateChatGptMove = (
   processedMove: string,
   usedMoves: MovePositionType[],
@@ -95,6 +104,57 @@ export const validateChatGptMove = (
   );
   const notUsedTurn = !usedMoves.includes(processedMove as MovePositionType);
   return validTurn && notUsedTurn;
+};
+
+export const extractJsonFromChatGptResponse = (
+  response: string,
+  usedMoves: MovePositionType[],
+):
+  | undefined
+  | {
+  move: string;
+  game_board: MatrixType;
+} => {
+  // Regular expression to match a JSON object
+  const jsonRegex = /\{(?:[^{}"]|"(?:\\.|[^"\\])*")*\}/;
+
+  // Extract the JSON
+  const matchArray = response.match(jsonRegex);
+  let startIndex = 0;
+  let returnResponse: { move: string; game_board: MatrixType; } | undefined = undefined;
+  let usedMoveReturnResponse: { move: string; game_board: MatrixType; } | undefined = undefined;
+  console.log("matchArray", matchArray);
+
+  if (matchArray) {
+    matchArray.forEach((match) => {
+      if (match && !returnResponse) {
+        try {
+          const jsonObject = JSON.parse(match);
+          console.log('Extracted JSON:', startIndex + 1, '\n' ,  jsonObject);
+          if ( validateChatGptMove( positionEditReverse(jsonObject.move) , usedMoves ) ) {
+            returnResponse = {
+              ...jsonObject,
+              move: positionEditReverse(jsonObject.move),
+            };
+          } else if ( validateMove( positionEditReverse(jsonObject.move) ) ) {
+            usedMoveReturnResponse = {
+              ...jsonObject,
+              move: positionEditReverse(jsonObject.move),
+            };
+          }
+        } catch (error) {
+          console.error('Invalid JSON:', error);
+        }
+      } else {
+        console.error('Invalid Response, No JSON found in the string.:', response);
+      }
+    });
+  }
+
+  if (returnResponse) {
+    return returnResponse;
+  }
+  return usedMoveReturnResponse;
 };
 
 
@@ -118,6 +178,7 @@ export const initiateConversation = async (
     await joinRoom(roomCode, ChatGptUser);
     await joinGame(roomCode, gameId, ChatGptUser.id);
     return {
+      conversation: userPrompts,
       response: response,
     };
   } else {
@@ -153,7 +214,7 @@ export const askChatGptToMakeMove = async (
         const response = await askForChatGptMove(promptMessages);
         if (response) {
           const extractJsonFromChatGptResponseData =
-            extractJsonFromChatGptResponse(response);
+            extractJsonFromChatGptResponse(response, usedMoves);
           if (extractJsonFromChatGptResponseData) {
             const processedPromptsMessages =
               processPromptsArray(promptMessages);
@@ -207,17 +268,17 @@ export const askChatGptToMakeMove = async (
             const a =
               ((response || '')?.toLowerCase() as string).indexOf(
                 'congratulations',
-              ) === -1;
+              ) !== -1;
             const b =
               ((response || '')?.toLowerCase() as string).indexOf(
                 'won game',
-              ) === -1;
+              ) !== -1;
             const wonGamePrediction = a || b;
             return {
               chatGptMove: wonGamePrediction
                 ? 'ERROR_WON_GAME_PREDICATION'
                 : 'ERROR_INVALID_MOVE',
-              conversation: [...retrievedConversation, response],
+              conversation: promptMessages,
               response: response,
             };
           }

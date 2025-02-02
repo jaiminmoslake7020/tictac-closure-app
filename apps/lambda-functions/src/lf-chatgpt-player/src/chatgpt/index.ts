@@ -15,7 +15,7 @@ You will engage in a Tic-tac-Toe game with the user. Follow the rules of the gam
 
 - **Roles**: You are OpenAI, and your opponent is the Player.
 - **First Move**: The Player will always make the first move.
-- **Game Board**: The board is a 3x3 grid initialized as \[["NULL", "NULL", "NULL"], ["NULL", "NULL", "NULL"], ["NULL", "NULL", "NULL"]\].
+- **Game Board**: The board is a 3x3 array initialized as \[["NULL", "NULL", "NULL"], ["NULL", "NULL", "NULL"], ["NULL", "NULL", "NULL"]\].
 - **Move Format**: Positions will be specified using numeric strings that define their location:
 - "00": First row, first column
 - "01": First row, second column
@@ -52,7 +52,7 @@ You will engage in a Tic-tac-Toe game with the user. Follow the rules of the gam
 # Output Format
 
 Determine the move position for your turn as a numeric string ("00", "01", "02", "10", "11", "12", "20", "21", "22").
-- **Response Format**: OpenAi will provide request in json format. For example. {"move":"22", "game_board":\[["NULL", "NULL", "NULL"], ["NULL", "OpenAi", "NULL"], ["NULL", "NULL", "NULL"]\]}.
+- **Response Format**: OpenAi will provide response in json format strictly. For example. {"move":"22", "game_board":\[["NULL", "NULL", "NULL"], ["NULL", "OpenAi", "NULL"], ["NULL", "NULL", "NULL"]\]}.
 
 # Notes
 
@@ -205,10 +205,10 @@ export const prepareChatGptPrompt = (
       if (sortMoves.length - 1 === index) {
         latestUserMessage = {
           role: 'user',
-          content: JSON.stringify({
+          content: '```json'+JSON.stringify({
             move: newPostion,
             game_board: matrix,
-          }),
+          })+'```',
         };
         messages.push(latestUserMessage as ChatCompletionMessageType);
       } else if (Array.isArray(restPrompt) && restPrompt[startAtRestPrompt]) {
@@ -220,9 +220,9 @@ export const prepareChatGptPrompt = (
       } else {
         messages.push({
           role: 'user',
-          content: JSON.stringify({
+          content: '```json'+JSON.stringify({
             move: newPostion,
-          }),
+          })+'```',
         });
       }
     } else {
@@ -239,35 +239,4 @@ export const prepareChatGptPrompt = (
     messages,
     latestUserMessage,
   } as any;
-};
-
-export const extractJsonFromChatGptResponse = (
-  response: string,
-):
-  | undefined
-  | {
-      move: string;
-      game_board: MatrixType;
-    } => {
-  // Regular expression to match a JSON object
-  const jsonRegex = /\{(?:[^{}]|"(?:\\.|[^"\\])*"|\[(?:[^\[\]]|"(?:\\.|[^"\\])*")*\])*\}/;;
-
-  // Extract the JSON
-  const match = response.match(jsonRegex);
-
-  if (match) {
-    try {
-      const jsonObject = JSON.parse(match[0]);
-      console.log('Extracted JSON:', jsonObject);
-      return {
-        ...jsonObject,
-        move: positionEditReverse(jsonObject.move),
-      };
-    } catch (error) {
-      console.error('Invalid JSON:', error);
-    }
-  } else {
-    console.error('Invalid Response, No JSON found in the string.:', response);
-  }
-  return undefined;
 };
