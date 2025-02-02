@@ -250,7 +250,7 @@ export const extractJsonFromChatGptResponse = (
       game_board: MatrixType;
     } => {
   // Regular expression to match a JSON object
-  const jsonRegex = /\{(?:[^{}]|(?<nested>\{(?:[^{}]|\\k<nested>)*\}))*\}/;
+  const jsonRegex = /\{(?:[^{}]|"(?:\\.|[^"\\])*"|\[(?:[^\[\]]|"(?:\\.|[^"\\])*")*\])*\}/;;
 
   // Extract the JSON
   const match = response.match(jsonRegex);
