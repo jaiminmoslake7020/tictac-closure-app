@@ -6,7 +6,7 @@ import {
   MovePositionTypeChatGpt,
   TurnStorageType,
 } from '../../../common/types';
-import {getSecretCore} from '../../../common/aws/get-secret';
+import { getSecretCore } from '../../../common/aws/get-secret';
 
 const chatInsert = `
 You will engage in a Tic-tac-Toe game with the user. Follow the rules of the game strictly and provide responses as instructed.
@@ -82,12 +82,11 @@ export const getOpenAIClient = (apiKey: string): OpenAI => {
   return configureOpenAIClient(apiKey);
 };
 
-export const getApiKeySecret = async () :Promise<string | undefined> => {
+export const getApiKeySecret = async (): Promise<string | undefined> => {
   const secret_env = process.env.SECRET_NAME_OPENAI_API_KEY;
   if (secret_env) {
     const secret = await getSecretCore(secret_env);
-    const p =
-      'OPEN_API_KEY_' + process.env.ENV_TYPE;
+    const p = 'OPEN_API_KEY_' + process.env.ENV_TYPE;
     if (secret && secret[p]) {
       return secret[p];
     } else {
@@ -97,7 +96,7 @@ export const getApiKeySecret = async () :Promise<string | undefined> => {
     console.error('SECRET_NAME_OPENAI_API_KEY is not found', secret_env);
   }
   return undefined;
-}
+};
 
 export const requestChatGptConversation = async (
   messages: ChatCompletionMessageType[],
@@ -205,10 +204,13 @@ export const prepareChatGptPrompt = (
       if (sortMoves.length - 1 === index) {
         latestUserMessage = {
           role: 'user',
-          content: '```json'+JSON.stringify({
-            move: newPostion,
-            game_board: matrix,
-          })+'```',
+          content:
+            '```json' +
+            JSON.stringify({
+              move: newPostion,
+              game_board: matrix,
+            }) +
+            '```',
         };
         messages.push(latestUserMessage as ChatCompletionMessageType);
       } else if (Array.isArray(restPrompt) && restPrompt[startAtRestPrompt]) {
@@ -220,9 +222,12 @@ export const prepareChatGptPrompt = (
       } else {
         messages.push({
           role: 'user',
-          content: '```json'+JSON.stringify({
-            move: newPostion,
-          })+'```',
+          content:
+            '```json' +
+            JSON.stringify({
+              move: newPostion,
+            }) +
+            '```',
         });
       }
     } else {

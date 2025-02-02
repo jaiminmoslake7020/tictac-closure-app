@@ -9,7 +9,8 @@ import {
   askForChatGptMove,
   getApiKeySecret,
   getInitialPromptMessageArray,
-  initiateChatGptConversation, positionEditReverse,
+  initiateChatGptConversation,
+  positionEditReverse,
   prepareChatGptPrompt,
   processPromptsArray,
 } from '../chatgpt';
@@ -86,9 +87,7 @@ export const processTurnStorageData = async (
   return undefined;
 };
 
-export const validateMove = (
-  processedMove: string,
-) => {
+export const validateMove = (processedMove: string) => {
   const validTurn = [11, 12, 13, 21, 22, 23, 31, 32, 33].includes(
     Number(processedMove),
   );
@@ -112,31 +111,34 @@ export const extractJsonFromChatGptResponse = (
 ):
   | undefined
   | {
-  move: string;
-  game_board: MatrixType;
-} => {
+      move: string;
+      game_board: MatrixType;
+    } => {
   // Regular expression to match a JSON object
   const jsonRegex = /\{(?:[^{}"]|"(?:\\.|[^"\\])*")*\}/;
 
   // Extract the JSON
   const matchArray = response.match(jsonRegex);
-  let startIndex = 0;
-  let returnResponse: { move: string; game_board: MatrixType; } | undefined = undefined;
-  let usedMoveReturnResponse: { move: string; game_board: MatrixType; } | undefined = undefined;
-  console.log("matchArray", matchArray);
+  let returnResponse: { move: string; game_board: MatrixType } | undefined =
+    undefined;
+  let usedMoveReturnResponse:
+    | { move: string; game_board: MatrixType }
+    | undefined = undefined;
 
   if (matchArray) {
-    matchArray.forEach((match) => {
+    matchArray.forEach((match, index) => {
       if (match && !returnResponse) {
         try {
           const jsonObject = JSON.parse(match);
-          console.log('Extracted JSON:', startIndex + 1, '\n' ,  jsonObject);
-          if ( validateChatGptMove( positionEditReverse(jsonObject.move) , usedMoves ) ) {
+          console.log('jsonObject: ', index, '\n', jsonObject);
+          if (
+            validateChatGptMove(positionEditReverse(jsonObject.move), usedMoves)
+          ) {
             returnResponse = {
               ...jsonObject,
               move: positionEditReverse(jsonObject.move),
             };
-          } else if ( validateMove( positionEditReverse(jsonObject.move) ) ) {
+          } else if (validateMove(positionEditReverse(jsonObject.move))) {
             usedMoveReturnResponse = {
               ...jsonObject,
               move: positionEditReverse(jsonObject.move),
@@ -146,7 +148,10 @@ export const extractJsonFromChatGptResponse = (
           console.error('Invalid JSON:', error);
         }
       } else {
-        console.error('Invalid Response, No JSON found in the string.:', response);
+        console.error(
+          'Invalid Response, No JSON found in the string.:',
+          response,
+        );
       }
     });
   }
@@ -157,10 +162,9 @@ export const extractJsonFromChatGptResponse = (
   return usedMoveReturnResponse;
 };
 
-
 export const initiateConversation = async (
   roomCode: string,
-  gameId: string
+  gameId: string,
 ) => {
   const apiKey = await getApiKeySecret();
   if (!apiKey) {
@@ -169,12 +173,7 @@ export const initiateConversation = async (
   const response = await initiateChatGptConversation();
   if (response) {
     const userPrompts = getInitialPromptMessageArray();
-    await updateChatGptConversation(
-      roomCode,
-      gameId,
-      [response],
-      userPrompts,
-    );
+    await updateChatGptConversation(roomCode, gameId, [response], userPrompts);
     await joinRoom(roomCode, ChatGptUser);
     await joinGame(roomCode, gameId, ChatGptUser.id);
     return {
@@ -184,7 +183,7 @@ export const initiateConversation = async (
   } else {
     throw new Error('initiateChatGptConversation is failed');
   }
-}
+};
 
 export const askChatGptToMakeMove = async (
   roomCode: string,

@@ -47,7 +47,7 @@ const run = async (roomId, gameId) => {
 app.get('/default/give-your-move', async (req, res) => {
   const roomCode = req.query.roomCode;
   const gameId = req.query.gameId;
-  const data = await run({queryStringParameters: {roomCode, gameId}});
+  const data = await run({ queryStringParameters: { roomCode, gameId } });
   res.send(JSON.parse(data?.body));
 });
 
