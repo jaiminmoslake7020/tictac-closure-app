@@ -23,6 +23,7 @@ import {
   MatrixType,
   MovePositionType,
   TurnStorageType,
+  JsonConvertedResponseType
 } from '../../../common/types';
 import { joinRoom } from '../../../common/firebase/room';
 
@@ -105,20 +106,37 @@ export const validateChatGptMove = (
   return validTurn && notUsedTurn;
 };
 
+const getJsonArrayFromResponse = (response : string, finalArray :JsonConvertedResponseType[] ) => {
+  const jsonRegex = /\{(?:[^{}"]|"(?:\\.|[^"\\])*")*\}/;
+
+  // Extract the JSON
+  const matchArray = response.match(jsonRegex);
+
+  if (matchArray && matchArray[0]) {
+    const match =  matchArray[0];
+    let responseStrip = response.replace( match , '' );
+    try {
+      const jsonObject = JSON.parse(match);
+      if (jsonObject && jsonObject.move && jsonObject.game_board) {
+        finalArray.push(jsonObject);
+      }
+    } catch (error) {
+      console.error('Invalid JSON:', error);
+    }
+    finalArray = getJsonArrayFromResponse( responseStrip,  finalArray);
+  }
+  return finalArray;
+}
+
 export const extractJsonFromChatGptResponse = (
   response: string,
   usedMoves: MovePositionType[],
 ):
   | undefined
-  | {
-      move: string;
-      game_board: MatrixType;
-    } => {
-  // Regular expression to match a JSON object
-  const jsonRegex = /\{(?:[^{}"]|"(?:\\.|[^"\\])*")*\}/;
+  | JsonConvertedResponseType => {
 
   // Extract the JSON
-  const matchArray = response.match(jsonRegex);
+  const matchArray = getJsonArrayFromResponse(response, []);
   let returnResponse: { move: string; game_board: MatrixType } | undefined =
     undefined;
   let usedMoveReturnResponse:
@@ -129,7 +147,7 @@ export const extractJsonFromChatGptResponse = (
     matchArray.forEach((match, index) => {
       if (match && !returnResponse) {
         try {
-          const jsonObject = JSON.parse(match);
+          const jsonObject = match;
           console.log('jsonObject: ', index, '\n', jsonObject);
           if (
             validateChatGptMove(positionEditReverse(jsonObject.move), usedMoves)

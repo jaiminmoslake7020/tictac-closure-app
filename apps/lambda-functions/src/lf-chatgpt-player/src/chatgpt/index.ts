@@ -205,7 +205,7 @@ export const prepareChatGptPrompt = (
         latestUserMessage = {
           role: 'user',
           content:
-            '```json' +
+            'Current Game Board after my move: ```json' +
             JSON.stringify({
               move: newPostion,
               game_board: matrix,
@@ -223,7 +223,7 @@ export const prepareChatGptPrompt = (
         messages.push({
           role: 'user',
           content:
-            '```json' +
+            'Current Game Board after my move: ```json' +
             JSON.stringify({
               move: newPostion,
             }) +

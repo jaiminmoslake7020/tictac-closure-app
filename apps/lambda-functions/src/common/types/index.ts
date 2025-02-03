@@ -101,3 +101,8 @@ export type MatrixType = [
 
 export type ChatCompletionMessageType =
   OpenAI.Chat.Completions.ChatCompletionMessageParam;
+
+export type JsonConvertedResponseType = {
+  move: MovePositionTypeChatGpt;
+  game_board: MatrixType;
+};
