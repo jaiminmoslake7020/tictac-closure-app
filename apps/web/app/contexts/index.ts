@@ -20,6 +20,7 @@ import {
 } from '@contexts/useGamePlayerType';
 import {
   computerProgram,
+  openAiChatGpt,
   remoteFriendPlayer,
   remoteRandomPlayer,
   sameDevicePlay,
@@ -299,6 +300,13 @@ export const isItRemoteGame = (
   );
 };
 
+export const isItGameWithOpenAi = (
+  contextsData: InitializeContextsFunctionType
+): boolean => {
+  const { getOpponentType } = useContextOpponentType(contextsData);
+  return getOpponentType() === openAiChatGpt;
+};
+
 export const isItSameDeviceGame = (
   contextsData: InitializeContextsFunctionType
 ): boolean => {
@@ -370,6 +378,14 @@ export const getRandomMove = (
   return idArray[number];
 };
 
+export const getUserId = (
+  contextsData: InitializeContextsFunctionType
+): string => {
+  const { getUser } = useContextUserSession(contextsData);
+  const userItem = getUser() as UserType;
+  return userItem.id;
+};
+
 export const getAllCurrentTurns = (
   contextsData: InitializeContextsFunctionType
 ): MovePositionType[] => {
@@ -379,6 +395,12 @@ export const getAllCurrentTurns = (
     ...(turnStorage[turnData.turn] || []),
     ...(turnStorage[turnData.anotherTurn] || []),
   ];
+};
+
+export const getNumberOfTurnsMade = (
+  contextsData: InitializeContextsFunctionType
+): number => {
+  return getAllCurrentTurns(contextsData).length;
 };
 
 export const isUsedTurn = (

@@ -193,6 +193,7 @@ export const InfoTab = (
   };
 
   const resetApp = () => {
+    removeTurn();
     removeWinner();
     removeRestartButton();
   };

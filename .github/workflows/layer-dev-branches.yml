@@ -56,8 +56,6 @@ jobs:
         run: cp -r node_modules nodejs
       - name: Zip nodejs directory
         run: zip -r my-layer.zip nodejs
-      - name: Verify zip file
-        run: ls -al
       - name: copy zip file
         run: cp my-layer.zip apps/lambda-functions
       - name: Upload artifact for deployment job
@@ -74,3 +72,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           LAYER_NAME: ${{ vars.LAYER_NAME_DEV }}
           FUNCTION_NAME: ${{ vars.FUNCTION_NAME_DEV_1 }}
+          FUNCTION_NAME_2: ${{ vars.FUNCTION_NAME_DEV_2 }}

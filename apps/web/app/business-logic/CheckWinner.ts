@@ -13,7 +13,7 @@ export type setAtFirebaseType = (
   v: WinnerType
 ) => void;
 
-export const CheckWinner = async (
+export const CheckWinner = (
   contextsData: InitializeContextsFunctionType,
   setAtFirebase?: setAtFirebaseType
 ) => {

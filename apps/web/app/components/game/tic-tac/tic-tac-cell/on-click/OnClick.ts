@@ -8,6 +8,7 @@ import {
   disableCell,
   addFn,
   enableCell,
+  removeFn,
 } from '@tic-tac/tic-tac-cell/common';
 import {
   ChangeFunctionType,
@@ -23,6 +24,7 @@ import {
 export const removeClickListener = (columnId: ColumnIdType) => {
   if (hasFn(columnId)) {
     getTd(columnId).removeEventListener('click', getFn(columnId));
+    removeFn(columnId);
   }
 };
 

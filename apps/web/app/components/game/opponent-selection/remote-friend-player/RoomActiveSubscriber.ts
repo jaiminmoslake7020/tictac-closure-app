@@ -24,7 +24,6 @@ export const RoomActiveSubscriber = (
   contextsData: InitializeContextsFunctionType,
   gameActions: GameActionCallbacksType
 ): AddRoomSubscriberType => {
-
   let interval: NodeJS.Timeout;
 
   const { showErrorMessage } = ShowErrorMessageWrapper(
@@ -87,6 +86,6 @@ export const RoomActiveSubscriber = (
 
   return {
     checkRoomActive,
-    checkRoomActiveSubscriber
+    checkRoomActiveSubscriber,
   };
 };

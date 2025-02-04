@@ -1,5 +1,7 @@
 import * as admin from 'firebase-admin';
-import {getSecret} from '../aws/get-secret';
+import { getSecret } from '../aws/get-secret';
+import { firestore } from 'firebase-admin';
+import DocumentSnapshot = firestore.DocumentSnapshot;
 
 let app: admin.app.App | undefined = undefined;
 const getFirebaseApp = async (): Promise<admin.app.App> => {
@@ -7,13 +9,13 @@ const getFirebaseApp = async (): Promise<admin.app.App> => {
     return app;
   } else {
     const secret = await getSecret();
-    const p = "FIREBASE_PRIVATE_KEY_BASE64_"+process.env.FIREBASE_PRIVATE_KEY_BASE64;
+    const p =
+      'FIREBASE_PRIVATE_KEY_BASE64_' + process.env.FIREBASE_PRIVATE_KEY_BASE64;
     const q = secret[p];
 
-    const firebasePrivateKey = Buffer.from(
-      q as string,
-      'base64',
-    ).toString('utf-8');
+    const firebasePrivateKey = Buffer.from(q as string, 'base64').toString(
+      'utf-8',
+    );
 
     app = admin.initializeApp({
       credential: admin.credential.cert({
@@ -69,5 +71,32 @@ export const updateDocument = async (path: string, updatedDocData: any) => {
     await docRef.update(updatedDocData);
   } catch (e) {
     console.error('Error Updating document', path, updatedDocData, e);
+  }
+};
+
+export const getDocument = async (
+  documentPath: string,
+): Promise<DocumentSnapshot<any, any> | undefined> => {
+  try {
+    const f = await getFirestoreObject();
+    const documentReference = f.doc(documentPath);
+    return await documentReference.get();
+  } catch (e) {
+    console.error('Error getting document:', documentPath, e);
+  }
+  return undefined;
+};
+
+export const insertNewDocumentWithId = async (
+  path: string,
+  proposedDocId: string,
+  docData: any,
+) => {
+  try {
+    const f = await getFirestoreObject();
+    const docRef = f.doc(path + '/' + proposedDocId);
+    await docRef.set(docData);
+  } catch (e) {
+    console.error('Error at insertNewDocumentWithId: ', path, proposedDocId, e);
   }
 };

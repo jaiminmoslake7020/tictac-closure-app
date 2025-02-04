@@ -47,6 +47,7 @@ jobs:
           FIREBASE_CONFIG_AUTH_DOMAIN: ${{ vars.FIREBASE_CONFIG_AUTH_DOMAIN_PROD }}
           FIREBASE_CONFIG_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID_PROD }}
           FIREBASE_CONFIG_MEASUREMENT_ID: ${{ vars.FIREBASE_CONFIG_MEASUREMENT_ID_PROD }}
+          LAMBDA_CHATGPT_PLAYER_API_URL: ${{ vars.LAMBDA_CHATGPT_PLAYER_API_URL_PROD }}
         run: yarn run webapp:build
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4

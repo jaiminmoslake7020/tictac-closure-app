@@ -6,7 +6,7 @@ import { InitializeContextsFunctionType } from '@contexts/index';
 export type TicTacTableType = {
   render: () => HTMLDivElement;
   reset: () => void;
-  updateOtherPersonMove: (v: MovePositionType) => Promise<void>;
+  updateOtherPersonMove: () => Promise<void>;
   exitGame: () => void;
 };
 
@@ -36,7 +36,6 @@ export const TicTacTable = (
     for (let i = 0; i < 3; i++) {
       trArray[i].update(handleChangeTurn);
     }
-    // console.log('handleChangeTurn updateInfo');
     updateInfo();
   };
 

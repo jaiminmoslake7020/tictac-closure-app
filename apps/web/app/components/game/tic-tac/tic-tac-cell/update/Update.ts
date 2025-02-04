@@ -1,5 +1,6 @@
 import {
   InitializeContextsFunctionType,
+  isItGameWithOpenAi,
   isItRemoteGame,
   isItRemotePlayerTurn,
   useContextTurnStorage,
@@ -38,6 +39,9 @@ export const Update = (
     checkWinnerIsAvailable(contextData, columnId);
   } else {
     if (isItRemoteGame(contextData) && isItRemotePlayerTurn(contextData)) {
+      disableCell(columnId);
+    }
+    if (isItGameWithOpenAi(contextData) && isItRemotePlayerTurn(contextData)) {
       disableCell(columnId);
     } else if (Array.isArray(anotherPersonMoves)) {
       if (!anotherPersonMoves.includes(moveType)) {

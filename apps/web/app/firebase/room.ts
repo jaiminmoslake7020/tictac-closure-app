@@ -24,7 +24,7 @@ export const getRoomData = async (
       return null;
     }
   } catch (e) {
-    console.error('Error getRoomData:', e);
+    console.error('Error getGameData:', e);
     return Promise.resolve(null);
   }
 };

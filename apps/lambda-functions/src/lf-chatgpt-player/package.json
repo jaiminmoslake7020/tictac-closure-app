@@ -1,0 +1,17 @@
+{
+  "name": "pair-support-service-lambda",
+  "version": "1.0.0",
+  "description": "pair-support-service-lambda",
+  "main": "./src/index.ts",
+  "type": "commonjs",
+  "scripts": {
+    "build:dev": "../../node_modules/.bin/webpack --mode development --watch",
+    "build": "../../node_modules/.bin/webpack --mode production",
+    "dev": "node app.js ./dist/bundle.js .env",
+    "zip": "./scripts/zip-lambda.sh",
+    "publish-aws-lambda": "./scripts/publish-awa-lambda-function.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -13,3 +13,27 @@ export const AddErrorWithAction = (message: string, action: () => void) => {
   const { addError } = NotificationHandler();
   addError(message, null, n);
 };
+
+export const AddErrorWithoutAction = (message: string) => {
+  const { addError } = NotificationHandler();
+  addError(message, null);
+};
+
+export const AddErrorWithCustomAction = (
+  message: string,
+  btnLable: string,
+  action: () => void
+) => {
+  const ib = IconButton(
+    btnLable,
+    ' with-text ',
+    'fa-solid fa-power-off',
+    () => {
+      remove();
+      action();
+    }
+  );
+  const n = NotificationSecondaryAction(ib as HTMLElement);
+  const { addError } = NotificationHandler();
+  const { remove } = addError(message, null, n);
+};

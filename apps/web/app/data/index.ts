@@ -1,4 +1,6 @@
 import {
+  ChatGptErrorObjectType,
+  FirebasePlayerType,
   MovePositionType,
   OpponentFormButtonType,
   OpponentLabelType,
@@ -44,12 +46,14 @@ export const remoteRandomPlayer = 'remote-random-player' as OpponentType;
 export const remoteFriendPlayer = 'remote-friend-player' as OpponentType;
 export const computerProgram = 'computer-program' as OpponentType;
 export const sameDevicePlay = 'same-device-play' as OpponentType;
+export const openAiChatGpt = 'openai-chat-gpt' as OpponentType;
 
 export const opponentTypesObject = {
   [remoteRandomPlayer]: 'Remote Random Player',
   [remoteFriendPlayer]: 'Remote Friend Player',
   [computerProgram]: 'Computer Program',
   [sameDevicePlay]: 'Same Device Play',
+  [openAiChatGpt]: 'OpenAi Chat-GPT',
 } as Record<OpponentType, OpponentLabelType>;
 
 export const opponentTypes = [
@@ -57,6 +61,7 @@ export const opponentTypes = [
   remoteFriendPlayer,
   computerProgram,
   sameDevicePlay,
+  openAiChatGpt,
 ] as OpponentType[];
 
 export const opponentFormButtonTypeList = opponentTypes.map(
@@ -65,3 +70,18 @@ export const opponentFormButtonTypeList = opponentTypes.map(
     value: k,
   })
 ) as OpponentFormButtonType[];
+
+export const openAiUser = {
+  id: 'OpenAI',
+  username: 'OpenAI - ChatGPT',
+} as FirebasePlayerType;
+
+export const ChatGptErrorObject = {
+  ERROR: 'Something went wrong. Please try again.',
+  ERROR_INVALID_MOVE:
+    'Invalid Move by Chat-GPT. Please try again and restart game.',
+  ERROR_USED_MOVE:
+    'Chat-GPT made a move on already used position. Please try again and restart game.',
+  ERROR_WON_GAME_PREDICATION:
+    'Chat-GPT predicted that one of you has won the game, without making any move. Please try again and restart game.',
+} as Record<ChatGptErrorObjectType, string>;
